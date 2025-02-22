@@ -2,7 +2,7 @@
 {
     public class STEP
     {
-        string STEP_ID { get; set; }
-        string STEP_NAME { get; set; }
+        public string STEP_ID { get; set; }
+        public string STEP_NAME { get; set; }
     }
 }
