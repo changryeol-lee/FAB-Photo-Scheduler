@@ -3,14 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabSchedulerModel", "FabSheduler\FabSchedulerModel.csproj", "{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E7A05B4A-6F47-469A-877A-49F32B2C6E01} = {E7A05B4A-6F47-469A-877A-49F32B2C6E01}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimulationEngine", "SimulationEngine\SimulationEngine.csproj", "{E7A05B4A-6F47-469A-877A-49F32B2C6E01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMart", "DataMart\DataMart.csproj", "{9EC1C4C2-330C-4255-B484-72661DD9F8F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabSchedulerModel", "FabScheduler\FabSchedulerModel.csproj", "{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E7A05B4A-6F47-469A-877A-49F32B2C6E01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E7A05B4A-6F47-469A-877A-49F32B2C6E01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7A05B4A-6F47-469A-877A-49F32B2C6E01}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,6 +23,10 @@ Global
 		{9EC1C4C2-330C-4255-B484-72661DD9F8F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EC1C4C2-330C-4255-B484-72661DD9F8F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EC1C4C2-330C-4255-B484-72661DD9F8F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
