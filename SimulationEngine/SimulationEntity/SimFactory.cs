@@ -1,5 +1,7 @@
-﻿using SimulationEngine.Schedule;
+﻿using SimulationEngine.Agents;
+using SimulationEngine.Schedule;
 using SimulationEngine.SimulationInterface;
+using SimulationEngine.SimulationObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ namespace SimulationEngine.SimulationEntity
     public class SimFactory
     {
         private ScheduleManager _scheduleManager;
+        private EqpManager _eqpManager;
         private ISimulationModel _model;
 
         public DateTime _simulationStartTime;
@@ -29,19 +32,20 @@ namespace SimulationEngine.SimulationEntity
             }
         }
 
-        private SimFactory(ISimulationModel model, DateTime startTime, DateTime endTime)
+        private SimFactory(IModelGroup model, DateTime startTime, DateTime endTime)
         {
-            _model = model;
+            _model = model.SimulationModel;
             _simulationStartTime = startTime;
             _simulationEndTime = endTime;
             _scheduleManager = new ScheduleManager(_simulationStartTime, _simulationEndTime);
+            _eqpManager = new EqpManager(model.EquipmentModel); 
         }
 
-        public static void InitializeInstance(ISimulationModel model, DateTime startTime, DateTime endTime)
+        public static void InitializeInstance(IModelGroup modelGroup, DateTime startTime, DateTime endTime)
         {
             if (_instance == null)
             {
-                _instance = new SimFactory(model, startTime, endTime);
+                _instance = new SimFactory(modelGroup, startTime, endTime);
             }
             else
             {
@@ -52,6 +56,7 @@ namespace SimulationEngine.SimulationEntity
         public void Initialize()
         {
             _model.OnBeginInitialize();
+            _eqpManager.SimEqpInit(); 
             _model.OnEndInitialize();
         }
 
