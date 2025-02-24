@@ -1,4 +1,5 @@
-﻿using SimulationEngine.SimulationInterface;
+﻿using SimulationEngine.SimulationEntity;
+using SimulationEngine.SimulationInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace SimulationEngine.Schedule
     public class ScheduleManager
     {
         private SortedDictionary<DateTime, List<Action>> eventQueue = new SortedDictionary<DateTime, List<Action>>();
-        private DateTime _currentTime;
+        public DateTime currentTime = SimFactory.Instance.currentTime;
         private DateTime _simulationEndTime;
 
         public ScheduleManager(DateTime simulationStartTime, DateTime simulationEndTime)
         {
-            _currentTime = simulationStartTime;
+            //_currentTime = simulationStartTime;
             _simulationEndTime = simulationEndTime;
         }
 
@@ -36,7 +37,7 @@ namespace SimulationEngine.Schedule
                 var keys = new List<DateTime>(eventQueue.Keys); // 현재 이벤트 리스트를 복사
                 foreach (var time in keys)
                 {
-                    _currentTime = time;
+                    currentTime = time;
                     if (eventQueue.TryGetValue(time, out var actions))
                     {
                         foreach (var action in actions)

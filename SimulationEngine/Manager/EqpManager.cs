@@ -1,4 +1,6 @@
 ﻿using SimulationEngine.BaseEntity;
+using SimulationEngine.Common;
+using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
 using SimulationEngine.SimulationObject;
 using System;
@@ -11,7 +13,7 @@ namespace SimulationEngine.Agents
 {
     public class EqpManager
     {
-        private List<SimEquipment> _simEquipments = new List<SimEquipment>(); 
+        private readonly Dictionary<string, SimEquipment> _simEquipments;
 
         private readonly ISimEquipmentModel _model;
         public EqpManager(ISimEquipmentModel model)
@@ -25,8 +27,21 @@ namespace SimulationEngine.Agents
 
             foreach (var equipment in equipments)
             {
-                _simEquipments.Add(new SimEquipment(equipment));  // SimEquipment로 변환하여 저장
+                _simEquipments.Add(equipment.EqpId, new SimEquipment(equipment));  // SimEquipment로 변환하여 저장
             }
+        }
+        public SimEquipment GetEquipment(string eqpId)
+        {
+            return _simEquipments.TryGetValue(eqpId, out var eqp) ? eqp : null; 
+        }
+        public List<SimEquipment> GetLoadableEqpList(SimLot lot)
+        {
+            return _model.GetLoadableEqpList(lot); 
+        }
+
+        internal List<SimEquipment> GetIdleEqpList()
+        {
+            return _simEquipments.Values.Where(eqp => eqp.GetEquipment().State.Equals(EqpState.IDLE)).ToList();
         }
     }
 }

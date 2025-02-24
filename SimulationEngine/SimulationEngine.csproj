@@ -41,25 +41,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Manager\DispatchManager.cs" />
+    <Compile Include="Manager\EqpManager.cs" />
     <Compile Include="BaseEntity\Equipment.cs" />
     <Compile Include="BaseEntity\Lot.cs" />
     <Compile Include="BaseEntity\Product.cs" />
     <Compile Include="BaseEntity\Step.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="Common\Enum.cs" />
+    <Compile Include="Manager\LotManager.cs" />
+    <Compile Include="Manager\ProcessManager.cs" />
+    <Compile Include="Manager\RouteManager.cs" />
     <Compile Include="ProcessEntity\DispatchInfo.cs" />
     <Compile Include="ProcessEntity\LoadInfo.cs" />
     <Compile Include="ProcessEntity\ProcTimeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Schedule\ScheduleManager.cs" />
+    <Compile Include="Manager\ScheduleManager.cs" />
     <Compile Include="SimulationEntity\SimEquipment.cs" />
     <Compile Include="SimulationEntity\SimFactory.cs" />
     <Compile Include="SimulationEntity\SimLot.cs" />
+    <Compile Include="SimulationInterface\ISimDispatchModel.cs" />
+    <Compile Include="SimulationInterface\IModelGroup.cs" />
+    <Compile Include="SimulationInterface\ISimProcessModel.cs" />
+    <Compile Include="SimulationInterface\ISimRouteModel.cs" />
     <Compile Include="SimulationInterface\ISimEquipmentModel.cs" />
+    <Compile Include="SimulationInterface\ISimLotModel.cs" />
     <Compile Include="SimulationInterface\ISimulationModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Agents\" />
+    <Folder Include="Schedule\" />
     <Folder Include="Simulation\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

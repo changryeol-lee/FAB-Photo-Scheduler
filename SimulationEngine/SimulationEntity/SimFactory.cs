@@ -1,4 +1,5 @@
 ﻿using SimulationEngine.Agents;
+using SimulationEngine.Manager;
 using SimulationEngine.Schedule;
 using SimulationEngine.SimulationInterface;
 using SimulationEngine.SimulationObject;
@@ -12,12 +13,17 @@ namespace SimulationEngine.SimulationEntity
 {
     public class SimFactory
     {
-        private ScheduleManager _scheduleManager;
-        private EqpManager _eqpManager;
+        internal ScheduleManager _scheduleManager;
+        internal EqpManager _eqpManager;
+        internal LotManager _lotManager;
+        internal RouteManager _routeManager;
+        internal DispatchManager _dispatchManager;
+        internal ProcessManager _processManager;
         private ISimulationModel _model;
 
         public DateTime _simulationStartTime;
         public DateTime _simulationEndTime;
+        public DateTime currentTime; 
         private static SimFactory _instance;
 
         public static SimFactory Instance
@@ -35,10 +41,15 @@ namespace SimulationEngine.SimulationEntity
         private SimFactory(IModelGroup model, DateTime startTime, DateTime endTime)
         {
             _model = model.SimulationModel;
+            currentTime = startTime;
             _simulationStartTime = startTime;
             _simulationEndTime = endTime;
             _scheduleManager = new ScheduleManager(_simulationStartTime, _simulationEndTime);
-            _eqpManager = new EqpManager(model.EquipmentModel); 
+            _eqpManager = new EqpManager(model.EquipmentModel);
+            _lotManager = new LotManager(model.LotModel);
+            _dispatchManager = new DispatchManager(model.DispatchModel);
+            _routeManager = new RouteManager(model.RouteModel);
+            _processManager = new ProcessManager(model.ProcessModel);
         }
 
         public static void InitializeInstance(IModelGroup modelGroup, DateTime startTime, DateTime endTime)
@@ -56,7 +67,10 @@ namespace SimulationEngine.SimulationEntity
         public void Initialize()
         {
             _model.OnBeginInitialize();
-            _eqpManager.SimEqpInit(); 
+            
+            //_eqpManager.SimEqpInit();
+            _lotManager.SimLotInit();
+
             _model.OnEndInitialize();
         }
 

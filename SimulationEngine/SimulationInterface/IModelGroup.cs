@@ -10,5 +10,9 @@ namespace SimulationEngine.SimulationInterface
     {
         ISimulationModel SimulationModel { get; }
         ISimEquipmentModel EquipmentModel { get; }
+        ISimLotModel LotModel { get; }
+        ISimRouteModel RouteModel { get; }
+        ISimDispatchModel DispatchModel { get; }
+        ISimProcessModel ProcessModel { get; }
     }
 }
