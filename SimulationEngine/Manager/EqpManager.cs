@@ -23,7 +23,7 @@ namespace SimulationEngine.Agents
 
         public void SimEqpInit()
         {
-            List<Equipment> equipments = _model.GetEqpList();  // 사용자가 제공한 장비 리스트
+            IEnumerable<Equipment> equipments = _model.GetEqpList();  // 사용자가 제공한 장비 리스트
 
             foreach (var equipment in equipments)
             {
@@ -34,9 +34,19 @@ namespace SimulationEngine.Agents
         {
             return _simEquipments.TryGetValue(eqpId, out var eqp) ? eqp : null; 
         }
-        public List<SimEquipment> GetLoadableEqpList(SimLot lot)
+        public IEnumerable<SimEquipment> GetLoadableEqpList(SimLot lot)
         {
-            return _model.GetLoadableEqpList(lot); 
+            var eqpIds = _model.GetLoadableEqpIds(lot);
+            List<SimEquipment> result = new List<SimEquipment>();
+
+            foreach (var eqpId in eqpIds)
+            {
+                SimEquipment eqp = GetEquipment(eqpId); 
+                if (eqp != null)
+                    result.Add(eqp);
+            }
+
+            return result; 
         }
 
         internal List<SimEquipment> GetIdleEqpList()

@@ -3,10 +3,12 @@ using SimulationEngine.Common;
 using SimulationEngine.Schedule;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
+using SimulationEngine.SimulationLog;
 using SimulationEngine.SimulationObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +17,7 @@ namespace SimulationEngine.Manager
     public class DispatchManager
     {
         private readonly ISimDispatchModel _model;
-        private DateTime _currentTime = SimFactory.Instance.currentTime;
+        private DateTime _currentTime => SimFactory.Instance.currentTime;
         private ScheduleManager _scheduleManager = SimFactory.Instance._scheduleManager;
         private RouteManager _routeManager = SimFactory.Instance._routeManager;
         private List<SimLot> _waitingLotList = new List<SimLot>();
@@ -44,9 +46,8 @@ namespace SimulationEngine.Manager
                 }
                 _dispatchLotList[eqp].Add(lot);
             }
-
-
         }
+
         public void Dispatch()
         {
             List<SimEquipment> idleEquipments = SimFactory.Instance._eqpManager.GetIdleEqpList();
@@ -63,11 +64,25 @@ namespace SimulationEngine.Manager
                 SimLot selectedLot = _model.SelectLot(equipment, filteredLots);
                 if (selectedLot != null)
                 {
+                    DispatchLog log = WriteDispatchLog(equipment, selectedLot, filteredLots, possibleLots);
+                    equipment.AddDispatchHistory(log);
+                    _model.WriteDispatchLog(log); 
                     RemoveLotFromAllQueues(selectedLot);
                     _waitingLotList.Remove(selectedLot); 
                     _routeManager.Dispatched(selectedLot, equipment);
                 }
             }
+        }
+
+        public DispatchLog WriteDispatchLog(SimEquipment eqp, SimLot lot, List<SimLot> filterLots, List<SimLot> CandidateLots) {
+            DispatchLog log = new DispatchLog();
+            log.EqpId = eqp.EqpId;
+            log.StepId = lot.GetLot().StepId;
+            log.DispatchingTime = _currentTime;
+            log.SelectedLot = lot; 
+            log.CandidateLots = CandidateLots;
+            log.FilterLots = filterLots;
+            return log; 
         }
 
 

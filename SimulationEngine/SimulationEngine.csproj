@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Utils.cs" />
     <Compile Include="Manager\DispatchManager.cs" />
     <Compile Include="Manager\EqpManager.cs" />
     <Compile Include="BaseEntity\Equipment.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Manager\ProcessManager.cs" />
     <Compile Include="Manager\RouteManager.cs" />
     <Compile Include="ProcessEntity\DispatchInfo.cs" />
+    <Compile Include="SimulationLog\EqpSchedule.cs" />
     <Compile Include="ProcessEntity\LoadInfo.cs" />
     <Compile Include="ProcessEntity\ProcTimeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="SimulationInterface\ISimEquipmentModel.cs" />
     <Compile Include="SimulationInterface\ISimLotModel.cs" />
     <Compile Include="SimulationInterface\ISimulationModel.cs" />
+    <Compile Include="SimulationLog\DispatchLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Schedule\" />

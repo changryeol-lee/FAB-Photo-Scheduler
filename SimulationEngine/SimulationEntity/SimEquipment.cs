@@ -1,6 +1,7 @@
 ﻿using SimulationEngine.BaseEntity;
 using SimulationEngine.ProcessEntity;
 using SimulationEngine.SimulationEntity;
+using SimulationEngine.SimulationLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,9 @@ namespace SimulationEngine.SimulationObject
     public class SimEquipment
     {
         private readonly Equipment _equipment;
-        private readonly List<DispatchInfo> _dispatchHistory;
-        private LoadInfo _previousPlan;
+        private readonly List<DispatchLog> _dispatchHistory;
+        private EqpSchedule _previousPlan;
+        private EqpSchedule _currentPlan;
 
         public string EqpId => _equipment.EqpId;
         public DateTime NowDT { get; set; }
@@ -21,28 +23,30 @@ namespace SimulationEngine.SimulationObject
         public SimEquipment(Equipment equipment)
         {
             _equipment = equipment;
-            _dispatchHistory = new List<DispatchInfo>();
+            _dispatchHistory = new List<DispatchLog>();
         }
 
-        public void AddDispatchInfo(List<SimLot> candidates, SimLot selected, DateTime dispatchTime)
+        public void AddDispatchHistory(DispatchLog dispatchLog)
         {
-            var info = new DispatchInfo
-            {
-                EqpId = this.EqpId,
-                DispatchingTime = dispatchTime,
-                SelectInfo = selected?.LotId,
-                CandidateLots = candidates
-            };
-
-            _dispatchHistory.Add(info);
+            _dispatchHistory.Add(dispatchLog);
         }
 
-        public LoadInfo GetPreviousPlan()
+        public EqpSchedule GetPreviousPlan()
         {
             return _previousPlan;
         }
 
-        public void SetPreviousPlan(LoadInfo plan)
+        public void SetPreviousPlan(EqpSchedule plan)
+        {
+            _previousPlan = plan;
+        }
+
+        public EqpSchedule GetCurrentPlan()
+        {
+            return _currentPlan;
+        }
+
+        public void SetCurrentPlan(EqpSchedule plan)
         {
             _previousPlan = plan;
         }
