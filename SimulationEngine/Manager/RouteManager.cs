@@ -14,7 +14,7 @@ namespace SimulationEngine.Manager
     public class RouteManager
     {
         private readonly ISimRouteModel _model;
-        private DateTime _currentTime = SimFactory.Instance.currentTime;
+        private DateTime _currentTime => SimFactory.Instance.currentTime;
         private ScheduleManager _scheduleManager = SimFactory.Instance._scheduleManager;
         private DispatchManager _dispatchManager = SimFactory.Instance._dispatchManager;
         private ProcessManager _processManager = SimFactory.Instance._processManager;
@@ -87,35 +87,44 @@ namespace SimulationEngine.Manager
 
         public void Dispatched(SimLot selectedLot, SimEquipment equipment)
         {
-            _scheduleManager.AddEvent(_currentTime, () => StartTask(selectedLot, equipment, _currentTime));
+            _scheduleManager.AddEvent(_currentTime, () => ProcessIn(selectedLot, equipment, _currentTime));
             //_model.OnDispatched(lot, equipment);
         }
 
-        public void StartTask(SimLot lot, SimEquipment equipment, DateTime currentTime)
+        public void ProcessIn(SimLot lot, SimEquipment equipment, DateTime currentTime)
         {
-            _model.OnStartTask(lot, equipment);
-            _scheduleManager.AddEvent(currentTime, () => _processManager.TrackIn(equipment, lot));
+            _model.OnProcessIn(lot, equipment);
+            _scheduleManager.AddEvent(currentTime, () =>
+            {
+                _processManager.Process(equipment, lot, currentTime);
+            });
         }
 
-        public void EndTask(SimLot lot, SimEquipment equipment, DateTime currentTime)
+        public void Processed(SimLot lot, SimEquipment equipment, DateTime finishTime)
         {
-            _model.OnEndTask(lot, equipment);
+            _model.OnProcessed(lot, equipment);
 
+            // 다음 공정 이동 여부 판단
             string nextStep = _model.GetNextStep(lot);
             if (string.IsNullOrEmpty(nextStep))
             {
-                _model.OnDone(lot);
+                _model.OnLotDone(lot);
             }
             else
             {
-                DateTime nextStepTime = currentTime.AddHours(1);  // 다음 공정 이동 시간 (기본 1시간 후)
-                _scheduleManager.AddEvent(nextStepTime, () => Release(lot));
+                _model.OnStepDone(lot);
+                // 일단 임시로 1시간 후에 Release
+                DateTime nextStepTime = finishTime.AddHours(1);
+                AddPendingRelease(nextStepTime, lot);
             }
+
+            //이 시점에 장비가 wait되서, dispatch하는 것도 고려. 
+            //_scheduleManager.AddEvent(_currentTime, () => DispatchIn());
         }
 
-        public bool IsDone(SimLot lot)
+        public bool OnStepDone(SimLot lot)
         {
-            return _model.IsDone(lot);
+            return _model.OnStepDone(lot);
         }
 
         public string GetNextStep(SimLot lot)
