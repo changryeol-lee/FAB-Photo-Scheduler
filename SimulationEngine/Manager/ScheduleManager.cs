@@ -11,7 +11,7 @@ namespace SimulationEngine.Schedule
     public class ScheduleManager
     {
         private SortedDictionary<DateTime, List<Action>> eventQueue = new SortedDictionary<DateTime, List<Action>>();
-        public DateTime currentTime = SimFactory.Instance.currentTime;
+        //public DateTime currentTime = SimFactory.Instance.currentTime;
         private DateTime _simulationEndTime;
 
         public ScheduleManager(DateTime simulationStartTime, DateTime simulationEndTime)
@@ -32,21 +32,19 @@ namespace SimulationEngine.Schedule
 
         public void Run()
         {
-            while (eventQueue.Count > 0) //  새로운 이벤트가 추가되더라도 계속 실행됨
+            while (eventQueue.Count > 0)
             {
-                var keys = new List<DateTime>(eventQueue.Keys); // 현재 이벤트 리스트를 복사
-                foreach (var time in keys)
+                var firstEntry = eventQueue.First();
+                DateTime eventTime = firstEntry.Key;
+                SimFactory.Instance.currentTime = eventTime;
+
+                // 이벤트 실행
+                foreach (var action in firstEntry.Value)
                 {
-                    currentTime = time;
-                    if (eventQueue.TryGetValue(time, out var actions))
-                    {
-                        foreach (var action in actions)
-                        {
-                            action?.Invoke();
-                        }
-                        eventQueue.Remove(time); //실행이 끝난 이벤트 삭제
-                    }
+                    action?.Invoke();
                 }
+                // 실행 끝난 이벤트 제거
+                eventQueue.Remove(eventTime);
             }
         }
     }
