@@ -48,6 +48,13 @@
     <Compile Include="InputEntity\PhotoLot.cs" />
     <Compile Include="InputEntity\PhotoProduct.cs" />
     <Compile Include="InputEntity\PhotoStep.cs" />
+    <Compile Include="InputHelper\CreateInput.cs" />
+    <Compile Include="PhotoEquipmentModel.cs" />
+    <Compile Include="PhotoLotModel.cs" />
+    <Compile Include="PhotoModelGroup.cs" />
+    <Compile Include="PhotoDispatchModel.cs" />
+    <Compile Include="PhotoProcessModel.cs" />
+    <Compile Include="PhotoRouteModel.cs" />
     <Compile Include="PhotoSimulationModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
