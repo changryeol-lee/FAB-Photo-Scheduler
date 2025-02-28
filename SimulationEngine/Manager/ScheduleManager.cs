@@ -36,6 +36,8 @@ namespace SimulationEngine.Schedule
             {
                 var firstEntry = eventQueue.First();
                 DateTime eventTime = firstEntry.Key;
+                if (eventTime > _simulationEndTime) break; 
+
                 SimFactory.Instance.currentTime = eventTime;
 
                 // 이벤트 실행
