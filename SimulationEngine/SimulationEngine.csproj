@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseEntity\Process.cs" />
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Manager\DispatchManager.cs" />
     <Compile Include="Manager\EqpManager.cs" />

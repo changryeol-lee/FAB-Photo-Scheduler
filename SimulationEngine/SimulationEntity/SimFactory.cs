@@ -6,6 +6,7 @@ using SimulationEngine.SimulationObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,17 +41,12 @@ namespace SimulationEngine.SimulationEntity
 
         private SimFactory(IModelGroup model, DateTime startTime, DateTime endTime)
         {
-            _model = model.SimulationModel;
             currentTime = startTime;
             _simulationStartTime = startTime;
             _simulationEndTime = endTime;
-            _scheduleManager = new ScheduleManager(_simulationStartTime, _simulationEndTime);
-            _eqpManager = new EqpManager(model.EquipmentModel);
-            _lotManager = new LotManager(model.LotModel);
-            _dispatchManager = new DispatchManager(model.DispatchModel);
-            _routeManager = new RouteManager(model.RouteModel);
-            _processManager = new ProcessManager(model.ProcessModel);
+            _model = model.SimulationModel;
         }
+        private SimFactory() { }
 
         public static void InitializeInstance(IModelGroup modelGroup, DateTime startTime, DateTime endTime)
         {
@@ -63,14 +59,24 @@ namespace SimulationEngine.SimulationEntity
                 throw new InvalidOperationException("SimFactory instance is already initialized.");
             }
         }
+        public void InitializeManagers(IModelGroup model)
+        {
+            _scheduleManager = new ScheduleManager(_simulationStartTime, _simulationEndTime);
+            _eqpManager = new EqpManager(model.EquipmentModel);
+            _lotManager = new LotManager(model.LotModel);
+            _dispatchManager = new DispatchManager(model.DispatchModel);
+            _routeManager = new RouteManager(model.RouteModel);
+            _processManager = new ProcessManager(model.ProcessModel);
+        }
 
-        public void Initialize()
+        public void Initialize(IModelGroup modelGroup)
         {
             _model.OnBeginInitialize();
-            
+            InitializeManagers(modelGroup);
+
+            _processManager.SimBomInit();
             _eqpManager.SimEqpInit();
             _lotManager.SimLotInit();
-
             _model.OnEndInitialize();
         }
 
@@ -91,6 +97,11 @@ namespace SimulationEngine.SimulationEntity
             // OnDone 이벤트 등록 (시뮬레이션 종료 시각)
             _scheduleManager.AddEvent(_simulationEndTime, () => _model.OnDone());
 
+            var initialLots = _lotManager.GetInitialLots();
+            _scheduleManager.AddEvent(_simulationStartTime, () =>
+            {
+                _routeManager.Release(initialLots); 
+            });
             // 실행
             _scheduleManager.Run();
         }

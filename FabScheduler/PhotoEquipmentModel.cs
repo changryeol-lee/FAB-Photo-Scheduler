@@ -35,10 +35,10 @@ namespace FabSchedulerModel
         public IEnumerable<string> GetLoadableEqpIds(SimLot lot)
         {
             List<EQP_ARRANGE> arrangeList = InputMart.Instance.GetList<EQP_ARRANGE>(InputTable.EQP_ARRANGE);
-            string stepId = lot.GetLot().StepId;
-            string prodId = lot.GetLot().ProductId;
-            string procId = lot.GetLot().ProcessId;
-            List<string> photoEqpIds = arrangeList.FindAll(x => x.Equals(stepId) && x.Equals(prodId) && x.Equals(procId)).Select(x=>x.EQP_ID).ToList();
+            string stepId = lot.StepId;
+            string prodId = lot.ProductId;
+            string procId = lot.ProcessId;
+            List<string> photoEqpIds = arrangeList.FindAll(x => x.STEP_ID.Equals(stepId) && x.PRODUCT_ID.Equals(prodId) && x.PROCESS_ID.Equals(procId)).Select(x=>x.EQP_ID).ToList();
 
             return photoEqpIds; 
         }

@@ -10,7 +10,5 @@ namespace SimulationEngine.BaseEntity
     {
         public string StepId { get; set; }
         public int StepSeq { get; set; }
-        //public string StepName { get; set; }
-        //public Step GetDefaultNextStep(); 
     }
 }

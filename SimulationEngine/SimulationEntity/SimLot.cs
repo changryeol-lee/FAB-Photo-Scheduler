@@ -15,6 +15,11 @@ namespace SimulationEngine.SimulationEntity
         public LoadInfo CurrentPlan { get; set; }
         public LoadInfo PreviousPlan { get; set; }
 
+        public string ProductId => _lot.Product.ProductId; 
+        public string ProcessId => _lot.Process.ProcessId;
+        public string StepId => _lot.Step.StepId; 
+        public string EqpId { get; set; }
+
         public string LotId => _lot.LotId;
         //public DateTime ArrivalTime => _lot.ArrivalTime;
 

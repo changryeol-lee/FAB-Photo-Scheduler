@@ -21,9 +21,9 @@ namespace SimulationEngine.SimulationInterface
 
         void OnProcessed(SimLot lot, SimEquipment equipment);
 
-        bool OnStepDone(SimLot lot);
+        void OnStepDone(SimLot lot);
 
-        string GetNextStep(SimLot lot);
+        Step GetNextStep(SimLot lot);
         void OnLotDone(SimLot lot);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SimulationEngine.BaseEntity;
+using SimulationEngine.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace SimulationEngine.SimulationInterface
 {
     public interface ISimLotModel
     {
-        List<Lot> GetLots();
+        IEnumerable<Lot> GetLots(ProcessManager processManager);
         //bool CheckLotHold(Lot lot);
         //TimeSpan CalculateHoldTime(Lot lot);
     }

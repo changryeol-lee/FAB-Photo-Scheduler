@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FabSchedulerModel.InputEntity
 {
-    public class PhotoProduct : Product
+    public class PhotoProcess : Process
     {
     }
 }

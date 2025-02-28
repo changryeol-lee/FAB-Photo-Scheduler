@@ -15,9 +15,9 @@ namespace SimulationEngine.Manager
     {
         private readonly ISimRouteModel _model;
         private DateTime _currentTime => SimFactory.Instance.currentTime;
-        private ScheduleManager _scheduleManager = SimFactory.Instance._scheduleManager;
-        private DispatchManager _dispatchManager = SimFactory.Instance._dispatchManager;
-        private ProcessManager _processManager = SimFactory.Instance._processManager;
+        private ScheduleManager _scheduleManager;
+        private DispatchManager _dispatchManager;
+        private ProcessManager _processManager;
 
         // Release 시각별로 Lots를 묶어 저장
         private Dictionary<DateTime, List<SimLot>> _batchReleaseDict = new Dictionary<DateTime, List<SimLot>>();
@@ -26,6 +26,9 @@ namespace SimulationEngine.Manager
         public RouteManager(ISimRouteModel model)
         {
             _model = model;
+            _scheduleManager = SimFactory.Instance._scheduleManager;
+            _dispatchManager = SimFactory.Instance._dispatchManager;
+            _processManager = SimFactory.Instance._processManager;
         }
 
         public void AddPendingRelease(DateTime time, SimLot lot)
@@ -69,6 +72,11 @@ namespace SimulationEngine.Manager
             foreach (SimLot lot in relaseLots)
             {
                 Lot actualLot = lot.GetLot();
+                if(actualLot.Step == null)
+                {
+                    actualLot.Step = actualLot.Process.GetFirstStep(); 
+                }
+
                 actualLot.ArrivalTime = _currentTime;
                 _dispatchManager.AddWaitingLot(lot);
                 _dispatchManager.AddToDispatchLot(lot);
@@ -105,29 +113,31 @@ namespace SimulationEngine.Manager
             _model.OnProcessed(lot, equipment);
 
             // 다음 공정 이동 여부 판단
-            string nextStep = _model.GetNextStep(lot);
-            if (string.IsNullOrEmpty(nextStep))
+            Step nextStep = _model.GetNextStep(lot);
+            if (nextStep == null)
             {
                 _model.OnLotDone(lot);
             }
             else
             {
                 _model.OnStepDone(lot);
+                lot.GetLot().Step = nextStep; 
+
                 // 일단 임시로 1시간 후에 Release
                 DateTime nextStepTime = finishTime.AddHours(1);
                 AddPendingRelease(nextStepTime, lot);
             }
 
             //이 시점에 장비가 wait되서, dispatch하는 것도 고려. 
-            //_scheduleManager.AddEvent(_currentTime, () => DispatchIn());
+            _scheduleManager.AddEvent(_currentTime, () => DispatchIn());
         }
 
-        public bool OnStepDone(SimLot lot)
-        {
-            return _model.OnStepDone(lot);
-        }
+        //public bool OnStepDone(SimLot lot)
+        //{
+        //    return _model.OnStepDone(lot);
+        //}
 
-        public string GetNextStep(SimLot lot)
+        public Step GetNextStep(SimLot lot)
         {
             return _model.GetNextStep(lot);
         }

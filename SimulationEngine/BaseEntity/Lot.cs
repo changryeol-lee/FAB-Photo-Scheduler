@@ -10,10 +10,11 @@ namespace SimulationEngine.BaseEntity
     public abstract class Lot
     {
         public string LotId { get; set; }
-        public string ProductId { get; set; }
-        public string ProcessId { get; set; }
-        public string StepId { get; set; }
-        public string EqpId { get; set; }
+        public Product Product { get; set; }
+
+        public Process Process { get; set; }
+        public Step Step { get; set; }
+
         public int LotQty { get; set; }
         public LotState State { get; set; }
         public DateTime ArrivalTime { get; set; }

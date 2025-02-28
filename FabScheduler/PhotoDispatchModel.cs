@@ -41,6 +41,7 @@ namespace FabSchedulerModel
         public void WriteDispatchLog(DispatchLog log)
         {
             DISPATCH_LOG dl = new DISPATCH_LOG();
+            dl.SIMULATION_VERSION = InputMart.Instance.SimulationVersion;
             dl.EQP_ID = log.EqpId; 
             dl.STEP_ID = log.StepId;
             dl.DISPATCHING_TIME = log.DispatchingTime; 

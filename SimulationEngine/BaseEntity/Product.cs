@@ -9,5 +9,6 @@ namespace SimulationEngine.BaseEntity
     public abstract class Product
     {
         public string ProductId { get; set; }
+        public Process Process { get; set; }    
     }
 }

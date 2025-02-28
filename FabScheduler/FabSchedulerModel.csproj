@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="InputEntity\PhotoEquipment.cs" />
     <Compile Include="InputEntity\PhotoLot.cs" />
+    <Compile Include="InputEntity\PhotoProcess.cs" />
     <Compile Include="InputEntity\PhotoProduct.cs" />
     <Compile Include="InputEntity\PhotoStep.cs" />
     <Compile Include="InputHelper\CreateInput.cs" />
