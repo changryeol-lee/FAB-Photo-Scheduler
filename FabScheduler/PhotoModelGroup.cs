@@ -11,11 +11,20 @@ namespace FabSchedulerModel
     {
         public ISimulationModel SimulationModel { get; private set; }
         public ISimEquipmentModel EquipmentModel { get; private set; }
+        public ISimLotModel LotModel { get; private set; }
+        public ISimRouteModel RouteModel { get; private set; }
+        public ISimDispatchModel DispatchModel { get; private set; }
+        public ISimProcessModel ProcessModel { get; private set; }
 
-        public PhotoModelGroup(ISimulationModel simModel, ISimEquipmentModel eqpModel)
+
+        public PhotoModelGroup(ISimulationModel simModel, ISimEquipmentModel eqpModel, ISimLotModel lotModel, ISimRouteModel routeModel, ISimDispatchModel dispatchModel, ISimProcessModel processhModel)
         {
             SimulationModel = simModel;
             EquipmentModel = eqpModel;
+            LotModel = lotModel;
+            RouteModel = routeModel;
+            DispatchModel = dispatchModel;
+            ProcessModel = processhModel;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using SimulationEngine.SimulationInterface;
+﻿using DataMart.SqlMapper;
+using SimulationEngine.SimulationInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace FabShedulerModel
         public void OnEndInitialize() => Console.WriteLine("[FabModel] OnEndInitialize triggered.");
         public void OnStart() => Console.WriteLine("[FabModel] OnStart triggered.");
         public void OnDayChanged(DateTime date) => Console.WriteLine($"[FabModel] OnDayChanged triggered for {date.ToShortDateString()}.");
-        public void OnDone() => Console.WriteLine("[FabModel] OnDone triggered.");
+        public void OnDone() {
+
+            OutputMart.Instance.SaveAll();
+        }
     }
 }

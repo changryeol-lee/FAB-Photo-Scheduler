@@ -1,5 +1,6 @@
 ﻿using DataMart.Input;
 using DataMart.Input.Query;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 
@@ -13,6 +14,7 @@ namespace DataMart.SqlMapper
         private Dictionary<InputTable, object> dataLists;
         private readonly TableDataAccess dataAccess;
         private Dictionary<InputTable, object> tableQueries;
+        public string SimulationVersion { get; private set; } 
 
         public static InputMart Instance
         {
@@ -38,6 +40,7 @@ namespace DataMart.SqlMapper
             dataAccess = new TableDataAccess(connectionString);
             dataLists = new Dictionary<InputTable, object>();
             InitializeTableQueries();
+            SimulationVersion = GenerateVersion();
         }
 
         private void InitializeTableQueries()
@@ -90,6 +93,10 @@ namespace DataMart.SqlMapper
         public void RefreshTableData<T>(InputTable table)
         {
             LoadTable<T>(table);
+        }
+        private string GenerateVersion()
+        {
+            return $"VER_{DateTime.Now:yyyyMMdd_HHmmss}"; // 예: VER_20250228_164837
         }
     }
 }
