@@ -11,7 +11,7 @@ namespace SimulationEngine.SimulationInterface
 {
     public interface ISimEquipmentModel
     {
-        List<Equipment> GetEqpList();
-        List<SimEquipment> GetLoadableEqpList(SimLot lot);
+        IEnumerable<Equipment> GetEqpList();
+        IEnumerable<string> GetLoadableEqpIds(SimLot lot);
     }
 }

@@ -68,7 +68,7 @@ namespace SimulationEngine.SimulationEntity
         {
             _model.OnBeginInitialize();
             
-            //_eqpManager.SimEqpInit();
+            _eqpManager.SimEqpInit();
             _lotManager.SimLotInit();
 
             _model.OnEndInitialize();

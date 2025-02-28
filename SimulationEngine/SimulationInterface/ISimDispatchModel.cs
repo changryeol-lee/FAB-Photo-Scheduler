@@ -1,4 +1,5 @@
 ﻿using SimulationEngine.SimulationEntity;
+using SimulationEngine.SimulationLog;
 using SimulationEngine.SimulationObject;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,9 @@ namespace SimulationEngine.SimulationInterface
     public interface ISimDispatchModel
     {
         bool FilterEqp(SimEquipment equipment, DateTime currentTime);
-        List<SimLot> FilterLot(SimEquipment equipment, List<SimLot> possibleLots);
+        void FilterLot(SimEquipment equipment, List<SimLot> candidateLots, out List<SimLot> passedLots, out List<SimLot> excludedLots);
         SimLot SelectLot(SimEquipment equipment, List<SimLot> selectedLot);
+        void WriteDispatchLog(DispatchLog log);
         //void OnDispatched(SimLot lot, SimEquipment equipment); 
     }
 }

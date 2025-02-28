@@ -13,6 +13,5 @@ namespace SimulationEngine.SimulationInterface
         void OnStart();
         void OnDone();
         void OnDayChanged(DateTime currentDate);
-
     }
 }

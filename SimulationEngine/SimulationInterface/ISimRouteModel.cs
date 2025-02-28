@@ -17,13 +17,13 @@ namespace SimulationEngine.SimulationInterface
 
         //public void OnDispatched(SimLot lot, SimEquipment equipment);
 
-        void OnStartTask(SimLot lot, SimEquipment equipment);
+        void OnProcessIn(SimLot lot, SimEquipment equipment);
 
-        void OnEndTask(SimLot lot, SimEquipment equipment);
+        void OnProcessed(SimLot lot, SimEquipment equipment);
 
-        bool IsDone(SimLot lot);
+        bool OnStepDone(SimLot lot);
 
         string GetNextStep(SimLot lot);
-        void OnDone(SimLot lot);
+        void OnLotDone(SimLot lot);
     }
 }
