@@ -12,8 +12,9 @@ namespace SimulationEngine.SimulationLog
         public string EqpId { get; set; }
         public string StepId { get; set; }
         public DateTime DispatchingTime { get; set; }
-        public SimLot SelectedLot { get; set; }
         public List<SimLot> CandidateLots { get; set; }      
-        public List<SimLot> FilterLots { get; set; }
+        public List<SimLot> PassedLots { get; set; }
+        public List<SimLot> ExcludedLots { get; set; }
+        public SimLot SelectedLot { get; set; }
     }
 }

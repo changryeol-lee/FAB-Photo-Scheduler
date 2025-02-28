@@ -57,14 +57,15 @@ namespace SimulationEngine.Manager
                 if (_model.FilterEqp(equipment, _currentTime)) continue;
 
                 if (!_dispatchLotList.ContainsKey(equipment) || _dispatchLotList[equipment].Count == 0) continue;
+                
+                List<SimLot> passedLots, excludedLots;
+                List<SimLot> candidateLots = _dispatchLotList[equipment];
+                _model.FilterLot(equipment, candidateLots, out passedLots, out excludedLots);
 
-                List<SimLot> possibleLots = _dispatchLotList[equipment];
-                List<SimLot> filteredLots = _model.FilterLot(equipment, possibleLots);
-
-                SimLot selectedLot = _model.SelectLot(equipment, filteredLots);
+                SimLot selectedLot = _model.SelectLot(equipment, passedLots);
                 if (selectedLot != null)
                 {
-                    DispatchLog log = WriteDispatchLog(equipment, selectedLot, filteredLots, possibleLots);
+                    DispatchLog log = WriteDispatchLog(equipment, selectedLot, candidateLots, passedLots, excludedLots);
                     equipment.AddDispatchHistory(log);
                     _model.WriteDispatchLog(log); 
                     RemoveLotFromAllQueues(selectedLot);
@@ -74,14 +75,16 @@ namespace SimulationEngine.Manager
             }
         }
 
-        public DispatchLog WriteDispatchLog(SimEquipment eqp, SimLot lot, List<SimLot> filterLots, List<SimLot> CandidateLots) {
+        public DispatchLog WriteDispatchLog(SimEquipment eqp, SimLot lot, List<SimLot> candidateLots, List<SimLot> passedLots, List<SimLot> excludedLots) {
             DispatchLog log = new DispatchLog();
             log.EqpId = eqp.EqpId;
             log.StepId = lot.GetLot().StepId;
             log.DispatchingTime = _currentTime;
-            log.SelectedLot = lot; 
-            log.CandidateLots = CandidateLots;
-            log.FilterLots = filterLots;
+            log.CandidateLots = candidateLots;
+            log.PassedLots = passedLots;
+            log.ExcludedLots = excludedLots;
+            log.SelectedLot = lot;
+
             return log; 
         }
 
