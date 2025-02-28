@@ -9,4 +9,10 @@
         EQP_ARRANGE,
         STEP
     }
+
+    public enum OutputTable
+    {
+        DISPATCH_LOG,
+        EQP_SCHEDULE 
+    }
 }

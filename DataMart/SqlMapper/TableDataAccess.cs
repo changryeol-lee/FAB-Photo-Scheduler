@@ -35,5 +35,24 @@ namespace DataMart.SqlMapper
 
             return list;
         }
+
+        public int InsertRows<T>(string insertSql, IEnumerable<T> dataItems, Action<MySqlCommand, T> bindParameters)
+        {
+            int totalRows = 0;
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(insertSql, conn))
+            {
+                conn.Open();
+                foreach (var item in dataItems)
+                {
+                    cmd.Parameters.Clear();
+                    bindParameters(cmd, item);
+
+                    totalRows += cmd.ExecuteNonQuery();
+                }
+            }
+            return totalRows;
+        }
     }
 }

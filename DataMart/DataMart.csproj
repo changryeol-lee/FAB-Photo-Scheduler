@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OutputMart.cs" />
     <Compile Include="Input\EQP_ARRANGE.cs" />
     <Compile Include="Input\EQUIPMENT.cs" />
     <Compile Include="Input\PROCESS.cs" />
@@ -64,6 +65,8 @@
     <Compile Include="Input\Query\EquipmentQuery.cs" />
     <Compile Include="Input\Query\ProductQuery.cs" />
     <Compile Include="Input\STEP.cs" />
+    <Compile Include="Output\DISPATCH_LOG.cs" />
+    <Compile Include="Output\EQP_SCHDULE.cs" />
     <Compile Include="SqlMapper\BaseMapper.cs" />
     <Compile Include="Input\STEP_ROUTE.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,9 +76,7 @@
     <Compile Include="SqlMapper\TableLoadInfo.cs" />
     <Compile Include="SqlMapper\TableName.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Output\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
