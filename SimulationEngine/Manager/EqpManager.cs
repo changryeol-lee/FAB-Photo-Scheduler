@@ -19,6 +19,7 @@ namespace SimulationEngine.Agents
         public EqpManager(ISimEquipmentModel model)
         {
             _model = model;
+            _simEquipments = new Dictionary<string, SimEquipment>();
         }
 
         public void SimEqpInit()

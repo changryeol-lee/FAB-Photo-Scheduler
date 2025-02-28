@@ -18,11 +18,12 @@ namespace SimulationEngine.Manager
         public LotManager(ISimLotModel model)
         {
             _model = model;
+            _simLots = new Dictionary<string, SimLot>();
         }
 
         public void SimLotInit()
         {
-            List<Lot> lots = _model.GetLots();
+            IEnumerable<Lot> lots = _model.GetLots(SimFactory.Instance._processManager);
 
             foreach (var lot in lots)
             {
@@ -32,6 +33,10 @@ namespace SimulationEngine.Manager
         public SimLot GetLot(string lotId)
         {
             return _simLots.TryGetValue(lotId, out var lot) ? lot : null;
+        }
+        public List<SimLot> GetInitialLots()
+        {
+            return _simLots.Values.ToList();
         }
     }
 }

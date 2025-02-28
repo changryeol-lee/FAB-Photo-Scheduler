@@ -18,8 +18,8 @@ namespace SimulationEngine.Manager
     {
         private readonly ISimDispatchModel _model;
         private DateTime _currentTime => SimFactory.Instance.currentTime;
-        private ScheduleManager _scheduleManager = SimFactory.Instance._scheduleManager;
-        private RouteManager _routeManager = SimFactory.Instance._routeManager;
+        private ScheduleManager _scheduleManager;
+        private RouteManager _routeManager;
         private List<SimLot> _waitingLotList = new List<SimLot>();
         private readonly Dictionary<SimEquipment, List<SimLot>> _dispatchLotList;
 
@@ -27,6 +27,8 @@ namespace SimulationEngine.Manager
         {
             _model = model;
             _dispatchLotList = new Dictionary<SimEquipment, List<SimLot>>();
+            _scheduleManager = SimFactory.Instance._scheduleManager;
+            _routeManager = SimFactory.Instance._routeManager;
         }
 
         public void AddWaitingLot(SimLot lot)
@@ -78,7 +80,7 @@ namespace SimulationEngine.Manager
         public DispatchLog WriteDispatchLog(SimEquipment eqp, SimLot lot, List<SimLot> candidateLots, List<SimLot> passedLots, List<SimLot> excludedLots) {
             DispatchLog log = new DispatchLog();
             log.EqpId = eqp.EqpId;
-            log.StepId = lot.GetLot().StepId;
+            log.StepId = lot.StepId;
             log.DispatchingTime = _currentTime;
             log.CandidateLots = candidateLots;
             log.PassedLots = passedLots;
