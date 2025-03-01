@@ -48,7 +48,7 @@ namespace SimulationEngine.SimulationObject
 
         public void SetCurrentPlan(EqpSchedule plan)
         {
-            _previousPlan = plan;
+            _currentPlan = plan;
         }
 
         public Equipment GetEquipment() => _equipment;
