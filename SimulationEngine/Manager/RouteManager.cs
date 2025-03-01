@@ -57,16 +57,6 @@ namespace SimulationEngine.Manager
             Release(releaseLots);
         }
 
-        public void Release(SimLot lot)
-        {
-            Lot actualLot = lot.GetLot();
-            actualLot.ArrivalTime = _currentTime;
-            _dispatchManager.AddWaitingLot(lot);
-            _dispatchManager.AddToDispatchLot(lot); 
-            _model.OnRelease(lot);
-            // Lot이 추가되었으므로 Dispatching 시도
-            _scheduleManager.AddEvent(_currentTime, () => DispatchIn());
-        }
         public void Release(List<SimLot> relaseLots)
         {
             foreach (SimLot lot in relaseLots)

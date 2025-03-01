@@ -57,7 +57,7 @@ namespace SimulationEngine.Manager
 
             double procTime = _model.GetProcessTime(equipment, lot);
 
-            DateTime finishTime = startTime.AddMinutes(procTime);
+            DateTime finishTime = startTime.AddSeconds(procTime);
             equipment.GetEquipment().State = EqpState.BUSY; 
 
             _scheduleManager.AddEvent(finishTime, () =>

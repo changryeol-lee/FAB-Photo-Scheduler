@@ -19,7 +19,6 @@ namespace SimulationEngine.Manager
         private readonly ISimDispatchModel _model;
         private DateTime _currentTime => SimFactory.Instance.currentTime;
         private ScheduleManager _scheduleManager;
-        private RouteManager _routeManager;
         private List<SimLot> _waitingLotList = new List<SimLot>();
         private readonly Dictionary<SimEquipment, List<SimLot>> _dispatchLotList;
 
@@ -28,7 +27,6 @@ namespace SimulationEngine.Manager
             _model = model;
             _dispatchLotList = new Dictionary<SimEquipment, List<SimLot>>();
             _scheduleManager = SimFactory.Instance._scheduleManager;
-            _routeManager = SimFactory.Instance._routeManager;
         }
 
         public void AddWaitingLot(SimLot lot)
@@ -39,6 +37,10 @@ namespace SimulationEngine.Manager
         public void AddToDispatchLot(SimLot lot)
         {
             var availableEquipments = SimFactory.Instance._eqpManager.GetLoadableEqpList(lot);
+            if (availableEquipments == null || availableEquipments.Count() == 0)
+            {
+                Console.WriteLine($"{_currentTime} {lot.LotId} not availabe equip"); 
+            }
 
             foreach (var eqp in availableEquipments)
             {
@@ -53,6 +55,12 @@ namespace SimulationEngine.Manager
         public void Dispatch()
         {
             List<SimEquipment> idleEquipments = SimFactory.Instance._eqpManager.GetIdleEqpList();
+
+            if (idleEquipments == null || idleEquipments.Count() == 0)
+            {
+                Console.WriteLine($"{_currentTime}  not availabe idle equip");
+            }
+
 
             foreach (var equipment in idleEquipments)
             {
@@ -71,8 +79,8 @@ namespace SimulationEngine.Manager
                     equipment.AddDispatchHistory(log);
                     _model.WriteDispatchLog(log); 
                     RemoveLotFromAllQueues(selectedLot);
-                    _waitingLotList.Remove(selectedLot); 
-                    _routeManager.Dispatched(selectedLot, equipment);
+                    _waitingLotList.Remove(selectedLot);
+                    SimFactory.Instance._routeManager.Dispatched(selectedLot, equipment);
                 }
             }
         }

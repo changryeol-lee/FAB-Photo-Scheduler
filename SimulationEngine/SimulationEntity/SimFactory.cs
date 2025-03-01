@@ -65,8 +65,8 @@ namespace SimulationEngine.SimulationEntity
             _eqpManager = new EqpManager(model.EquipmentModel);
             _lotManager = new LotManager(model.LotModel);
             _dispatchManager = new DispatchManager(model.DispatchModel);
-            _routeManager = new RouteManager(model.RouteModel);
             _processManager = new ProcessManager(model.ProcessModel);
+            _routeManager = new RouteManager(model.RouteModel);
         }
 
         public void Initialize(IModelGroup modelGroup)
