@@ -36,17 +36,28 @@ namespace SimulationEngine.Schedule
             {
                 var firstEntry = eventQueue.First();
                 DateTime eventTime = firstEntry.Key;
+
                 if (eventTime > _simulationEndTime) break; 
 
                 SimFactory.Instance.currentTime = eventTime;
 
+                // 실행 도중 eventQueue[eventTime]이 변경될 수 있으므로 별도로 보관
+                List<Action> actions = new List<Action>(firstEntry.Value);
+
                 // 이벤트 실행
-                foreach (var action in firstEntry.Value)
+                foreach (var action in actions)
                 {
                     action?.Invoke();
                 }
-                // 실행 끝난 이벤트 제거
-                eventQueue.Remove(eventTime);
+
+                if (eventQueue.TryGetValue(eventTime, out List<Action> newActions) && newActions.Count > actions.Count)
+                {
+                    eventQueue[eventTime] = newActions.Skip(actions.Count).ToList();
+                }
+                else
+                {
+                    eventQueue.Remove(eventTime);
+                }
             }
         }
     }
