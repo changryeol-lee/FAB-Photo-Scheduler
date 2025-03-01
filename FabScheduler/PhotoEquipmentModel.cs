@@ -39,7 +39,10 @@ namespace FabSchedulerModel
             string prodId = lot.ProductId;
             string procId = lot.ProcessId;
             List<string> photoEqpIds = arrangeList.FindAll(x => x.STEP_ID.Equals(stepId) && x.PRODUCT_ID.Equals(prodId) && x.PROCESS_ID.Equals(procId)).Select(x=>x.EQP_ID).ToList();
-
+            if (photoEqpIds == null)
+            {
+                Console.WriteLine("arrnage");
+            }
             return photoEqpIds; 
         }
     }

@@ -52,6 +52,7 @@ namespace FabSchedulerModel
                     Step step = steps.Where(s=>s.StepId == stepRoute.STEP_ID).FirstOrDefault();
                     if (step != null)
                     {
+                        step.StepSeq = stepRoute.STEP_SEQ;
                         proc.AddStep(step);
                     }
                 }
