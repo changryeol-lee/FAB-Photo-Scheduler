@@ -1,0 +1,111 @@
+<template>
+  <q-layout view="hHh LpR fFf">
+    <q-header elevated class="sk-header">
+      <q-toolbar>
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-toolbar-title>
+          <q-avatar>
+            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+          </q-avatar>
+          FAB PHOTO Schduler
+        </q-toolbar-title>
+      </q-toolbar>
+    </q-header>
+
+    <q-drawer show-if-above v-model="leftDrawerOpen" side="left" behavior="desktop" elevated>
+      <q-list>
+        <!-- 1. 기준정보 -->
+        <q-item clickable v-ripple to="/master-data">
+          <q-item-section avatar>
+            <q-icon name="table_chart" />
+          </q-item-section>
+          <q-item-section>기준정보</q-item-section>
+        </q-item>
+        <!-- 2. 생산계획 (하위 메뉴 포함) -->
+        <q-expansion-item
+          expand-separator
+          icon="event"
+          label="생산 계획"
+          @show="onShow('productionPlan')"
+          @hide="onHide('productionPlan')"
+          :header-style="parentMenuBackgroundColor.get('productionPlan')"
+        >
+          <q-item clickable v-ripple to="/schedule/eqp" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="build" />
+            </q-item-section>
+            <q-item-section>설비별 생산 계획</q-item-section>
+          </q-item>
+
+          <q-item clickable v-ripple to="/schedule/product" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="shopping_cart" />
+            </q-item-section>
+            <q-item-section>완제품 생산 계획</q-item-section>
+          </q-item>
+        </q-expansion-item>
+
+        <!-- 3. 계획 분석 (하위 메뉴 포함) -->
+        <q-expansion-item
+          expand-separator
+          icon="bar_chart"
+          label="계획 분석"
+          @show="onShow('planAnalysis')"
+          @hide="onHide('planAnalysis')"
+          :header-style="parentMenuBackgroundColor.get('planAnalysis')"
+        >
+          <q-item clickable v-ripple to="/analysis/gantt" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="timeline" />
+            </q-item-section>
+            <q-item-section>간트차트</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple to="/analysis/compare" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="compare" />
+            </q-item-section>
+            <q-item-section>계획 결과 비교</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple to="/analysis/dispatch-log" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="list" />
+            </q-item-section>
+            <q-item-section>Dispatch Log</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple to="/analysis/other-logs" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="description" />
+            </q-item-section>
+            <q-item-section>기타 Log</q-item-section>
+          </q-item>
+        </q-expansion-item>
+      </q-list>
+    </q-drawer>
+    <q-page-container>
+      <router-view />
+    </q-page-container>
+  </q-layout>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const leftDrawerOpen = ref(false)
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+const parentMenuBackgroundColor = ref(new Map<string, any>())
+const onShow = (menu: string) => {
+  parentMenuBackgroundColor.value.set(menu, { backgroundColor: 'rgba(0, 128, 255, 0.2)' })
+}
+const onHide = (menu: string) => {
+  parentMenuBackgroundColor.value.delete(menu)
+}
+</script>
+<style scoped>
+.sk-header {
+  background: linear-gradient(90deg, #ea002c 0%, #ff6a00 100%); /* SK하이닉스 로고 그라디언트 */
+  color: white;
+}
+</style>
