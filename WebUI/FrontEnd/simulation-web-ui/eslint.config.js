@@ -66,6 +66,7 @@ export default defineConfigWithVueTs(
       'prefer-promise-reject-errors': 'off',
       '@typescript-eslint/no-unused-vars': 'off', // 사용하지 않은 변수 경고 끄기
       '@typescript-eslint/no-explicit-any': 'off', // any 타입 사용 허용
+      'prefer-const': 'off',
       // allow debugger during development only
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     },
