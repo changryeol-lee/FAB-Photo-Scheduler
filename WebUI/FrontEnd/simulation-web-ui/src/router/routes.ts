@@ -1,5 +1,9 @@
 import type { RouteRecordRaw } from 'vue-router'
-import MasterData from 'pages/MasterData.vue' // 추가
+import MasterData from 'pages/MasterData.vue'
+import GanttChart from 'pages/GanttChart.vue'
+import GanttChart2 from 'pages/GanttChart2.vue'
+import EqpSchedule from 'src/pages/EqpSchedule.vue'
+import DispatchLog from 'src/pages/DispatchLog.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -8,6 +12,15 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       { path: 'master-data', component: MasterData },
+      {
+        path: 'analysis',
+        children: [
+          { path: 'gantt', component: GanttChart },
+          { path: 'gantt2', component: GanttChart2 },
+          { path: 'eqp-schedule', component: EqpSchedule },
+          { path: 'dispatch-log', component: DispatchLog },
+        ],
+      },
     ],
   },
 
