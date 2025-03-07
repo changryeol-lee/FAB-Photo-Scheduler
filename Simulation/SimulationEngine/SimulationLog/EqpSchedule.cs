@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimulationEngine.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,6 @@ namespace SimulationEngine.ProcessEntity
         public double ProcessDuration => (EndTime - StartTime).TotalMinutes;
         // Lot이 실제로 공정 대기를 얼마나 했는지
         public double? WaitDuration { get; set; }
-        public DateTime? SetupStartTime { get; set; }
-        public DateTime? SetupEndTime { get; set; }
+        public WorkType WorkType { get; set; }
     }
 }

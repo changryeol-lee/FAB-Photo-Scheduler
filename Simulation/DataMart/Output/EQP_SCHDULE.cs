@@ -21,7 +21,6 @@ namespace DataMart.Output
         public double PROCESS_DURATION { get; set; }
         // Lot이 실제로 공정 대기를 얼마나 했는지
         public double? WAIT_DURATION { get; set; }
-        public DateTime? SETUP_START_TIME { get; set; }
-        public DateTime? SETUP_END_TIME { get; set; }
+        public string WORK_TYPE { get; set; }
     }
 }

@@ -19,4 +19,11 @@ namespace SimulationEngine.Common
         WAIT,
         RUN
     }
+    public enum WorkType
+    {
+        PLAN,
+        REWORK,
+        SETUP,
+        OFF
+    }
 }

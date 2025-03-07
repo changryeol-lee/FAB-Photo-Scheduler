@@ -74,7 +74,7 @@ namespace SimulationEngine.Manager
             lot.GetLot().State = LotState.RUN;
 
             string scheduleId = equipment.EqpId + "-" + Utils.GenerateRandom8Digits();
-
+            double waitMinutes = (startTime - lot.GetLot().ArrivalTime).TotalMinutes;
             EqpSchedule schedule = new EqpSchedule
             {
                 ScheduleId = scheduleId,
@@ -82,7 +82,10 @@ namespace SimulationEngine.Manager
                 ProductId = lot.ProductId,
                 LotId = lot.LotId,
                 StepId = lot.StepId,
-                StartTime = startTime
+                StartTime = startTime,
+                LotQty = lot.GetLot().LotQty,
+                WaitDuration = waitMinutes,
+                WorkType = WorkType.PLAN
             };
             equipment.SetCurrentPlan(schedule);
             _schedules.Add(scheduleId, schedule);
@@ -94,12 +97,12 @@ namespace SimulationEngine.Manager
             return _model.GetProcessTime(equipment, lot);
         }
 
-        internal void TrackOut(SimEquipment equipment, SimLot lot, DateTime finishiTime)
+        internal void TrackOut(SimEquipment equipment, SimLot lot, DateTime finishTime)
         {
             equipment.GetEquipment().State = EqpState.IDLE;
             lot.GetLot().State = LotState.WAIT;
             EqpSchedule plan =  equipment.GetCurrentPlan();
-            plan.EndTime = finishiTime;
+            plan.EndTime = finishTime;
             equipment.SetPreviousPlan(plan);
             equipment.SetCurrentPlan(null);
             _model.OnTrackOut(equipment, lot, plan);

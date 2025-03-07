@@ -106,8 +106,7 @@ namespace FabSchedulerModel
             es.END_TIME = plan.EndTime;
             es.PROCESS_DURATION = plan.ProcessDuration;
             es.WAIT_DURATION = plan.WaitDuration;
-            es.SETUP_START_TIME = plan.SetupStartTime;
-            es.SETUP_END_TIME = plan.SetupEndTime;
+            es.WORK_TYPE = plan.WorkType.ToString(); 
             OutputMart.Instance.AddData(OutputTable.EQP_SCHEDULE, es);
         }
     }

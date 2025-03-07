@@ -85,9 +85,9 @@ namespace DataMart.SqlMapper
                         var scheduleList = listObj as List<EQP_SCHEDULE>;
                         string insertEqpScheduleSql =
                             "INSERT INTO TB_EQP_SCHEDULE (SIMULATION_VERSION, SCHEDULE_ID, EQP_ID, PRODUCT_ID, LOT_ID, LOT_QTY, STEP_ID, START_TIME, END_TIME, " +
-                            "PROCESS_DURATION, WAIT_DURATION, SETUP_START_TIME, SETUP_END_TIME) " +
+                            "PROCESS_DURATION, WAIT_DURATION, WORK_TYPE) " +
                             "VALUES (@SimulationVersion, @ScheduleId, @EqpId, @ProductId, @LotId, @LotQty, @StepId, @StartTime, @EndTime, " +
-                            "@ProcessDuration, @WaitDuration, @SetupStartTime, @SetupEndTime)";
+                            "@ProcessDuration, @WaitDuration, @WorkType)";
 
                         int eqpRows = dataAccess.InsertRows(insertEqpScheduleSql, scheduleList, (cmd, item) =>
                         {
@@ -102,8 +102,8 @@ namespace DataMart.SqlMapper
                             cmd.Parameters.AddWithValue("@EndTime", item.END_TIME);
                             cmd.Parameters.AddWithValue("@ProcessDuration", (item.END_TIME - item.START_TIME).TotalMinutes);
                             cmd.Parameters.AddWithValue("@WaitDuration", item.WAIT_DURATION);
-                            cmd.Parameters.AddWithValue("@SetupStartTime", item.SETUP_START_TIME);
-                            cmd.Parameters.AddWithValue("@SetupEndTime", item.SETUP_END_TIME);
+                            cmd.Parameters.AddWithValue("@WorkType", item.WORK_TYPE);
+       
                         });
                         break;
 
