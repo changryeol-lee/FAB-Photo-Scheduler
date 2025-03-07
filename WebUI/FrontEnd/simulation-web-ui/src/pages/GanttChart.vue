@@ -196,6 +196,10 @@
         :virtual-scroll-slice-size="6"
         :pagination="pagination"
       >
+        <!-- 
+      고민..
+      hide-bottom 
+      -->
       </q-table>
     </div>
   </div>
@@ -799,8 +803,10 @@ const loadEqpSchedule = async (version: string = 'VER_20250301_182331'): Promise
 }
 
 .selected-task {
-  border: 2px solid #000;
-  z-index: 5;
+  /* border: 2px solid #03097c;
+  z-index: 5; */
+  border: 2.5px solid #7e25f1;
+  /* box-shadow: inset 0 0 0 2px #3d5afe; */
 }
 
 .resource-tasks {
@@ -854,6 +860,23 @@ const loadEqpSchedule = async (version: string = 'VER_20250301_182331'): Promise
 }
 :deep(.q-checkbox) {
   display: none;
+}
+
+/* 열 사이에 경계선 추가 */
+:deep(.q-table th),
+:deep(.q-table td) {
+  border-right: 1px solid #e0e0e0;
+}
+
+/* 마지막 열의 오른쪽 경계선은 제거 (선택 사항) */
+:deep(.q-table th:last-child),
+:deep(.q-table td:last-child) {
+  border-right: none;
+}
+
+/* 테두리 스타일을 일관되게 유지 */
+:deep(.q-table) {
+  border-collapse: collapse;
 }
 
 @media (max-width: 800px) {
