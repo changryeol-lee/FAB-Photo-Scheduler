@@ -207,7 +207,7 @@
 
 <script setup lang="ts">
 import { date } from 'quasar'
-import { removeZAndParse } from 'src/utils/dateUtils'
+import { removeZAndParse, formatDateTime, formatDate } from 'src/utils/dateUtils'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import api from '../api/axiosInstance'
 import type { TaskItem } from '../types/types'
@@ -257,13 +257,6 @@ const resources = computed(() => {
 // 시간 간격 (시간)
 const timeInterval = ref(4)
 const hoursPerDay = computed(() => 24 / timeInterval.value)
-
-const formatDate = (dateStr: any) => {
-  return date.formatDate(dateStr, 'YYYY-MM-DD')
-}
-const formatDateTime = (dateObj: any) => {
-  return date.formatDate(dateObj, 'YYYY-MM-DD HH:mm:ss')
-}
 
 // 달력 데이터 생성
 const days = computed(() => {
@@ -477,23 +470,28 @@ const filteredTasks = computed(() => {
 })
 
 const columns = ref([
-  { name: 'SIMULATION_VERSION', required: true, label: '버전', field: 'SIMULATION_VERSION' },
+  { name: 'WORK_TYPE', required: true, label: '작업 유형', field: 'WORK_TYPE' },
   { name: 'EQP_ID', required: true, label: '프로세스 ID', field: 'EQP_ID' },
   { name: 'PRODUCT_ID', required: true, label: '제품 ID', field: 'PRODUCT_ID' },
   { name: 'LOT_ID', required: true, label: 'LOT ID', field: 'LOT_ID' },
   { name: 'LOT_QTY', required: true, label: 'LOT 수량', field: 'LOT_QTY' },
   { name: 'STEP_ID', required: true, label: '공정 ID', field: 'STEP_ID' },
-  { name: 'START_TIME', required: true, label: 'START_TIME', field: 'START_TIME' },
-  { name: 'END_TIME', required: true, label: 'END_TIME', field: 'END_TIME' },
-  { name: 'PROCESS_DURATION', required: true, label: '작업 시간', field: 'PROCESS_DURATION' },
-  { name: 'WAIT_DURATION', required: true, label: '대기 시간', field: 'WAIT_DURATION' },
+  { name: 'START_TIME', required: true, label: '작업 시작 시간', field: 'START_TIME' },
+  { name: 'END_TIME', required: true, label: '작업 종료 시간', field: 'END_TIME' },
   {
-    name: 'SETUP_START_TIME',
+    name: 'PROCESS_DURATION',
     required: true,
-    label: 'SETUP_START_TIME',
-    field: 'SETUP_START_TIME',
+    label: '총 작업 시간(분)',
+    field: 'PROCESS_DURATION',
   },
-  { name: 'SETUP_END_TIME', required: true, label: 'SETUP_END_TIME', field: 'SETUP_END_TIME' },
+  { name: 'WAIT_DURATION', required: true, label: '대기 시간(분)', field: 'WAIT_DURATION' },
+  // {
+  //   name: 'SETUP_START_TIME',
+  //   required: true,
+  //   label: 'SETUP_START_TIME',
+  //   field: 'SETUP_START_TIME',
+  // },
+  // { name: 'SETUP_END_TIME', required: true, label: 'SETUP_END_TIME', field: 'SETUP_END_TIME' },
 ])
 
 // 테이블 행 클릭 이벤트
@@ -537,13 +535,10 @@ const loadEqpSchedule = async (version: string = 'VER_20250301_182331'): Promise
     // API 응답의 날짜 문자열을 Date 객체로 변환
     eqpSchedule.value = response.data.map((item: any) => ({
       ...item,
-      START_TIME: new Date(removeZAndParse(item.START_TIME)),
-      END_TIME: new Date(removeZAndParse(item.END_TIME)),
-      SETUP_START_TIME: item.SETUP_START_TIME
-        ? new Date(removeZAndParse(item.SETUP_START_TIME))
-        : null,
-      SETUP_END_TIME: item.SETUP_END_TIME ? new Date(removeZAndParse(item.SETUP_END_TIME)) : null,
+      START_TIME: formatDateTime(removeZAndParse(item.START_TIME)),
+      END_TIME: formatDateTime(removeZAndParse(item.END_TIME)),
     }))
+    console.log(eqpSchedule.value)
   } catch (err) {
     console.error('Error fetching schedule data:', err)
     error.value = '데이터를 불러오는 중 오류가 발생했습니다.'
