@@ -2,7 +2,7 @@
   <div class="control-container">
     <div class="control-wrapper">
       <div class="control-menu-name">작업 계획 / 설비 간트 차트</div>
-      <div class="header-container">
+      <div class="header-container q-pa-md">
         <div class="filter-row">
           <div class="filter-item">
             <q-select
@@ -88,7 +88,7 @@
 
   <div v-else>
     <!-- Gantt Chart Container -->
-    <div class="gantt-wrapper">
+    <div class="gantt-wrapper q-px-md">
       <div class="gantt-wrap">
         <!-- Left Sidebar (Fixed) -->
         <div class="gantt-sidebar">
@@ -179,6 +179,25 @@
         </div>
       </div>
     </div>
+    <div class="task-table-container q-mt-md q-px-md" v-if="eqpSchedule.length > 0">
+      <q-table
+        class="task-detail-table"
+        :rows="filteredTasks"
+        :columns="columns"
+        row-key="SCHEDULE_ID"
+        v-model:selected="selectedTableRows"
+        selection="single"
+        @row-click="onTableRowClick"
+        bordered
+        flat
+        dense
+        sticky-header
+        virtual-scroll
+        :virtual-scroll-slice-size="6"
+        :pagination="pagination"
+      >
+      </q-table>
+    </div>
   </div>
 </template>
 
@@ -237,6 +256,9 @@ const hoursPerDay = computed(() => 24 / timeInterval.value)
 
 const formatDate = (dateStr: any) => {
   return date.formatDate(dateStr, 'YYYY-MM-DD')
+}
+const formatDateTime = (dateObj: any) => {
+  return date.formatDate(dateObj, 'YYYY-MM-DD HH:mm:ss')
 }
 
 // 달력 데이터 생성
@@ -434,10 +456,53 @@ const setupScrollSynchronization = () => {
   }
 }
 
-// 작업 선택 시 상세 정보 표시
-watch(selectedTask, (newVal) => {
-  if (newVal) {
-    showTaskDetail.value = true
+// 테이블 관련 상태
+const selectedTableRows = ref([])
+const pagination = ref({ rowsPerPage: 0 })
+// 선택된 설비의 작업만 필터링
+const filteredTasks = computed(() => {
+  let tasks = eqpSchedule.value
+
+  if (selectedTask.value?.EQP_ID) {
+    tasks = tasks.filter((task) => task.EQP_ID === selectedTask.value.EQP_ID)
+  }
+
+  return [...tasks].sort((a, b) => {
+    return new Date(a.START_TIME).getTime() - new Date(b.START_TIME).getTime()
+  })
+})
+
+const columns = ref([
+  { name: 'SIMULATION_VERSION', required: true, label: '버전', field: 'SIMULATION_VERSION' },
+  { name: 'EQP_ID', required: true, label: '프로세스 ID', field: 'EQP_ID' },
+  { name: 'PRODUCT_ID', required: true, label: '제품 ID', field: 'PRODUCT_ID' },
+  { name: 'LOT_ID', required: true, label: 'LOT ID', field: 'LOT_ID' },
+  { name: 'LOT_QTY', required: true, label: 'LOT 수량', field: 'LOT_QTY' },
+  { name: 'STEP_ID', required: true, label: '공정 ID', field: 'STEP_ID' },
+  { name: 'START_TIME', required: true, label: 'START_TIME', field: 'START_TIME' },
+  { name: 'END_TIME', required: true, label: 'END_TIME', field: 'END_TIME' },
+  { name: 'PROCESS_DURATION', required: true, label: '작업 시간', field: 'PROCESS_DURATION' },
+  { name: 'WAIT_DURATION', required: true, label: '대기 시간', field: 'WAIT_DURATION' },
+  {
+    name: 'SETUP_START_TIME',
+    required: true,
+    label: 'SETUP_START_TIME',
+    field: 'SETUP_START_TIME',
+  },
+  { name: 'SETUP_END_TIME', required: true, label: 'SETUP_END_TIME', field: 'SETUP_END_TIME' },
+])
+
+// 테이블 행 클릭 이벤트
+const onTableRowClick = (evt, row) => {
+  selectedTask.value = row
+  selectedTableRows.value = [row]
+}
+
+// 간트 차트 선택 시 테이블 연동
+watch(selectedTask, (newTask) => {
+  if (newTask) {
+    selectedTableRows.value = [newTask]
+    // 해당 행으로 스크롤 처리 로직...
   }
 })
 
@@ -506,7 +571,6 @@ const loadEqpSchedule = async (version: string = 'VER_20250301_182331'): Promise
 }
 
 .header-container {
-  padding: 16px;
   background: #f5f7fa;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
@@ -539,41 +603,11 @@ const loadEqpSchedule = async (version: string = 'VER_20250301_182331'): Promise
   font-weight: 500;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-  .filter-item {
-    flex: 0 0 calc(33.33% - 12px);
-  }
-
-  .search-button-container {
-    margin-top: 12px;
-    width: 100%;
-  }
-
-  .search-button {
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .filter-item {
-    flex: 0 0 calc(50% - 8px);
-  }
-}
-
-@media (max-width: 576px) {
-  .filter-item {
-    flex: 0 0 100%;
-  }
-}
-
 .gantt-wrapper {
   height: 500px;
   margin-bottom: 20px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
   background-color: #fff;
-  padding-left: 16px;
-  padding-right: 16px;
 }
 
 .gantt-wrap {
@@ -769,16 +803,89 @@ const loadEqpSchedule = async (version: string = 'VER_20250301_182331'): Promise
   z-index: 5;
 }
 
-/* Resource tasks row */
 .resource-tasks {
   position: relative;
   height: 50px; /* Match resource row height */
   border-bottom: 1px solid #ebeef5;
 }
 
+.task-table-container {
+  height: 220px; /* 테이블 높이 설정 */
+  overflow-y: auto;
+  position: relative;
+}
+/* 테이블 헤더 고정 CSS */
+:deep(.q-table) thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+:deep(.q-table) thead tr th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f5f5f5;
+}
+
+.task-detail-table {
+  height: 220px;
+}
+/* 테이블 헤더 스타일 */
+:deep(.q-table thead tr) {
+  background-color: #f5f5f5;
+}
+
+/* 고정 헤더에 그림자 효과 추가 */
+:deep(.q-table--sticky-header thead tr:last-child th) {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+/* 선택된 행 스타일 */
+:deep(.q-table tbody tr.selected) {
+  background-color: rgba(25, 118, 210, 0.12);
+}
+
+/* 체크박스 열 너비를 0으로 설정하여 완전히 숨기기 */
+/* .q-table--col-auto-width {
+  padding: 0px;
+} */
+:deep(.q-table--col-auto-width) {
+  display: none;
+}
+:deep(.q-checkbox) {
+  display: none;
+}
+
 @media (max-width: 800px) {
   .gantt-wrapper {
     height: 400px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .filter-item {
+    flex: 0 0 calc(33.33% - 12px);
+  }
+
+  .search-button-container {
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .search-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-item {
+    flex: 0 0 calc(50% - 8px);
+  }
+}
+
+@media (max-width: 576px) {
+  .filter-item {
+    flex: 0 0 100%;
   }
 }
 </style>
