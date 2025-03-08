@@ -234,8 +234,8 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 
 // UI 상태 관리
-const startDate = ref('2025-03-01')
-const endDate = ref('2025-03-08')
+const startDate = ref('') // 2025-03-01
+const endDate = ref('') // 2025-03-08
 const selectedScheduleVersion = ref(null)
 const selectedResource = ref(null)
 const columnWidth = ref(300)
@@ -243,10 +243,12 @@ const selectedTask = ref<TaskItem | null>(null)
 const showTaskDetail = ref(false)
 
 // 필터링 옵션 생성
-const scheduleVersions = computed(() => {
-  const versions = [...new Set(eqpSchedule.value.map((item) => item.SIMULATION_VERSION))]
-  return versions.map((version) => ({ label: version, value: version }))
-})
+const scheduleVersions = ref<any>()
+
+// = computed(() => {
+//   const versions = [...new Set(eqpSchedule.value.map((item) => item.SIMULATION_VERSION))]
+//   return versions.map((version) => ({ label: version, value: version }))
+// })
 
 // 리소스 목록
 const resources = computed(() => {
@@ -511,7 +513,8 @@ watch(selectedTask, (newTask) => {
 // 컴포넌트 마운트 시 초기화
 onMounted(async () => {
   // await loadEqpSchedule()
-  await loadEqpSchedule()
+  await loadEngineExecuteLog()
+  await loadEqpSchedule(selectedScheduleVersion.value)
   ensureHorizontalScroll()
   setupScrollSynchronization()
 })
@@ -520,24 +523,42 @@ watch([days, columnWidth], () => {
   ensureHorizontalScroll()
 })
 
+const loadEngineExecuteLog = async () => {
+  try {
+    const response = await api.get('/get-engine-execute-log')
+    scheduleVersions.value = response.data.map((x) => x.SIMULATION_VERSION)
+    selectedScheduleVersion.value = scheduleVersions.value[0]
+    startDate.value = formatDate(response.data[0].SIMULATION_START_TIME)
+    endDate.value = formatDate(response.data[0].SIMULATION_END_TIME)
+  } catch (err) {
+    console.error('Error fetching schedule version:', err)
+  }
+}
+
 // 데이터 로드 함수
-const loadEqpSchedule = async (version: string = 'VER_20250301_182331'): Promise<void> => {
+const loadEqpSchedule = async (version?: string): Promise<void> => {
   loading.value = true
   error.value = null
-
+  //= 'VER_20250301_182331'
   try {
     const response = await api.get('/get-eqp-schedule', {
       params: {
         version: version,
       },
     })
+    const latestVersion = response.data.reduce(
+      (max, row) => (row.SIMULATION_VERSION > max ? row.SIMULATION_VERSION : max),
+      '',
+    )
 
     // API 응답의 날짜 문자열을 Date 객체로 변환
-    eqpSchedule.value = response.data.map((item: any) => ({
-      ...item,
-      START_TIME: formatDateTime(removeZAndParse(item.START_TIME)),
-      END_TIME: formatDateTime(removeZAndParse(item.END_TIME)),
-    }))
+    eqpSchedule.value = response.data
+      .filter((item) => item.SIMULATION_VERSION === latestVersion)
+      .map((item: any) => ({
+        ...item,
+        START_TIME: formatDateTime(removeZAndParse(item.START_TIME)),
+        END_TIME: formatDateTime(removeZAndParse(item.END_TIME)),
+      }))
     console.log(eqpSchedule.value)
   } catch (err) {
     console.error('Error fetching schedule data:', err)
