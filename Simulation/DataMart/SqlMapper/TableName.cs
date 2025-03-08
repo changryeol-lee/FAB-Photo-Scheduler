@@ -7,7 +7,8 @@
         STEP_ROUTE,
         EQUIPMENT,
         EQP_ARRANGE,
-        STEP
+        STEP,
+        SETUP_INFO
     }
 
     public enum OutputTable

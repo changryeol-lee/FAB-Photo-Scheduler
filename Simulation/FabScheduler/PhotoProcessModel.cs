@@ -1,6 +1,7 @@
 ﻿using DataMart.Input;
 using DataMart.Output;
 using DataMart.SqlMapper;
+using FabSchedulerModel.Helper;
 using FabSchedulerModel.InputEntity;
 using SimulationEngine.BaseEntity;
 using SimulationEngine.Common;
@@ -94,32 +95,16 @@ namespace FabSchedulerModel
 
         public void OnTrackOut(SimEquipment equipment, SimLot lot, EqpSchedule plan)
         {
-            EQP_SCHEDULE es = new EQP_SCHEDULE();
-            es.SIMULATION_VERSION = InputMart.Instance.SimulationVersion; 
-            es.SCHEDULE_ID = plan.ScheduleId;
-            es.EQP_ID = plan.EqpId;
-            es.PRODUCT_ID = plan.ProductId;
-            es.LOT_ID = plan.LotId;
-            es.LOT_QTY = plan.LotQty;
-            es.STEP_ID = plan.StepId;
-            es.START_TIME = plan.StartTime;
-            es.END_TIME = plan.EndTime;
-            es.PROCESS_DURATION = plan.ProcessDuration;
-            es.WAIT_DURATION = plan.WaitDuration;
-            es.WORK_TYPE = plan.WorkType.ToString(); 
-            OutputMart.Instance.AddData(OutputTable.EQP_SCHEDULE, es);
+            Console.WriteLine($"{lot.LotId} OnTrackOut triggered. ");
+            OutputHelper.WriteEqpSchedule(plan);
         }
 
         public double GetSetupTime(SimEquipment equipment, SimLot lot)
         {
-            //List<EQP_ARRANGE> arrangeList = InputMart.Instance.GetList<EQP_ARRANGE>(InputTable.EQP_ARRANGE);
-            //string stepId = lot.StepId;
-            //string prodId = lot.ProductId;
-            //string procId = lot.ProcessId;
-            //string eqpId = equipment.EqpId;
-            //double procTime = arrangeList.FindAll(x => x.STEP_ID.Equals(stepId) && x.PRODUCT_ID.Equals(prodId) && x.PROCESS_ID.Equals(procId) && x.EQP_ID.Equals(eqpId)).Select(x => x.TACT_TIME).First();
-            //double tactTime = lot.GetLot().LotQty * procTime;
-            //return tactTime;
+            List<SETUP_INFO> setupInfoList = InputMart.Instance.GetList<SETUP_INFO>(InputTable.SETUP_INFO);
+            SETUP_INFO info = setupInfoList.Where(x => x.EQP_ID.Equals(equipment.EqpId)).FirstOrDefault();
+            if (info != null) return info.SETUP_TIME;
+
             return 0;
         }
 

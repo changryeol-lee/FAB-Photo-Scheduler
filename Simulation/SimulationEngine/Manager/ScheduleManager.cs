@@ -37,7 +37,7 @@ namespace SimulationEngine.Schedule
                 var firstEntry = eventQueue.First();
                 DateTime eventTime = firstEntry.Key;
 
-                if (eventTime > _simulationEndTime) break; 
+                if (eventTime > _simulationEndTime) break;
 
                 SimFactory.Instance.currentTime = eventTime;
 
@@ -60,5 +60,17 @@ namespace SimulationEngine.Schedule
                 }
             }
         }
+
+        public bool HasEvent(DateTime time, Action action)
+        {
+            if (!eventQueue.ContainsKey(time))
+                return false;
+
+            // 이미 등록된 이벤트 리스트에서 같은 메서드가 있는지 확인
+            return eventQueue[time].Any(existingAction => existingAction.Method == action.Method || // 직접 참조된 메서드
+                    (existingAction.Target is Action targetAction && targetAction.Method == action.Method) // 람다식 내부 메서드까지 비교
+                    );
+        }
+
     }
 }

@@ -75,7 +75,11 @@ namespace SimulationEngine.Manager
             }
 
             // Lot이 추가되었으므로 Dispatching 시도
-            _scheduleManager.AddEvent(_currentTime, () => DispatchIn());
+            
+            if (!_scheduleManager.HasEvent(_currentTime.AddMilliseconds(30), DispatchIn))
+            {
+                _scheduleManager.AddEvent(_currentTime.AddMilliseconds(30), DispatchIn);
+            }
         }
 
 
@@ -123,6 +127,9 @@ namespace SimulationEngine.Manager
             {
                 _processManager.Process(equipment, lot, currentTime);
             });
+
+            //이벤트로 등록시, disaptch와 동일 시간인 경우
+            //_processManager.Process(equipment, lot, currentTime);
         }
 
         public void Processed(SimLot lot, SimEquipment equipment, DateTime finishTime)
@@ -146,7 +153,10 @@ namespace SimulationEngine.Manager
             }
 
             //이 시점에 장비가 wait되서, dispatch하는 것도 고려. 
-            _scheduleManager.AddEvent(_currentTime, () => DispatchIn());
+            if (!_scheduleManager.HasEvent(_currentTime.AddMilliseconds(30), DispatchIn))
+            {
+                _scheduleManager.AddEvent(_currentTime.AddMilliseconds(30), DispatchIn);
+            }
         }
 
         //public bool OnStepDone(SimLot lot)

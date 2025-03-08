@@ -53,6 +53,7 @@ namespace DataMart.SqlMapper
             { InputTable.STEP, new StepQuery() },
             { InputTable.STEP_ROUTE, new StepRouteQuery() },
             { InputTable.EQP_ARRANGE, new EqpArrangeQuery() },
+            { InputTable.SETUP_INFO, new SetupInfoQuery() },
         };
         }
 
@@ -64,6 +65,8 @@ namespace DataMart.SqlMapper
             LoadTable<STEP_ROUTE>(InputTable.STEP_ROUTE);
             LoadTable<EQUIPMENT>(InputTable.EQUIPMENT);
             LoadTable<EQP_ARRANGE>(InputTable.EQP_ARRANGE);
+            LoadTable<SETUP_INFO>(InputTable.SETUP_INFO);
+
         }
 
         private void LoadTable<T>(InputTable table)

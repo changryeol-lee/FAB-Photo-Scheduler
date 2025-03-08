@@ -20,38 +20,60 @@ namespace FabSchedulerModel
             //List<EQP_ARRANGE> arrangeList = InputMart.Instance.GetList<EQP_ARRANGE>(InputTable.EQP_ARRANGE);
 
             List<PhotoLot> returnList = new List<PhotoLot>();
-            PhotoLot pl = new PhotoLot();
-            pl.LotId = "LOT_01";
-            pl.Product = processManager.GetProduct("PROD_01");
-            pl.Process = processManager.GetProcess("PROC_01");
-            pl.LotQty = 100;
-            pl.State = LotState.WAIT;
+            for(int i=1; i< 11; i++)
+            {
+                PhotoLot pl = new PhotoLot();
+                pl.LotId = $"LOT_{i:D2}";
+                pl.Product = processManager.GetProduct("PROD_01");
+                pl.Process = processManager.GetProcess("PROC_01");
+                pl.LotQty = 100;
+                pl.State = LotState.WAIT;
+                returnList.Add(pl);
+            }
 
-            PhotoLot pl2 = new PhotoLot();
-            pl2.LotId = "LOT_02";
-            pl2.Product = processManager.GetProduct("PROD_01");
-            pl2.Process = processManager.GetProcess("PROC_01");
-            pl2.LotQty = 100;
-            pl2.State = LotState.WAIT;
+            for (int i = 11; i < 20; i++)
+            {
+                PhotoLot pl = new PhotoLot();
+                pl.LotId = $"LOT_{i:D2}";
+                pl.Product = processManager.GetProduct("PROD_02");
+                pl.Process = processManager.GetProcess("PROC_01");
+                pl.LotQty = 100;
+                pl.State = LotState.WAIT;
+                returnList.Add(pl);
+            }
 
-            PhotoLot pl3 = new PhotoLot();
-            pl3.LotId = "LOT_03";
-            pl3.Product = processManager.GetProduct("PROD_02");
-            pl3.Process = processManager.GetProcess("PROC_01");
-            pl3.LotQty = 100;
-            pl3.State = LotState.WAIT;
+            //PhotoLot pl = new PhotoLot();
+            //pl.LotId = "LOT_01";
+            //pl.Product = processManager.GetProduct("PROD_01");
+            //pl.Process = processManager.GetProcess("PROC_01");
+            //pl.LotQty = 100;
+            //pl.State = LotState.WAIT;
 
-            PhotoLot pl4 = new PhotoLot();
-            pl4.LotId = "LOT_04";
-            pl4.Product = processManager.GetProduct("PROD_02");
-            pl4.Process = processManager.GetProcess("PROC_01");
-            pl4.LotQty = 100;
-            pl4.State = LotState.WAIT;
+            //PhotoLot pl2 = new PhotoLot();
+            //pl2.LotId = "LOT_02";
+            //pl2.Product = processManager.GetProduct("PROD_01");
+            //pl2.Process = processManager.GetProcess("PROC_01");
+            //pl2.LotQty = 100;
+            //pl2.State = LotState.WAIT;
 
-            returnList.Add(pl);
-            returnList.Add(pl2);
-            returnList.Add(pl3);
-            returnList.Add(pl4); 
+            //PhotoLot pl3 = new PhotoLot();
+            //pl3.LotId = "LOT_03";
+            //pl3.Product = processManager.GetProduct("PROD_02");
+            //pl3.Process = processManager.GetProcess("PROC_01");
+            //pl3.LotQty = 100;
+            //pl3.State = LotState.WAIT;
+
+            //PhotoLot pl4 = new PhotoLot();
+            //pl4.LotId = "LOT_04";
+            //pl4.Product = processManager.GetProduct("PROD_02");
+            //pl4.Process = processManager.GetProcess("PROC_01");
+            //pl4.LotQty = 100;
+            //pl4.State = LotState.WAIT;
+
+            //returnList.Add(pl);
+            //returnList.Add(pl2);
+            //returnList.Add(pl3);
+            //returnList.Add(pl4); 
 
             //List<EQUIPMENT> eqpList = InputMart.Instance.GetList<EQUIPMENT>(InputTable.EQUIPMENT);
             //foreach (EQUIPMENT eqp in eqpList)
