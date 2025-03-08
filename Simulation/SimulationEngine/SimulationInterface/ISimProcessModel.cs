@@ -18,5 +18,6 @@ namespace SimulationEngine.SimulationInterface
         IEnumerable<Step> GetSteps();
         IEnumerable<Process> GetProcesses(IEnumerable<Step> steps);
         IEnumerable<Product> GetProducts(IEnumerable<Process> processes);
+        double GetSetupTime(SimEquipment equipment, SimLot lot);
     }
 }

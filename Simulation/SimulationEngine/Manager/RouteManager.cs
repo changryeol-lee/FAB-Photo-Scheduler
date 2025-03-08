@@ -1,4 +1,5 @@
 ﻿using SimulationEngine.BaseEntity;
+using SimulationEngine.ProcessEntity;
 using SimulationEngine.Schedule;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
@@ -85,8 +86,34 @@ namespace SimulationEngine.Manager
 
         public void Dispatched(SimLot selectedLot, SimEquipment equipment)
         {
-            _scheduleManager.AddEvent(_currentTime, () => ProcessIn(selectedLot, equipment, _currentTime));
+            if(_model.IsSetup(selectedLot, equipment))
+            {
+                _scheduleManager.AddEvent(_currentTime, () => SetupIn(selectedLot, equipment, _currentTime));
+            } else
+            {
+                _scheduleManager.AddEvent(_currentTime, () => ProcessIn(selectedLot, equipment, _currentTime));
+            }
+
             //_model.OnDispatched(lot, equipment);
+        }
+
+        public void SetupIn(SimLot lot, SimEquipment equipment, DateTime currentTime)
+        {
+            //_model.OnProcessIn(lot, equipment);
+            _scheduleManager.AddEvent(currentTime, () =>
+            {
+                _processManager.ProcessSetup(equipment, lot, currentTime);
+            });
+        }
+
+        public void SetupOut(SimLot lot, SimEquipment equipment, DateTime finishTime)
+        {
+            EqpSchedule plan = equipment.GetCurrentPlan();
+            plan.EndTime = finishTime;
+            equipment.SetPreviousPlan(plan);
+            equipment.SetCurrentPlan(null);
+            _model.OnSetupOut(equipment, lot, plan); 
+            _scheduleManager.AddEvent(_currentTime, () => ProcessIn(lot, equipment, finishTime));
         }
 
         public void ProcessIn(SimLot lot, SimEquipment equipment, DateTime currentTime)

@@ -50,6 +50,32 @@ namespace SimulationEngine.Manager
             }
         }
 
+        internal void ProcessSetup(SimEquipment equipment, SimLot lot, DateTime startTime)
+        {
+            double setupTime = _model.GetSetupTime(equipment, lot);
+
+            DateTime finishTime = startTime.AddMinutes(setupTime);
+            equipment.GetEquipment().State = EqpState.SETUP;
+
+            string scheduleId = equipment.EqpId + "-" + Utils.GenerateRandom8Digits();
+            EqpSchedule schedule = new EqpSchedule
+            {
+                ScheduleId = scheduleId,
+                EqpId = equipment.EqpId,
+                ProductId = lot.ProductId,
+                StartTime = startTime,
+                EndTime = finishTime,
+                WorkType = WorkType.SETUP
+            };
+            equipment.SetCurrentPlan(schedule);
+
+            _scheduleManager.AddEvent(finishTime, () =>
+            {
+                SimFactory.Instance._routeManager.SetupOut(lot, equipment, finishTime);
+            });
+        }
+
+
         internal void Process(SimEquipment equipment, SimLot lot, DateTime startTime)
         {
             TrackIn(equipment, lot, startTime);

@@ -109,5 +109,19 @@ namespace FabSchedulerModel
             es.WORK_TYPE = plan.WorkType.ToString(); 
             OutputMart.Instance.AddData(OutputTable.EQP_SCHEDULE, es);
         }
+
+        public double GetSetupTime(SimEquipment equipment, SimLot lot)
+        {
+            //List<EQP_ARRANGE> arrangeList = InputMart.Instance.GetList<EQP_ARRANGE>(InputTable.EQP_ARRANGE);
+            //string stepId = lot.StepId;
+            //string prodId = lot.ProductId;
+            //string procId = lot.ProcessId;
+            //string eqpId = equipment.EqpId;
+            //double procTime = arrangeList.FindAll(x => x.STEP_ID.Equals(stepId) && x.PRODUCT_ID.Equals(prodId) && x.PROCESS_ID.Equals(procId) && x.EQP_ID.Equals(eqpId)).Select(x => x.TACT_TIME).First();
+            //double tactTime = lot.GetLot().LotQty * procTime;
+            //return tactTime;
+            return 0;
+        }
+
     }
 }

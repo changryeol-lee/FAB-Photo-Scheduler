@@ -1,4 +1,5 @@
 ﻿using SimulationEngine.BaseEntity;
+using SimulationEngine.ProcessEntity;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
 using SimulationEngine.SimulationObject;
@@ -40,6 +41,15 @@ namespace FabSchedulerModel
         public void OnProcessIn(SimLot lot, SimEquipment equipment)
         {
             //throw new NotImplementedException();
+        }
+        public bool IsSetup(SimLot lot, SimEquipment equipment)
+        {
+            //throw new NotImplementedException();
+            return false; 
+        }
+        public void OnSetupOut(SimEquipment equipment, SimLot lot, EqpSchedule plan)
+        {
+
         }
     }
 }

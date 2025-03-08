@@ -1,4 +1,5 @@
 ﻿using SimulationEngine.BaseEntity;
+using SimulationEngine.ProcessEntity;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationObject;
 using System;
@@ -16,7 +17,7 @@ namespace SimulationEngine.SimulationInterface
         //void OnDispatchIn
 
         //public void OnDispatched(SimLot lot, SimEquipment equipment);
-
+        bool IsSetup(SimLot lot, SimEquipment equipment);
         void OnProcessIn(SimLot lot, SimEquipment equipment);
 
         void OnProcessed(SimLot lot, SimEquipment equipment);
@@ -25,5 +26,6 @@ namespace SimulationEngine.SimulationInterface
 
         Step GetNextStep(SimLot lot);
         void OnLotDone(SimLot lot);
+        void OnSetupOut(SimEquipment equipment, SimLot lot, EqpSchedule plan);
     }
 }
