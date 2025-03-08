@@ -20,24 +20,46 @@ namespace FabSchedulerModel
             //List<EQP_ARRANGE> arrangeList = InputMart.Instance.GetList<EQP_ARRANGE>(InputTable.EQP_ARRANGE);
 
             List<PhotoLot> returnList = new List<PhotoLot>();
-            for(int i=1; i< 11; i++)
+            for(int i=1; i< 6; i++)
             {
                 PhotoLot pl = new PhotoLot();
                 pl.LotId = $"LOT_{i:D2}";
                 pl.Product = processManager.GetProduct("PROD_01");
                 pl.Process = processManager.GetProcess("PROC_01");
-                pl.LotQty = 100;
+                pl.LotQty = 300;
                 pl.State = LotState.WAIT;
                 returnList.Add(pl);
             }
 
-            for (int i = 11; i < 20; i++)
+            for (int i = 6; i < 11; i++)
             {
                 PhotoLot pl = new PhotoLot();
                 pl.LotId = $"LOT_{i:D2}";
                 pl.Product = processManager.GetProduct("PROD_02");
                 pl.Process = processManager.GetProcess("PROC_01");
-                pl.LotQty = 100;
+                pl.LotQty = 300;
+                pl.State = LotState.WAIT;
+                returnList.Add(pl);
+            }
+
+            for (int i = 11; i < 16; i++)
+            {
+                PhotoLot pl = new PhotoLot();
+                pl.LotId = $"LOT_{i:D2}";
+                pl.Product = processManager.GetProduct("PROD_01");
+                pl.Process = processManager.GetProcess("PROC_01");
+                pl.LotQty = 300;
+                pl.State = LotState.WAIT;
+                returnList.Add(pl);
+            }
+
+            for (int i = 16; i < 21; i++)
+            {
+                PhotoLot pl = new PhotoLot();
+                pl.LotId = $"LOT_{i:D2}";
+                pl.Product = processManager.GetProduct("PROD_02");
+                pl.Process = processManager.GetProcess("PROC_01");
+                pl.LotQty = 300;
                 pl.State = LotState.WAIT;
                 returnList.Add(pl);
             }

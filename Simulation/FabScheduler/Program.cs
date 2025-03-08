@@ -33,7 +33,7 @@ internal class Program
             IModelGroup modelGroup = new PhotoModelGroup(simulationModel, equipmentModel, lotModel, routeModel, dispatchModel, processModel);
 
             //엔진 실행자로부터 입력받아야할 값을 담은 객체 
-            SimulationOption simulationOption = new SimulationOption();
+            PhotoSimulationOption simulationOption = new PhotoSimulationOption();
             simulationOption.SimulationStartTime = DateTime.Today; 
             simulationOption.SimulationEndTime = DateTime.Today.AddDays(7);
             simulationOption.DispatchType = DispatchType.FIFO;
@@ -42,7 +42,7 @@ internal class Program
 
             OutputHelper.WriteEngineExecuteLog(simulationOption); 
 
-            SimFactory.InitializeInstance(modelGroup, simulationOption.SimulationStartTime, simulationOption.SimulationEndTime);
+            SimFactory.InitializeInstance(modelGroup, simulationOption);
             SimFactory factory = SimFactory.Instance;
             factory.Initialize(modelGroup);
             factory.StartSimulation();

@@ -15,8 +15,9 @@ namespace FabShedulerModel
         public void OnStart() => Console.WriteLine("[FabModel] OnStart triggered.");
         public void OnDayChanged(DateTime date) => Console.WriteLine($"[FabModel] OnDayChanged triggered for {date.ToShortDateString()}.");
         public void OnDone() {
-
+            Console.WriteLine("[FabModel] OnDone triggered. DB Save Start ...");
             OutputMart.Instance.SaveAll();
+            Console.WriteLine("[FabModel] OnDone triggered. DB Save End");
         }
     }
 }

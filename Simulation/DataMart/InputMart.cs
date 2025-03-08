@@ -40,7 +40,6 @@ namespace DataMart.SqlMapper
             dataAccess = new TableDataAccess(connectionString);
             dataLists = new Dictionary<InputTable, object>();
             InitializeTableQueries();
-             
         }
 
         private void InitializeTableQueries()

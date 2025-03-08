@@ -1,4 +1,5 @@
 ﻿using SimulationEngine.Agents;
+using SimulationEngine.BaseEntity;
 using SimulationEngine.Manager;
 using SimulationEngine.Schedule;
 using SimulationEngine.SimulationInterface;
@@ -22,8 +23,9 @@ namespace SimulationEngine.SimulationEntity
         internal ProcessManager _processManager;
         private ISimulationModel _model;
 
-        public DateTime _simulationStartTime;
-        public DateTime _simulationEndTime;
+        public SimulationOption option; 
+        public DateTime _simulationStartTime => option.SimulationStartTime;
+        public DateTime _simulationEndTime => option.SimulationEndTime;
         public DateTime currentTime; 
         private static SimFactory _instance;
 
@@ -39,20 +41,19 @@ namespace SimulationEngine.SimulationEntity
             }
         }
 
-        private SimFactory(IModelGroup model, DateTime startTime, DateTime endTime)
+        private SimFactory(IModelGroup model, SimulationOption simOption)
         {
-            currentTime = startTime;
-            _simulationStartTime = startTime;
-            _simulationEndTime = endTime;
+            option = simOption;
+            currentTime = simOption.SimulationStartTime;
             _model = model.SimulationModel;
         }
         private SimFactory() { }
 
-        public static void InitializeInstance(IModelGroup modelGroup, DateTime startTime, DateTime endTime)
+        public static void InitializeInstance(IModelGroup modelGroup, SimulationOption option)
         {
             if (_instance == null)
             {
-                _instance = new SimFactory(modelGroup, startTime, endTime);
+                _instance = new SimFactory(modelGroup, option);
             }
             else
             {

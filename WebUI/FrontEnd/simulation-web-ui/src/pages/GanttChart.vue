@@ -375,6 +375,9 @@ const getTaskStyle = (task: TaskItem) => {
   const width = durationRatio * columnWidth.value
 
   const backgroundColor = getLotColor(task)
+  if (task.WORK_TYPE === 'SETUP' && width < 20) {
+    debugger
+  }
 
   return {
     left: `${startPos}px`,
@@ -520,8 +523,10 @@ onMounted(async () => {
   setupScrollSynchronization()
 })
 // 데이터 변경 시 스크롤 동기화 재설정
-watch([days, columnWidth], () => {
+watch([days, columnWidth, eqpSchedule], () => {
+  console.log('watch gantt scroll')
   ensureHorizontalScroll()
+  setupScrollSynchronization()
 })
 
 const loadEngineExecuteLog = async () => {

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity\Process.cs" />
+    <Compile Include="BaseEntity\SimulationOption.cs" />
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Manager\DispatchManager.cs" />
     <Compile Include="Manager\EqpManager.cs" />

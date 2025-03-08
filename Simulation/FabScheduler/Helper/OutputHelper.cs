@@ -12,7 +12,7 @@ namespace FabSchedulerModel.Helper
 {
     public class OutputHelper
     {
-        public static void WriteEngineExecuteLog(SimulationOption option)
+        public static void WriteEngineExecuteLog(PhotoSimulationOption option)
         {
             ENGINE_EXECUTE_LOG el = new ENGINE_EXECUTE_LOG();
             el.SIMULATION_VERSION = InputMart.Instance.SimulationVersion;

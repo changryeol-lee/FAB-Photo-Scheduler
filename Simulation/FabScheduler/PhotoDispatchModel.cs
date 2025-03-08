@@ -1,5 +1,6 @@
 ﻿using DataMart.Output;
 using DataMart.SqlMapper;
+using FabSchedulerModel.ModelConfig;
 using SimulationEngine.Common;
 using SimulationEngine.ProcessEntity;
 using SimulationEngine.SimulationEntity;
@@ -30,11 +31,26 @@ namespace FabSchedulerModel
 
         public bool FilterEqp(SimEquipment equipment, DateTime currentTime)
         {
-            return false; 
+            return false;
         }
 
+        //1. optino이 없다면 기본적으로 fifo. 
+        //2. min setup인 경우, product id가 동일하면서 가장 빨리 도착한 lot 선택. 
+        //2.1 product id가 동일한 lot이 없는 경우, fifo로 진행. 
         public SimLot SelectLot(SimEquipment equipment, List<SimLot> filteredList)
         {
+            PhotoSimulationOption option = SimFactory.Instance.option as PhotoSimulationOption;
+            if (option.DispatchType == DispatchType.FIFO)
+            {
+                return filteredList.OrderBy(x => x.GetLot().ArrivalTime).First();
+            }
+            else if (option.DispatchType == DispatchType.MIN_SETUP && equipment.GetPreviousPlan() != null)
+            {
+                SimLot lot = filteredList.Where(x => x.ProductId == equipment.GetPreviousPlan().ProductId)
+                    .OrderBy(x => x.GetLot().ArrivalTime).FirstOrDefault();
+                if (lot != null)
+                    return lot;
+            }
             return filteredList.OrderBy(x => x.GetLot().ArrivalTime).First();
         }
 
@@ -42,11 +58,11 @@ namespace FabSchedulerModel
         {
             DISPATCH_LOG dl = new DISPATCH_LOG();
             dl.SIMULATION_VERSION = InputMart.Instance.SimulationVersion;
-            dl.EQP_ID = log.EqpId; 
+            dl.EQP_ID = log.EqpId;
             dl.STEP_ID = log.StepId;
-            dl.DISPATCHING_TIME = log.DispatchingTime; 
+            dl.DISPATCHING_TIME = log.DispatchingTime;
             dl.LOT_ID = log.SelectedLot.LotId;
-            dl.CANDIDATE_LOTS = string.Join(";", log.CandidateLots.Select(x=>x.LotId));
+            dl.CANDIDATE_LOTS = string.Join(";", log.CandidateLots.Select(x => x.LotId));
             dl.PASSED_LOTS = string.Join(";", log.PassedLots.Select(x => x.LotId));
             dl.EXCLUDE_LOTS = string.Join(";", log.ExcludedLots.Select(x => x.LotId));
             string dispatchInfo = string.Join(";", log.PassedLots.Select(x => $"{x.GetLot().LotId};{x.GetLot().ArrivalTime:yyyy-MM-dd HH:mm:ss}"));
