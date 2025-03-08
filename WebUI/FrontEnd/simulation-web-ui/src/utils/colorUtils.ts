@@ -33,8 +33,12 @@ const pastelColors = [
   '#92A9C8', // 스틸블루
   '#9FC088', // 아스파라거스
 ]
+const setupColor = '#D32F2F'
 
-const generatePastelColor = (seed: string): string => {
+const generatePastelColor = (seed?: string): string => {
+  if (!seed) {
+    seed = generateRandomString(8)
+  }
   // 문자열에서 해시값 생성
   let hash = 0
   for (let i = 0; i < seed.length; i++) {
@@ -53,7 +57,23 @@ const generatePastelColor = (seed: string): string => {
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }
 
+const generateRandomString = (length: number = 8): string => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  let result = ''
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length)
+    result += characters[randomIndex]
+  }
+
+  return result
+}
+
 export const getLotColor = (task: TaskItem): string => {
+  if (task.WORK_TYPE === 'SETUP') {
+    return setupColor
+  }
+
   if (lotColorMap.has(task.LOT_ID)) {
     return lotColorMap.get(task.LOT_ID)
   }

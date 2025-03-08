@@ -10,6 +10,5 @@ export interface TaskItem {
   END_TIME: Date
   PROCESS_DURATION: number
   WAIT_DURATION: number
-  SETUP_START_TIME: Date
-  SETUP_END_TIME: Date
+  WORK_TYPE: string
 }

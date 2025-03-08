@@ -171,7 +171,8 @@
                   :style="getTaskStyle(task)"
                   @click="selectedTask = task"
                 >
-                  {{ task.PRODUCT_ID }}
+                  <span v-if="task.WORK_TYPE === 'SETUP'">SETUP</span>
+                  <span v-else>{{ task.PRODUCT_ID }}</span>
                 </div>
               </div>
             </div>
