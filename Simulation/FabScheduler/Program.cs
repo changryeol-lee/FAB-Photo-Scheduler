@@ -10,6 +10,8 @@ using FabShedulerModel;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
 using System.Diagnostics;
+using FabSchedulerModel.ModelConfig;
+using FabSchedulerModel.Helper; 
 
 namespace FabSchedulerModel
 {
@@ -21,8 +23,6 @@ internal class Program
             InputMart.Instance.LoadFromDatabase();
             //var products = InputMart.Instance.GetList<PRODUCT>(InputTable.PRODUCT);
 
-            DateTime startDate = new DateTime(2025, 3, 1, 15, 0, 0);
-            DateTime endDate = new DateTime(2025, 3, 5, 15, 0, 0);
 
             PhotoSimulationModel simulationModel = new PhotoSimulationModel();
             PhotoEquipmentModel equipmentModel = new PhotoEquipmentModel();
@@ -30,12 +30,19 @@ internal class Program
             PhotoRouteModel routeModel = new PhotoRouteModel();
             PhotoDispatchModel dispatchModel = new PhotoDispatchModel(); 
             PhotoProcessModel processModel = new PhotoProcessModel();
-
-     
             IModelGroup modelGroup = new PhotoModelGroup(simulationModel, equipmentModel, lotModel, routeModel, dispatchModel, processModel);
 
+            //엔진 실행자로부터 입력받아야할 값을 담은 객체 
+            SimulationOption simulationOption = new SimulationOption();
+            simulationOption.SimulationStartTime = DateTime.Today; 
+            simulationOption.SimulationEndTime = DateTime.Today.AddDays(7);
+            simulationOption.DispatchType = DispatchType.FIFO;
+            simulationOption.RunUser = "Engine";
+            InputMart.Instance.SetVersion(simulationOption.DispatchType.ToString());
 
-            SimFactory.InitializeInstance(modelGroup, startDate, endDate);
+            OutputHelper.WriteEngineExecuteLog(simulationOption); 
+
+            SimFactory.InitializeInstance(modelGroup, simulationOption.SimulationStartTime, simulationOption.SimulationEndTime);
             SimFactory factory = SimFactory.Instance;
             factory.Initialize(modelGroup);
             factory.StartSimulation();

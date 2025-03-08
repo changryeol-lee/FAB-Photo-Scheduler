@@ -49,7 +49,9 @@
     <Compile Include="InputEntity\PhotoProcess.cs" />
     <Compile Include="InputEntity\PhotoProduct.cs" />
     <Compile Include="InputEntity\PhotoStep.cs" />
-    <Compile Include="InputHelper\CreateInput.cs" />
+    <Compile Include="ModelConfig\Enum.cs" />
+    <Compile Include="ModelConfig\SimulationOption.cs" />
+    <Compile Include="Helper\OutputHelper.cs" />
     <Compile Include="PhotoEquipmentModel.cs" />
     <Compile Include="PhotoLotModel.cs" />
     <Compile Include="PhotoModelGroup.cs" />

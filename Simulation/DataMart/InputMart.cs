@@ -40,7 +40,7 @@ namespace DataMart.SqlMapper
             dataAccess = new TableDataAccess(connectionString);
             dataLists = new Dictionary<InputTable, object>();
             InitializeTableQueries();
-            SimulationVersion = GenerateVersion();
+             
         }
 
         private void InitializeTableQueries()
@@ -94,9 +94,10 @@ namespace DataMart.SqlMapper
         {
             LoadTable<T>(table);
         }
-        private string GenerateVersion()
+        public void SetVersion(string prefix)
         {
-            return $"VER_{DateTime.Now:yyyyMMdd_HHmmss}"; // 예: VER_20250228_164837
+            if(SimulationVersion == null) 
+                SimulationVersion =  $"{prefix}_{DateTime.Now:yyyyMMdd_HHmmss}"; // 예: VER_20250228_164837
         }
     }
 }

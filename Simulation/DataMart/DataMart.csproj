@@ -111,6 +111,7 @@
     <Compile Include="Input\Query\EquipmentQuery.cs" />
     <Compile Include="Input\Query\ProductQuery.cs" />
     <Compile Include="Input\STEP.cs" />
+    <Compile Include="Output\ENGINE_EXECUTE_LOG.cs" />
     <Compile Include="Output\DISPATCH_LOG.cs" />
     <Compile Include="Output\EQP_SCHDULE.cs" />
     <Compile Include="SqlMapper\BaseMapper.cs" />

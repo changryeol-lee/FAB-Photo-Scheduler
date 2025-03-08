@@ -106,6 +106,23 @@ namespace DataMart.SqlMapper
        
                         });
                         break;
+                    case OutputTable.ENGINE_EXECUTE_LOG:
+                        var engineExecuteLogList = listObj as List<ENGINE_EXECUTE_LOG>;
+                        string insertEngineExecuteSql =
+                            "INSERT INTO TB_ENGINE_EXECUTE_LOG (SIMULATION_VERSION, DISPATCH_TYPE, SIMULATION_START_TIME, SIMULATION_END_TIME, RUN_USER, SIMULATION_EXECUTE_TIME)" +
+                            "VALUES (@SimulationVersion, @DispatchType, @SimulationStartTime, @SimulationEndTime, @RunUser, @SimulationExecuteTime)";
+
+                        int executeRows = dataAccess.InsertRows(insertEngineExecuteSql, engineExecuteLogList, (cmd, item) =>
+                        {
+                            cmd.Parameters.AddWithValue("@SimulationVersion", item.SIMULATION_VERSION);
+                            cmd.Parameters.AddWithValue("@DispatchType", item.DISPATCH_TYPE);
+                            cmd.Parameters.AddWithValue("@SimulationStartTime", item.SIMULATION_START_TIME);
+                            cmd.Parameters.AddWithValue("@SimulationEndTime", item.SIMULATION_END_TIME);
+                            cmd.Parameters.AddWithValue("@RunUser", item.RUN_USER);
+                            cmd.Parameters.AddWithValue("@SimulationExecuteTime", item.SIMULATION_EXECUTE_TIME);
+                        });
+                        break;
+
 
                 }
             }
