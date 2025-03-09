@@ -71,12 +71,13 @@
   </div>
 
   <!-- 로딩 및 오류 상태 표시 -->
-  <div v-if="loading" class="q-pa-lg flex flex-center">
+  <!-- <div v-if="loading" class="q-pa-lg flex flex-center">
     <q-spinner size="3em" color="primary" />
     <div class="q-ml-md text-subtitle1">데이터를 불러오는 중...</div>
-  </div>
+  </div> 
+  -->
 
-  <div v-else-if="error" class="q-pa-lg flex flex-center text-negative">
+  <div v-if="error" class="q-pa-lg flex flex-center text-negative">
     <q-icon name="error" size="2em" />
     <div class="q-ml-md text-subtitle1">{{ error }}</div>
   </div>
@@ -230,8 +231,6 @@ const onVersionChange = async (version: string) => {
 
 const eqpSchedule = ref<TaskItem[]>([])
 
-// 데이터 로딩 상태 관리
-const loading = ref(false)
 const error = ref<string | null>(null)
 
 // UI 상태 관리
@@ -241,15 +240,9 @@ const selectedScheduleVersion = ref(null)
 const selectedResource = ref(null)
 const columnWidth = ref(300)
 const selectedTask = ref<TaskItem | null>(null)
-const showTaskDetail = ref(false)
 
 // 필터링 옵션 생성
 const scheduleVersions = ref<any>()
-
-// = computed(() => {
-//   const versions = [...new Set(eqpSchedule.value.map((item) => item.SIMULATION_VERSION))]
-//   return versions.map((version) => ({ label: version, value: version }))
-// })
 
 // 리소스 목록
 const resources = computed(() => {
@@ -535,34 +528,32 @@ const loadEngineExecuteLog = async () => {
 
 // 데이터 로드 함수
 const loadEqpSchedule = async (version?: string): Promise<void> => {
-  loading.value = true
   error.value = null
-  //= 'VER_20250301_182331'
   try {
     const response = await api.get('/get-eqp-schedule', {
       params: {
         version: version,
       },
     })
-    const latestVersion = response.data.reduce(
-      (max, row) => (row.SIMULATION_VERSION > max ? row.SIMULATION_VERSION : max),
-      '',
-    )
+    if (!version) {
+      version = response.data.reduce(
+        (max, row) => (row.SIMULATION_VERSION > max ? row.SIMULATION_VERSION : max),
+        '',
+      )
+    }
 
     // API 응답의 날짜 문자열을 Date 객체로 변환
     eqpSchedule.value = response.data
-      .filter((item) => item.SIMULATION_VERSION === latestVersion)
+      .filter((item) => item.SIMULATION_VERSION === version)
       .map((item: any) => ({
         ...item,
         START_TIME: formatDateTime(removeZAndParse(item.START_TIME)),
         END_TIME: formatDateTime(removeZAndParse(item.END_TIME)),
       }))
-    console.log(eqpSchedule.value)
+    selectedTask.value = null
   } catch (err) {
     console.error('Error fetching schedule data:', err)
     error.value = '데이터를 불러오는 중 오류가 발생했습니다.'
-  } finally {
-    loading.value = false
   }
 }
 </script>
