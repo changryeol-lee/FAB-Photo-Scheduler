@@ -208,7 +208,7 @@
 
 <script setup lang="ts">
 import { date } from 'quasar'
-import { removeZAndParse, formatDateTime, formatDate } from 'src/utils/dateUtils'
+import { removeZAndParse, formatDateTime, formatDate, addDays } from 'src/utils/dateUtils'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import api from '../api/axiosInstance'
 import type { TaskItem } from '../types/types'
@@ -328,7 +328,11 @@ const isWeekend = (day: any) => {
 
 // 리소스별 작업 가져오기
 const getTasksForResource = (resourceId: any) => {
-  return eqpSchedule.value.filter((task) => task.EQP_ID === resourceId)
+  const finalDate = new Date(endDate.value)
+  finalDate.setHours(0, 0, 0, 0)
+  return eqpSchedule.value.filter(
+    (task) => task.EQP_ID === resourceId && task.START_TIME < addDays(endDate.value, 1),
+  )
 }
 
 /* 작업 위치 계산을 위한 수정된 함수 */
@@ -336,9 +340,12 @@ const getTaskStyle = (task: TaskItem) => {
   // 시작일로부터의 일수 차이 계산
   const firstDate = new Date(startDate.value)
   firstDate.setHours(0, 0, 0, 0)
+  const finalDate = new Date(addDays(endDate.value, 1))
+  finalDate.setHours(0, 0, 0, 0)
 
   const taskStartDate = new Date(task.START_TIME)
-  const taskEndDate = new Date(task.END_TIME)
+  const taskEndDate =
+    task.END_TIME > addDays(endDate.value, 1) ? finalDate : new Date(task.END_TIME)
 
   // 날짜 부분만 가져오기 (시간 정보 제거)
   const startDay = new Date(taskStartDate)
@@ -353,19 +360,7 @@ const getTaskStyle = (task: TaskItem) => {
   // 날짜 내 시간 비율 (0-1 사이)
   const hourRatio = hoursInDay / 24
 
-  // 종료 시간 계산 (제한: 같은 날짜 내에서만)
-  const endDay = new Date(taskEndDate)
-  endDay.setHours(0, 0, 0, 0)
-
-  let durationHours
-
-  if (endDay.getTime() === startDay.getTime()) {
-    // 같은 날짜 내에 끝나는 경우
-    durationHours = taskEndDate.getHours() + taskEndDate.getMinutes() / 60 - hoursInDay
-  } else {
-    // 다른 날짜에 끝나는 경우, 당일 자정(24시)까지만 표시
-    durationHours = 24 - hoursInDay
-  }
+  const durationHours = (taskEndDate.getTime() - taskStartDate.getTime()) / (60 * 60 * 1000)
 
   // 날짜 내 시간 비율 (0-1 사이)
   const durationRatio = durationHours / 24
@@ -375,9 +370,6 @@ const getTaskStyle = (task: TaskItem) => {
   const width = durationRatio * columnWidth.value
 
   const backgroundColor = getLotColor(task)
-  if (task.WORK_TYPE === 'SETUP' && width < 20) {
-    debugger
-  }
 
   return {
     left: `${startPos}px`,

@@ -6,8 +6,8 @@ export interface TaskItem {
   LOT_ID: string
   LOT_QTY: number
   STEP_ID: string
-  START_TIME: Date
-  END_TIME: Date
+  START_TIME: string
+  END_TIME: string
   PROCESS_DURATION: number
   WAIT_DURATION: number
   WORK_TYPE: string

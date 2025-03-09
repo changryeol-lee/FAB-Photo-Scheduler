@@ -15,7 +15,7 @@ const pastelColors = [
   '#E5A886', // 살구색
   '#B39EB5', // 자주
   '#8CB07C', // 올리브
-  '#EB9486', // 테라코타
+  '#86C0Eb', // 연하늘
   '#9FB0BF', // 슬레이트
   '#D6927C', // 황토색
   '#82B0D9', // 청색
@@ -34,7 +34,6 @@ const pastelColors = [
   '#9FC088', // 아스파라거스
 ]
 const setupColor = '#D32F2F'
-
 const generatePastelColor = (seed?: string): string => {
   if (!seed) {
     seed = generateRandomString(8)
