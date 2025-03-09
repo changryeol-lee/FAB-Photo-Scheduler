@@ -37,7 +37,7 @@ namespace FabSchedulerModel
                 {
                     RuleType = OffTimeRuleType.Daily,
                     StartTime = new TimeSpan(13, 0, 0),
-                    EndTime = new TimeSpan(14, 0, 0)
+                    EndTime = new TimeSpan(15, 0, 0)
                 }
             };
         }

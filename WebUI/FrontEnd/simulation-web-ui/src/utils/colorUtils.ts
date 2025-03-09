@@ -33,7 +33,8 @@ const pastelColors = [
   '#92A9C8', // 스틸블루
   '#9FC088', // 아스파라거스
 ]
-const setupColor = '#D32F2F'
+const setupColor = '#D32F2F' //빨강
+const offColor = '#A0A0A0'
 const generatePastelColor = (seed?: string): string => {
   if (!seed) {
     seed = generateRandomString(8)
@@ -71,6 +72,9 @@ const generateRandomString = (length: number = 8): string => {
 export const getLotColor = (task: TaskItem): string => {
   if (task.WORK_TYPE === 'SETUP') {
     return setupColor
+  }
+  if (task.WORK_TYPE === 'OFF') {
+    return offColor
   }
 
   if (lotColorMap.has(task.LOT_ID)) {

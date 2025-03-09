@@ -173,6 +173,7 @@
                   @click="selectedTask = task"
                 >
                   <span v-if="task.WORK_TYPE === 'SETUP'">SETUP</span>
+                  <span v-else-if="task.WORK_TYPE === 'OFF'">OFF</span>
                   <span v-else>{{ task.PRODUCT_ID }}</span>
                 </div>
               </div>
@@ -462,7 +463,7 @@ const filteredTasks = computed(() => {
 
 const columns = ref([
   { name: 'WORK_TYPE', required: true, label: '작업 유형', field: 'WORK_TYPE' },
-  { name: 'EQP_ID', required: true, label: '프로세스 ID', field: 'EQP_ID' },
+  { name: 'EQP_ID', required: true, label: '설비 ID', field: 'EQP_ID' },
   { name: 'PRODUCT_ID', required: true, label: '제품 ID', field: 'PRODUCT_ID' },
   { name: 'LOT_ID', required: true, label: 'LOT ID', field: 'LOT_ID' },
   { name: 'LOT_QTY', required: true, label: 'LOT 수량', field: 'LOT_QTY' },
