@@ -1,4 +1,5 @@
-﻿using DataMart.Output;
+﻿using DataMart.Input;
+using DataMart.Output;
 using DataMart.SqlMapper;
 using FabSchedulerModel.ModelConfig;
 using SimulationEngine.Common;
@@ -46,10 +47,14 @@ namespace FabSchedulerModel
             }
             else if (option.DispatchType == DispatchType.MIN_SETUP && equipment.GetPreviousPlan() != null)
             {
-                SimLot lot = filteredList.Where(x => x.ProductId == equipment.GetPreviousPlan().ProductId)
-                    .OrderBy(x => x.GetLot().ArrivalTime).FirstOrDefault();
-                if (lot != null)
-                    return lot;
+                List<SETUP_INFO> setupInfoList = InputMart.Instance.GetList<SETUP_INFO>(InputTable.SETUP_INFO);
+                SETUP_INFO info = setupInfoList.Where(x => x.EQP_ID.Equals(equipment.EqpId)).FirstOrDefault();
+                if(info != null && info.SETUP_CONDITION == "PRODUCT_CHANGE") {
+                    SimLot lot = filteredList.Where(x => x.ProductId == equipment.GetPreviousPlan().ProductId)
+                                             .OrderBy(x => x.GetLot().ArrivalTime).FirstOrDefault();
+                    if (lot != null)
+                        return lot;
+                }
             }
             return filteredList.OrderBy(x => x.GetLot().ArrivalTime).First();
         }
