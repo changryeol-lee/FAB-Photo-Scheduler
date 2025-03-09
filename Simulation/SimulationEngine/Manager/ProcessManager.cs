@@ -1,6 +1,5 @@
 ﻿using SimulationEngine.BaseEntity;
 using SimulationEngine.Common;
-using SimulationEngine.ProcessEntity;
 using SimulationEngine.Schedule;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
@@ -17,6 +16,8 @@ namespace SimulationEngine.Manager
     {
         private readonly ISimProcessModel _model;
         private ScheduleManager _scheduleManager = SimFactory.Instance._scheduleManager;
+        private OffTimeManager _offTimeManager = SimFactory.Instance._offTimeManager;
+
         private Dictionary<string, EqpSchedule> _schedules = new Dictionary<string, EqpSchedule>();
         private readonly Dictionary<string, Step> _simSteps = new Dictionary<string, Step>();
         private readonly Dictionary<string, Process> _simProcesses = new Dictionary<string, Process>();
@@ -54,8 +55,13 @@ namespace SimulationEngine.Manager
         {
             double setupTime = _model.GetSetupTime(equipment, lot);
 
-            DateTime finishTime = startTime.AddMinutes(setupTime);
             equipment.GetEquipment().State = EqpState.SETUP;
+            DateTime finishTime = startTime.AddMinutes(setupTime);
+            if (_offTimeManager.IsOffTimeRange(startTime, finishTime))
+            {
+                //offTime 이 끝나는 시점으로 finish 조정
+                finishTime = _offTimeManager.GetAdjustedEndTime(startTime, finishTime);
+            }
 
             string scheduleId = equipment.EqpId + "-" + Utils.GenerateRandom8Digits();
             EqpSchedule schedule = new EqpSchedule
@@ -78,13 +84,18 @@ namespace SimulationEngine.Manager
 
         internal void Process(SimEquipment equipment, SimLot lot, DateTime startTime)
         {
-            TrackIn(equipment, lot, startTime);
 
+            TrackIn(equipment, lot, startTime);
+            equipment.GetEquipment().State = EqpState.BUSY;
 
             double procTime = _model.GetProcessTime(equipment, lot);
-
             DateTime finishTime = startTime.AddSeconds(procTime);
-            equipment.GetEquipment().State = EqpState.BUSY; 
+            if (_offTimeManager.IsOffTimeRange(startTime, finishTime))
+            {
+                //offTime 이 끝나는 시점으로 finish 조정
+                finishTime = _offTimeManager.GetAdjustedEndTime(startTime, finishTime);
+            }
+
 
             _scheduleManager.AddEvent(finishTime, () =>
             {

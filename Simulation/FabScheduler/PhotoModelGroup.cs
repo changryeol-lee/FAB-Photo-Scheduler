@@ -15,9 +15,9 @@ namespace FabSchedulerModel
         public ISimRouteModel RouteModel { get; private set; }
         public ISimDispatchModel DispatchModel { get; private set; }
         public ISimProcessModel ProcessModel { get; private set; }
+        public ISimOffTimeModel OffTimeModel { get; private set; }
 
-
-        public PhotoModelGroup(ISimulationModel simModel, ISimEquipmentModel eqpModel, ISimLotModel lotModel, ISimRouteModel routeModel, ISimDispatchModel dispatchModel, ISimProcessModel processhModel)
+        public PhotoModelGroup(ISimulationModel simModel, ISimEquipmentModel eqpModel, ISimLotModel lotModel, ISimRouteModel routeModel, ISimDispatchModel dispatchModel, ISimProcessModel processhModel, ISimOffTimeModel offTimeModel)
         {
             SimulationModel = simModel;
             EquipmentModel = eqpModel;
@@ -25,6 +25,7 @@ namespace FabSchedulerModel
             RouteModel = routeModel;
             DispatchModel = dispatchModel;
             ProcessModel = processhModel;
+            OffTimeModel = offTimeModel;
         }
     }
 }

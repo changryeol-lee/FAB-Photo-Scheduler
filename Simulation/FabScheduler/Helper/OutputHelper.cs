@@ -6,12 +6,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FabSchedulerModel.Helper
 {
     public class OutputHelper
     {
+        private static readonly ThreadLocal<Random> _random = new ThreadLocal<Random>(() => new Random());
         public static void WriteEngineExecuteLog(PhotoSimulationOption option)
         {
             ENGINE_EXECUTE_LOG el = new ENGINE_EXECUTE_LOG();
@@ -40,6 +42,10 @@ namespace FabSchedulerModel.Helper
             es.WAIT_DURATION = plan.WaitDuration;
             es.WORK_TYPE = plan.WorkType.ToString();
             OutputMart.Instance.AddData(OutputTable.EQP_SCHEDULE, es);
+        }
+        public static string GenerateRandom8Digits()
+        {
+            return _random.Value.Next(10000000, 99999999).ToString();
         }
     }
 }

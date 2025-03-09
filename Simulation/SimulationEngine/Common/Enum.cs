@@ -26,4 +26,11 @@ namespace SimulationEngine.Common
         SETUP,
         OFF
     }
+
+    public enum OffTimeRuleType
+    {
+        Daily,        // 요일과 무관하게 매일 특정 시간
+        Weekly,       // 특정 요일+시간 (예: 월수금 13:00~14:00)
+        Once          // 단발성 (DateTime Start~End)
+    }
 }

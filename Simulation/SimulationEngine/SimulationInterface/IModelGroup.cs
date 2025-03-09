@@ -14,5 +14,7 @@ namespace SimulationEngine.SimulationInterface
         ISimRouteModel RouteModel { get; }
         ISimDispatchModel DispatchModel { get; }
         ISimProcessModel ProcessModel { get; }
+        ISimOffTimeModel OffTimeModel { get; }
+
     }
 }

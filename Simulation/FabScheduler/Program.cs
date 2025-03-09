@@ -30,13 +30,15 @@ internal class Program
             PhotoRouteModel routeModel = new PhotoRouteModel();
             PhotoDispatchModel dispatchModel = new PhotoDispatchModel(); 
             PhotoProcessModel processModel = new PhotoProcessModel();
-            IModelGroup modelGroup = new PhotoModelGroup(simulationModel, equipmentModel, lotModel, routeModel, dispatchModel, processModel);
+            PhotoOffTimeModel offTimeModel = new PhotoOffTimeModel();
+
+            IModelGroup modelGroup = new PhotoModelGroup(simulationModel, equipmentModel, lotModel, routeModel, dispatchModel, processModel, offTimeModel);
 
             //엔진 실행자로부터 입력받아야할 값을 담은 객체 
             PhotoSimulationOption simulationOption = new PhotoSimulationOption();
             simulationOption.SimulationStartTime = DateTime.Today; 
             simulationOption.SimulationEndTime = DateTime.Today.AddDays(7);
-            simulationOption.DispatchType = DispatchType.FIFO;
+            simulationOption.DispatchType = DispatchType.MIN_SETUP;
             simulationOption.RunUser = "Engine";
             InputMart.Instance.SetVersion(simulationOption.DispatchType.ToString());
 

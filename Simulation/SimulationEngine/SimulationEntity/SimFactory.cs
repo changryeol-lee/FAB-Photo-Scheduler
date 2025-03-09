@@ -1,6 +1,7 @@
 ﻿using SimulationEngine.Agents;
 using SimulationEngine.BaseEntity;
 using SimulationEngine.Manager;
+using SimulationEngine.ProcessEntity;
 using SimulationEngine.Schedule;
 using SimulationEngine.SimulationInterface;
 using SimulationEngine.SimulationObject;
@@ -21,6 +22,8 @@ namespace SimulationEngine.SimulationEntity
         internal RouteManager _routeManager;
         internal DispatchManager _dispatchManager;
         internal ProcessManager _processManager;
+        internal OffTimeManager _offTimeManager;
+
         private ISimulationModel _model;
 
         public SimulationOption option; 
@@ -63,6 +66,7 @@ namespace SimulationEngine.SimulationEntity
         public void InitializeManagers(IModelGroup model)
         {
             _scheduleManager = new ScheduleManager(_simulationStartTime, _simulationEndTime);
+            _offTimeManager = new OffTimeManager(model.OffTimeModel);
             _eqpManager = new EqpManager(model.EquipmentModel);
             _lotManager = new LotManager(model.LotModel);
             _dispatchManager = new DispatchManager(model.DispatchModel);
@@ -96,7 +100,7 @@ namespace SimulationEngine.SimulationEntity
             }
 
             // OnDone 이벤트 등록 (시뮬레이션 종료 시각)
-            _scheduleManager.AddEvent(_simulationEndTime, () => _model.OnDone());
+            _scheduleManager.AddEvent(_simulationEndTime, () => OnDone());
 
             var initialLots = _lotManager.GetInitialLots();
             _scheduleManager.AddEvent(_simulationStartTime, () =>
@@ -105,6 +109,12 @@ namespace SimulationEngine.SimulationEntity
             });
             // 실행
             _scheduleManager.Run();
+        }
+
+        public void OnDone()
+        {
+            _offTimeManager.WriteOffTimeLog(); 
+            _model.OnDone(); 
         }
     }
 }
