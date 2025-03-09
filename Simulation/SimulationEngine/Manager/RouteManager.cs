@@ -1,14 +1,10 @@
 ﻿using SimulationEngine.BaseEntity;
-using SimulationEngine.ProcessEntity;
 using SimulationEngine.Schedule;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
 using SimulationEngine.SimulationObject;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimulationEngine.Manager
 {
@@ -63,9 +59,9 @@ namespace SimulationEngine.Manager
             foreach (SimLot lot in relaseLots)
             {
                 Lot actualLot = lot.GetLot();
-                if(actualLot.Step == null)
+                if (actualLot.Step == null)
                 {
-                    actualLot.Step = actualLot.Process.GetFirstStep(); 
+                    actualLot.Step = actualLot.Process.GetFirstStep();
                 }
 
                 actualLot.ArrivalTime = _currentTime;
@@ -75,7 +71,7 @@ namespace SimulationEngine.Manager
             }
 
             // Lot이 추가되었으므로 Dispatching 시도
-            
+
             if (!_scheduleManager.HasEvent(_currentTime.AddMilliseconds(30), DispatchIn))
             {
                 _scheduleManager.AddEvent(_currentTime.AddMilliseconds(30), DispatchIn);
@@ -90,10 +86,11 @@ namespace SimulationEngine.Manager
 
         public void Dispatched(SimLot selectedLot, SimEquipment equipment)
         {
-            if(_model.IsSetup(selectedLot, equipment))
+            if (_model.IsSetup(selectedLot, equipment))
             {
                 _scheduleManager.AddEvent(_currentTime, () => SetupIn(selectedLot, equipment, _currentTime));
-            } else
+            }
+            else
             {
                 _scheduleManager.AddEvent(_currentTime, () => ProcessIn(selectedLot, equipment, _currentTime));
             }
@@ -116,7 +113,7 @@ namespace SimulationEngine.Manager
             plan.EndTime = finishTime;
             equipment.SetPreviousPlan(plan);
             equipment.SetCurrentPlan(null);
-            _model.OnSetupOut(equipment, lot, plan); 
+            _model.OnSetupOut(equipment, lot, plan);
             _scheduleManager.AddEvent(_currentTime, () => ProcessIn(lot, equipment, finishTime));
         }
 
@@ -145,7 +142,7 @@ namespace SimulationEngine.Manager
             else
             {
                 _model.OnStepDone(lot);
-                lot.GetLot().Step = nextStep; 
+                lot.GetLot().Step = nextStep;
 
                 // 일단 임시로 1시간 후에 Release
                 DateTime nextStepTime = finishTime.AddHours(1);

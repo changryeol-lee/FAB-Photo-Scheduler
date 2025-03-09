@@ -1,20 +1,10 @@
 ﻿using SimulationEngine.BaseEntity;
-using SimulationEngine.ProcessEntity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SimulationEngine.SimulationEntity
 {
     public class SimLot
     {
         private readonly Lot _lot;
-        public List<LoadInfo> Plans { get; }
-        public LoadInfo CurrentPlan { get; set; }
-        public LoadInfo PreviousPlan { get; set; }
-
         public string ProductId => _lot.Product.ProductId; 
         public string ProcessId => _lot.Process.ProcessId;
         public string StepId => _lot.Step.StepId; 
@@ -26,7 +16,6 @@ namespace SimulationEngine.SimulationEntity
         public SimLot(Lot lot)
         {
             _lot = lot;
-            Plans = new List<LoadInfo>();
         }
 
         public Lot GetLot() => _lot;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulationEngine.BaseEntity
+namespace SimulationEngine.ProcessEntity
 {
     public class SimulationOption
     {

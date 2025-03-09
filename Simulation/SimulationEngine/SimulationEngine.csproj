@@ -42,7 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseEntity\Process.cs" />
-    <Compile Include="BaseEntity\SimulationOption.cs" />
+    <Compile Include="ProcessEntity\OffTimeRule.cs" />
+    <Compile Include="ProcessEntity\SimulationOption.cs" />
     <Compile Include="Common\Utils.cs" />
     <Compile Include="Manager\DispatchManager.cs" />
     <Compile Include="Manager\EqpManager.cs" />
@@ -53,12 +54,11 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Common\Enum.cs" />
     <Compile Include="Manager\LotManager.cs" />
+    <Compile Include="Manager\OfftimeManager.cs" />
     <Compile Include="Manager\ProcessManager.cs" />
     <Compile Include="Manager\RouteManager.cs" />
-    <Compile Include="ProcessEntity\DispatchInfo.cs" />
+    <Compile Include="SimulationInterface\ISimOffTimeModel.cs" />
     <Compile Include="SimulationLog\EqpSchedule.cs" />
-    <Compile Include="ProcessEntity\LoadInfo.cs" />
-    <Compile Include="ProcessEntity\ProcTimeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Manager\ScheduleManager.cs" />
     <Compile Include="SimulationEntity\SimEquipment.cs" />

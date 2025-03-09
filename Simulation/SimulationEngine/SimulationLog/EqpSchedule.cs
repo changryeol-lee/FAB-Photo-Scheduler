@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimulationEngine.ProcessEntity
+namespace SimulationEngine.BaseEntity
 {
     public class EqpSchedule
     {

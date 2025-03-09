@@ -3,7 +3,7 @@ using DataMart.Output;
 using DataMart.SqlMapper;
 using FabSchedulerModel.ModelConfig;
 using SimulationEngine.Common;
-using SimulationEngine.ProcessEntity;
+using SimulationEngine.BaseEntity;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
 using SimulationEngine.SimulationLog;

@@ -1,7 +1,7 @@
 ﻿using DataMart.Output;
 using DataMart.SqlMapper;
 using FabSchedulerModel.ModelConfig;
-using SimulationEngine.ProcessEntity;
+using SimulationEngine.BaseEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
