@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\Utils.cs" />
     <Compile Include="InputEntity\PhotoEquipment.cs" />
     <Compile Include="InputEntity\PhotoLot.cs" />
     <Compile Include="InputEntity\PhotoProcess.cs" />

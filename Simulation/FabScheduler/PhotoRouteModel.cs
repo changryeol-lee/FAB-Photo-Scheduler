@@ -1,6 +1,7 @@
 ﻿using DataMart.Input;
 using DataMart.SqlMapper;
 using FabSchedulerModel.Helper;
+using FabSchedulerModel.InputEntity;
 using SimulationEngine.BaseEntity;
 using SimulationEngine.SimulationEntity;
 using SimulationEngine.SimulationInterface;
@@ -14,7 +15,17 @@ namespace FabSchedulerModel
     {
         public Step GetNextStep(SimLot lot)
         {
-            return lot.GetLot().Process.GetNextStep(lot.StepId); 
+            PhotoLot pl = (lot.GetLot()) as PhotoLot; 
+            //한개 lot은 rework 한번만 발생. 
+            if (lot.StepId == "INSPECTION" && pl.isRework == false)
+            {
+                if(Utils.IsTrueWithPercent(15)) //rework 확률 = 15% 
+                {
+                    pl.isRework = true; 
+                    return pl.Process.GetFirstStep(); //rework시 첫 step부터 다시 
+                };
+            }
+            return pl.Process.GetNextStep(lot.StepId); 
         }
 
         public void OnStepDone(SimLot lot)
@@ -58,7 +69,7 @@ namespace FabSchedulerModel
         }
         public void OnSetupOut(SimEquipment equipment, SimLot lot, EqpSchedule plan)
         {
-            OutputHelper.WriteEqpSchedule(plan);
+            OutputHelper.WriteEqpSchedule(plan, lot);
         }
     }
 }

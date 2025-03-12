@@ -92,7 +92,7 @@ namespace FabSchedulerModel
         public void OnTrackOut(SimEquipment equipment, SimLot lot, EqpSchedule plan)
         {
             Console.WriteLine($"{lot.LotId} OnTrackOut triggered. ");
-            OutputHelper.WriteEqpSchedule(plan);
+            OutputHelper.WriteEqpSchedule(plan, lot);
         }
 
         public double GetSetupTime(SimEquipment equipment, SimLot lot)

@@ -1,7 +1,10 @@
 ﻿using DataMart.Output;
 using DataMart.SqlMapper;
+using FabSchedulerModel.InputEntity;
 using FabSchedulerModel.ModelConfig;
 using SimulationEngine.BaseEntity;
+using SimulationEngine.Common;
+using SimulationEngine.SimulationEntity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +29,7 @@ namespace FabSchedulerModel.Helper
             OutputMart.Instance.AddData(OutputTable.ENGINE_EXECUTE_LOG, el);
         }
 
-        public static void WriteEqpSchedule(EqpSchedule plan)
+        public static void WriteEqpSchedule(EqpSchedule plan, SimLot lot)
         {
             EQP_SCHEDULE es = new EQP_SCHEDULE();
             es.SIMULATION_VERSION = InputMart.Instance.SimulationVersion;
@@ -40,7 +43,18 @@ namespace FabSchedulerModel.Helper
             es.END_TIME = plan.EndTime;
             es.PROCESS_DURATION = plan.ProcessDuration;
             es.WAIT_DURATION = plan.WaitDuration;
-            es.WORK_TYPE = plan.WorkType.ToString();
+
+            string workType;
+            if ((lot.GetLot() as PhotoLot).isRework && plan.WorkType == WorkType.PLAN)
+            {
+                workType = WorkType.REWORK.ToString();
+            }
+            else
+            {
+                workType = plan.WorkType.ToString();
+            }
+
+            es.WORK_TYPE = workType;
             OutputMart.Instance.AddData(OutputTable.EQP_SCHEDULE, es);
         }
         public static string GenerateRandom8Digits()

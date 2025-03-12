@@ -15,11 +15,13 @@ namespace FabSchedulerModel.InputEntity
         {
             State = LotState.WAIT;
             LotQty = lotQty;
-            initStep = null; 
+            initStep = null;
+            isRework = false; 
         }
         public PhotoLot(Step initStep, Equipment equipment, LotState state)
         {
             this.initStep = initStep;
         }
+        public bool isRework { get; set; }
     }
 }
