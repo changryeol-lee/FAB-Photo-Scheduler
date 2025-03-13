@@ -34,7 +34,8 @@ const pastelColors = [
   '#9FC088', // 아스파라거스
 ]
 const setupColor = '#D32F2F' //빨강
-const offColor = '#A0A0A0'
+const offColor = '#A0A0A0' //회색
+const reworkColor = '#3F1601' // 검정
 const generatePastelColor = (seed?: string): string => {
   if (!seed) {
     seed = generateRandomString(8)
@@ -75,6 +76,9 @@ export const getLotColor = (task: TaskItem): string => {
   }
   if (task.WORK_TYPE === 'OFF') {
     return offColor
+  }
+  if (task.WORK_TYPE === 'REWORK') {
+    return reworkColor
   }
 
   if (lotColorMap.has(task.LOT_ID)) {

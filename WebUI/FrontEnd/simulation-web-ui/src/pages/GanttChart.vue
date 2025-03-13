@@ -50,11 +50,8 @@
               class="filter-input"
             />
           </div>
-
           <div class="filter-item"></div>
-
           <div class="filter-item"></div>
-
           <div class="search-button-container">
             <q-btn
               color="primary"
@@ -174,6 +171,7 @@
                 >
                   <span v-if="task.WORK_TYPE === 'SETUP'">SETUP</span>
                   <span v-else-if="task.WORK_TYPE === 'OFF'">OFF</span>
+                  <span v-else-if="task.WORK_TYPE === 'REWORK'">REWORK</span>
                   <span v-else>{{ task.PRODUCT_ID }}</span>
                 </div>
               </div>
