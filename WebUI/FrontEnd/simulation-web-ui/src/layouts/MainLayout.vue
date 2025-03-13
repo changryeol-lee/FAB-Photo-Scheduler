@@ -15,13 +15,42 @@
     <q-drawer show-if-above v-model="leftDrawerOpen" side="left" behavior="desktop" elevated>
       <q-list>
         <!-- 1. 기준정보 -->
-        <q-item clickable v-ripple to="/master-data">
-          <q-item-section avatar>
-            <q-icon name="table_chart" />
-          </q-item-section>
-          <q-item-section>기준정보</q-item-section>
-        </q-item>
-        <!-- 2. 생산계획 (하위 메뉴 포함) -->
+        <q-expansion-item
+          expand-separator
+          icon="table_chart"
+          label="기준 정보"
+          @show="onShow('masterData')"
+          @hide="onHide('masterData')"
+          :header-style="parentMenuBackgroundColor.get('masterData')"
+        >
+          <q-item clickable v-ripple to="/master/bom" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="table_chart" />
+            </q-item-section>
+            <q-item-section>BOM 정보</q-item-section>
+          </q-item>
+
+          <q-item clickable v-ripple to="/master/route" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="map" />
+            </q-item-section>
+            <q-item-section>라우팅 정보</q-item-section>
+          </q-item>
+
+          <q-item clickable v-ripple to="/master/lot" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="widgets" />
+            </q-item-section>
+            <q-item-section>Lot 정보</q-item-section>
+          </q-item>
+
+          <q-item clickable v-ripple to="/master/info" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="info" />
+            </q-item-section>
+            <q-item-section>기타 정보</q-item-section>
+          </q-item>
+        </q-expansion-item>
         <q-expansion-item
           expand-separator
           icon="event"
@@ -60,7 +89,13 @@
             </q-item-section>
             <q-item-section>간트차트</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/analysis/compare" class="q-pl-lg">
+          <q-item clickable v-ripple to="/analysis/gantt2" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="timeline" />
+            </q-item-section>
+            <q-item-section>간트차트2</q-item-section>
+          </q-item>
+          <q-item clickable v-ripple to="/analysis/eqp-schedule" class="q-pl-lg">
             <q-item-section avatar>
               <q-icon name="compare" />
             </q-item-section>
