@@ -18,6 +18,8 @@ namespace DataMart.Output
         public DateTime START_TIME { get; set; }
         public DateTime END_TIME { get; set; }
         // 공정 진행시간(분)
+        public double TOTAL_PROCESS_DURATION { get; set; }
+        // OFF를 제외한 공정 진행시간(분) 
         public double PROCESS_DURATION { get; set; }
         // Lot이 실제로 공정 대기를 얼마나 했는지
         public double? WAIT_DURATION { get; set; }

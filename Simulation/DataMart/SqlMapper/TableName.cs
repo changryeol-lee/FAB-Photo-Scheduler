@@ -8,7 +8,8 @@
         EQUIPMENT,
         EQP_ARRANGE,
         STEP,
-        SETUP_INFO
+        SETUP_INFO,
+        OFFTIME_INFO
     }
 
     public enum OutputTable

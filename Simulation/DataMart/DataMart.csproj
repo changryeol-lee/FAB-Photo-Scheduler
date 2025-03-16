@@ -98,7 +98,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Input\Query\OffTimeInfoQuery.cs" />
     <Compile Include="Input\Query\SetupInfoQuery.cs" />
+    <Compile Include="Input\OFFTIME_INFO.cs" />
     <Compile Include="Input\SETUP_INFO.cs" />
     <Compile Include="OutputMart.cs" />
     <Compile Include="Input\EQP_ARRANGE.cs" />

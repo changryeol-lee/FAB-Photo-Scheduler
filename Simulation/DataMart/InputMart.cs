@@ -53,6 +53,7 @@ namespace DataMart.SqlMapper
             { InputTable.STEP_ROUTE, new StepRouteQuery() },
             { InputTable.EQP_ARRANGE, new EqpArrangeQuery() },
             { InputTable.SETUP_INFO, new SetupInfoQuery() },
+            { InputTable.OFFTIME_INFO, new OffTimeInfoQuery() },
         };
         }
 
@@ -65,7 +66,7 @@ namespace DataMart.SqlMapper
             LoadTable<EQUIPMENT>(InputTable.EQUIPMENT);
             LoadTable<EQP_ARRANGE>(InputTable.EQP_ARRANGE);
             LoadTable<SETUP_INFO>(InputTable.SETUP_INFO);
-
+            LoadTable<OFFTIME_INFO>(InputTable.OFFTIME_INFO);
         }
 
         private void LoadTable<T>(InputTable table)
