@@ -41,6 +41,7 @@ namespace FabSchedulerModel.Helper
             es.STEP_ID = plan.StepId;
             es.START_TIME = plan.StartTime;
             es.END_TIME = plan.EndTime;
+            es.TOTAL_PROCESS_DURATION = plan.TotalProcessDuration;
             es.PROCESS_DURATION = plan.ProcessDuration;
             es.WAIT_DURATION = plan.WaitDuration;
 

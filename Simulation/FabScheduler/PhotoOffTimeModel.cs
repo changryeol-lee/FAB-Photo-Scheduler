@@ -18,28 +18,43 @@ namespace FabSchedulerModel
 {
     public class PhotoOffTimeModel : ISimOffTimeModel
     {
-
-        //
-        //    new OffTimeRule
-        //        {
-        //            RuleType = OffTimeRuleType.Weekly,
-        //            Days = new[] { DayOfWeek.Sunday
-        //},
-        //            StartTime = TimeSpan.FromHours(0),
-        //            EndTime   = TimeSpan.FromHours(24)
-        //        }
-
         public List<OffTimeRule> GetOffTimeRules()
         {
-            return new List<OffTimeRule>
+
+            var offTimeList = InputMart.Instance.GetList<OFFTIME_INFO>(InputTable.OFFTIME_INFO);
+            List<OffTimeRule> returnList = new List<OffTimeRule>();
+            foreach (var offTime in offTimeList)
             {
-                new OffTimeRule
+                OffTimeRuleType type;
+                TimeSpan startTime;
+                TimeSpan endTime;
+
+                //rule type은 필수 
+                if (Enum.TryParse(offTime.RULE_TYPE, true, out type))
                 {
-                    RuleType = OffTimeRuleType.Daily,
-                    StartTime = new TimeSpan(13, 0, 0),
-                    EndTime = new TimeSpan(15, 0, 0)
+                    OffTimeRule rule = new OffTimeRule();
+                    rule.RuleType = type;
+                    TimeSpan.TryParse(offTime.START_TIME, out startTime);
+                    rule.StartTime = startTime;
+
+                    rule.EndTime = string.IsNullOrEmpty(offTime.END_TIME) ? TimeSpan.Zero
+                                        : (offTime.END_TIME == "24:00" ? TimeSpan.FromHours(24) : TimeSpan.ParseExact(offTime.END_TIME, @"hh\:mm", null));
+                    rule.Days = offTime?.DAYS_OF_WEEK == null 
+                                    ? null
+                                    : offTime.DAYS_OF_WEEK
+                                        .Split(',')
+                                        .Select(d => (DayOfWeek)Enum.Parse(typeof(DayOfWeek), d))
+                                        .ToArray();
+                    rule.StartDateTime = offTime.START_DATE_TIME;
+                    rule.EndDateTime = offTime.END_DATE_TIME;
+                    returnList.Add(rule);
                 }
-            };
+                else
+                {
+                    continue;
+                }
+            }
+            return returnList;
         }
         public void WriteOffTimeLog(List<(DateTime Start, DateTime End)> offTimeList)
         {
