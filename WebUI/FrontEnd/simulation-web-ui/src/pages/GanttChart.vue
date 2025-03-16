@@ -469,9 +469,15 @@ const columns = ref([
   { name: 'START_TIME', required: true, label: '작업 시작 시간', field: 'START_TIME' },
   { name: 'END_TIME', required: true, label: '작업 종료 시간', field: 'END_TIME' },
   {
-    name: 'PROCESS_DURATION',
+    name: 'TOTAL_PROCESS_DURATION',
     required: true,
     label: '총 작업 시간(분)',
+    field: 'TOTAL_PROCESS_DURATION',
+  },
+  {
+    name: 'PROCESS_DURATION',
+    required: true,
+    label: '순 작업 시간(분)',
     field: 'PROCESS_DURATION',
   },
   { name: 'WAIT_DURATION', required: true, label: '대기 시간(분)', field: 'WAIT_DURATION' },
