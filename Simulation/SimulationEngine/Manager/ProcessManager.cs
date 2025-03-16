@@ -57,10 +57,16 @@ namespace SimulationEngine.Manager
 
             equipment.GetEquipment().State = EqpState.SETUP;
             DateTime finishTime = startTime.AddMinutes(setupTime);
+
+            double processDuration = setupTime;
             if (_offTimeManager.IsOffTimeRange(startTime, finishTime))
             {
-                //offTime 이 끝나는 시점으로 finish 조정
-                finishTime = _offTimeManager.GetAdjustedEndTime(startTime, finishTime);
+                //offTime 반영한 finish 조정
+                DateTime adjustedFinishTime = _offTimeManager.GetAdjustedEndTime(startTime, finishTime);
+                TimeSpan gap = adjustedFinishTime - finishTime;
+                //off 제외한 순수 작업시간 (이론상 procTime과 동일해야함) 
+                processDuration = (adjustedFinishTime - startTime - gap).TotalMinutes;
+                finishTime = adjustedFinishTime;
             }
 
             string scheduleId = equipment.EqpId + "-" + Utils.GenerateRandom8Digits();
@@ -71,6 +77,7 @@ namespace SimulationEngine.Manager
                 ProductId = lot.ProductId,
                 StartTime = startTime,
                 EndTime = finishTime,
+                ProcessDuration = processDuration,
                 WorkType = WorkType.SETUP
             };
             equipment.SetCurrentPlan(schedule);
@@ -84,22 +91,26 @@ namespace SimulationEngine.Manager
 
         internal void Process(SimEquipment equipment, SimLot lot, DateTime startTime)
         {
-
             TrackIn(equipment, lot, startTime);
-            equipment.GetEquipment().State = EqpState.BUSY;
 
             double procTime = _model.GetProcessTime(equipment, lot);
             DateTime finishTime = startTime.AddSeconds(procTime);
+            double processDuration = procTime; 
+
             if (_offTimeManager.IsOffTimeRange(startTime, finishTime))
             {
-                //offTime 이 끝나는 시점으로 finish 조정
-                finishTime = _offTimeManager.GetAdjustedEndTime(startTime, finishTime);
+                //offTime 반영한 finish 조정
+                DateTime adjustedFinishTime = _offTimeManager.GetAdjustedEndTime(startTime, finishTime);
+                TimeSpan gap = adjustedFinishTime - finishTime;
+                //off 제외한 순수 작업시간 (이론상 procTime과 동일해야함) 
+                processDuration = (adjustedFinishTime - startTime - gap).TotalMinutes;
+                finishTime = adjustedFinishTime;
             }
 
 
             _scheduleManager.AddEvent(finishTime, () =>
             {
-                TrackOut(equipment, lot, finishTime);
+                TrackOut(equipment, lot, finishTime, processDuration);
                 
                 SimFactory.Instance._routeManager.Processed(lot, equipment, finishTime);
             });
@@ -134,12 +145,13 @@ namespace SimulationEngine.Manager
             return _model.GetProcessTime(equipment, lot);
         }
 
-        internal void TrackOut(SimEquipment equipment, SimLot lot, DateTime finishTime)
+        internal void TrackOut(SimEquipment equipment, SimLot lot, DateTime finishTime, double processDuration)
         {
             equipment.GetEquipment().State = EqpState.IDLE;
             lot.GetLot().State = LotState.WAIT;
             EqpSchedule plan =  equipment.GetCurrentPlan();
             plan.EndTime = finishTime;
+            plan.ProcessDuration = processDuration;
             equipment.SetPreviousPlan(plan);
             equipment.SetCurrentPlan(null);
             _model.OnTrackOut(equipment, lot, plan);
