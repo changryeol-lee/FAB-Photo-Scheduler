@@ -9,12 +9,13 @@
 
     <q-card-section>
       <q-table
-        class="fixed-height-table"
+        :style="{ height: fixTableHeightPx + 'px' }"
         :rows="displayRows"
         :columns="columns"
         :loading="loading"
         row-key="id"
         dense
+        selection="single"
         sticky-header
         virtual-scroll
         :virtual-scroll-slice-size="6"
@@ -54,7 +55,11 @@ const props = defineProps({
   },
   minRows: {
     type: Number,
-    default: 6,
+    default: 8,
+  },
+  fixTableHeightPx: {
+    type: Number,
+    default: 290,
   },
 })
 // 이벤트 정의
@@ -88,10 +93,6 @@ const displayRows = computed(() => {
   height: 100%;
 }
 
-.table-container {
-  height: 350px; /* 테이블 컨테이너 높이 고정 */
-}
-
 .fixed-height-table {
   height: 100%;
 }
@@ -103,6 +104,20 @@ const displayRows = computed(() => {
 
 /* 테이블 헤더 스타일 */
 :deep(.q-table thead tr) {
+  background-color: #f5f5f5;
+}
+
+/* 테이블 헤더 고정 CSS */
+:deep(.q-table) thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+:deep(.q-table) thead tr th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   background-color: #f5f5f5;
 }
 
