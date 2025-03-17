@@ -30,11 +30,11 @@
             <q-item-section>BOM 정보</q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple to="/master/route" class="q-pl-lg">
+          <q-item clickable v-ripple to="/master/equipment" class="q-pl-lg">
             <q-item-section avatar>
               <q-icon name="map" />
             </q-item-section>
-            <q-item-section>라우팅 정보</q-item-section>
+            <q-item-section>설비 정보</q-item-section>
           </q-item>
 
           <q-item clickable v-ripple to="/master/lot" class="q-pl-lg">

@@ -4,6 +4,9 @@ import GanttChart from 'pages/GanttChart.vue'
 import GanttChart2 from 'pages/GanttChart2.vue'
 import EqpSchedule from 'src/pages/EqpSchedule.vue'
 import DispatchLog from 'src/pages/DispatchLog.vue'
+import BomData from 'src/pages/Master/BomData.vue'
+import EquipmentData from 'src/pages/Master/EquipmentData.vue'
+import MasterDataLayout from 'src/layouts/MasterDataLayout.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -11,7 +14,15 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
-      { path: 'master-data', component: MasterData },
+      {
+        path: 'master',
+        children: [
+          { path: 'bom', component: BomData },
+          { path: 'equipment', component: EquipmentData },
+          // { path: 'lot', component: LotData },
+          // { path: 'etc', component: EtcData },
+        ],
+      },
       {
         path: 'analysis',
         children: [
