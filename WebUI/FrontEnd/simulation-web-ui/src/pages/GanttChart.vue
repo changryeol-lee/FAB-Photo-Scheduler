@@ -63,10 +63,10 @@
     <div class="q-ml-md text-subtitle1">{{ error }}</div>
   </div>
 
-  <div v-else-if="eqpSchedule.length === 0" class="q-pa-lg flex flex-center">
+  <!-- <div v-else-if="eqpSchedule.length === 0" class="q-pa-lg flex flex-center">
     <q-icon name="info" size="2em" color="info" />
     <div class="q-ml-md text-subtitle1">표시할 데이터가 없습니다.</div>
-  </div>
+  </div> -->
 
   <div v-else>
     <!-- Gantt Chart Container -->
@@ -182,13 +182,14 @@
 </template>
 
 <script setup lang="ts">
-import { date } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { removeZAndParse, formatDateTime, formatDate, addDays } from 'src/utils/dateUtils'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import api from '../api/axiosInstance'
 import type { TaskItem } from '../types/types'
 import { getLotColor } from 'src/utils/colorUtils'
 import SearchPanel from 'components/SearchPanel.vue'
+const $q = useQuasar()
 
 // 컴포넌트 최상단에 refs 정의
 const ganttHeader = ref(null)
@@ -482,6 +483,7 @@ const loadEngineExecuteLog = async () => {
 // 데이터 로드 함수
 const loadEqpSchedule = async (version?: string): Promise<void> => {
   error.value = null
+  $q.loading.show()
   try {
     const response = await api.get('/get-eqp-schedule', {
       params: {
@@ -507,6 +509,8 @@ const loadEqpSchedule = async (version?: string): Promise<void> => {
   } catch (err) {
     console.error('Error fetching schedule data:', err)
     error.value = '데이터를 불러오는 중 오류가 발생했습니다.'
+  } finally {
+    $q.loading.hide()
   }
 }
 
