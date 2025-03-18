@@ -1,71 +1,55 @@
 <template>
-  <div class="control-container">
-    <div class="control-wrapper">
-      <div class="control-menu-name">작업 계획 / 설비 간트 차트</div>
-      <div class="header-container q-pa-md">
-        <div class="filter-row">
-          <div class="filter-item">
-            <q-select
-              outlined
-              dense
-              v-model="selectedScheduleVersion"
-              :options="scheduleVersions"
-              label="시뮬레이션 버전"
-              class="filter-input"
-              @update:model-value="onVersionChange"
-            />
-          </div>
-
-          <div class="filter-item">
-            <q-input outlined dense v-model="startDate" label="시작일" class="filter-input">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="fade" transition-hide="fade">
-                    <q-date v-model="startDate" mask="YYYY-MM-DD" />
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-          </div>
-
-          <div class="filter-item">
-            <q-input outlined dense v-model="endDate" label="종료일" class="filter-input">
-              <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="fade" transition-hide="fade">
-                    <q-date v-model="endDate" mask="YYYY-MM-DD" />
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
-          </div>
-
-          <div class="filter-item">
-            <q-select
-              outlined
-              dense
-              v-model="selectedResource"
-              :options="resources"
-              label="설비 ID"
-              class="filter-input"
-            />
-          </div>
-          <div class="filter-item"></div>
-          <div class="filter-item"></div>
-          <div class="search-button-container">
-            <q-btn
-              color="primary"
-              icon-right="search"
-              label="검색"
-              no-caps
-              class="search-button"
-              @click="loadEqpSchedule(selectedScheduleVersion)"
-            />
-          </div>
-        </div>
+  <SearchPanel
+    title="작업 계획 / 설비 간트 차트"
+    @search="loadEqpSchedule(selectedScheduleVersion)"
+  >
+    <template #filter-items>
+      <div class="filter-item">
+        <q-select
+          outlined
+          dense
+          v-model="selectedScheduleVersion"
+          :options="scheduleVersions"
+          label="시뮬레이션 버전"
+        />
       </div>
-    </div>
-  </div>
+      <div class="filter-item">
+        <q-input outlined dense v-model="startDate" label="시작일">
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover transition-show="fade" transition-hide="fade">
+                <q-date v-model="startDate" mask="YYYY-MM-DD" />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+      </div>
+      <div class="filter-item">
+        <q-input outlined dense v-model="endDate" label="종료일">
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover transition-show="fade" transition-hide="fade">
+                <q-date v-model="endDate" mask="YYYY-MM-DD" />
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+      </div>
+      <div class="filter-item">
+        <q-select
+          outlined
+          dense
+          v-model="selectedResource"
+          :options="resources"
+          label="설비 ID"
+          class="filter-input"
+        />
+      </div>
+
+      <div class="filter-item"></div>
+      <div class="filter-item"></div>
+    </template>
+  </SearchPanel>
 
   <!-- 로딩 및 오류 상태 표시 -->
   <!-- <div v-if="loading" class="q-pa-lg flex flex-center">
@@ -100,7 +84,6 @@
 
         <div class="gantt-header" ref="ganttHeader">
           <div class="gantt-header-content" ref="ganttHeaderContent">
-            <!-- Month Row -->
             <div class="month-row">
               <div
                 v-for="month in months"
@@ -111,8 +94,6 @@
                 {{ month.name }}
               </div>
             </div>
-
-            <!-- Day Row -->
             <div class="day-row">
               <div
                 v-for="day in days"
@@ -143,10 +124,8 @@
           </div>
         </div>
 
-        <!-- Main Content Area (Scrollable) -->
         <div class="gantt-body" ref="ganttBody">
           <div class="gantt-content" ref="ganttContent">
-            <!-- Time Grid (Background) -->
             <div class="time-grid" ref="timeGrid">
               <div
                 v-for="day in days"
@@ -197,10 +176,6 @@
         :virtual-scroll-slice-size="6"
         :pagination="pagination"
       >
-        <!-- 
-      고민..
-      hide-bottom 
-      -->
       </q-table>
     </div>
   </div>
@@ -213,6 +188,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import api from '../api/axiosInstance'
 import type { TaskItem } from '../types/types'
 import { getLotColor } from 'src/utils/colorUtils'
+import SearchPanel from 'components/SearchPanel.vue'
 
 // 컴포넌트 최상단에 refs 정의
 const ganttHeader = ref(null)
@@ -222,19 +198,12 @@ const ganttContent = ref(null)
 const resourceList = ref(null)
 const timeGrid = ref(null)
 
-const onVersionChange = async (version: string) => {
-  if (version) {
-    await loadEqpSchedule(version)
-  }
-}
-
 const eqpSchedule = ref<TaskItem[]>([])
-
 const error = ref<string | null>(null)
 
 // UI 상태 관리
-const startDate = ref('') // 2025-03-01
-const endDate = ref('') // 2025-03-08
+const startDate = ref('') // 2040-03-01
+const endDate = ref('') // 2040-03-08
 const selectedScheduleVersion = ref(null)
 const selectedResource = ref(null)
 const columnWidth = ref(300)
@@ -242,6 +211,15 @@ const selectedTask = ref<TaskItem | null>(null)
 
 // 필터링 옵션 생성
 const scheduleVersions = ref<any>()
+
+// 컴포넌트 마운트 시 초기화
+onMounted(async () => {
+  // await loadEqpSchedule()
+  await loadEngineExecuteLog()
+  await loadEqpSchedule(selectedScheduleVersion.value)
+  ensureHorizontalScroll()
+  setupScrollSynchronization()
+})
 
 // 리소스 목록
 const resources = computed(() => {
@@ -481,13 +459,6 @@ const columns = ref([
     field: 'PROCESS_DURATION',
   },
   { name: 'WAIT_DURATION', required: true, label: '대기 시간(분)', field: 'WAIT_DURATION' },
-  // {
-  //   name: 'SETUP_START_TIME',
-  //   required: true,
-  //   label: 'SETUP_START_TIME',
-  //   field: 'SETUP_START_TIME',
-  // },
-  // { name: 'SETUP_END_TIME', required: true, label: 'SETUP_END_TIME', field: 'SETUP_END_TIME' },
 ])
 
 // 테이블 행 클릭 이벤트
@@ -496,36 +467,13 @@ const onTableRowClick = (evt, row) => {
   selectedTableRows.value = [row]
 }
 
-// 간트 차트 선택 시 테이블 연동
-watch(selectedTask, (newTask) => {
-  if (newTask) {
-    selectedTableRows.value = [newTask]
-    // 해당 행으로 스크롤 처리 로직...
-  }
-})
-
-// 컴포넌트 마운트 시 초기화
-onMounted(async () => {
-  // await loadEqpSchedule()
-  await loadEngineExecuteLog()
-  await loadEqpSchedule(selectedScheduleVersion.value)
-  ensureHorizontalScroll()
-  setupScrollSynchronization()
-})
-// 데이터 변경 시 스크롤 동기화 재설정
-watch([days, columnWidth, eqpSchedule], () => {
-  console.log('watch gantt scroll')
-  ensureHorizontalScroll()
-  setupScrollSynchronization()
-})
-
 const loadEngineExecuteLog = async () => {
   try {
     const response = await api.get('/get-engine-execute-log')
     scheduleVersions.value = response.data.map((x) => x.SIMULATION_VERSION)
     selectedScheduleVersion.value = scheduleVersions.value[0]
     startDate.value = formatDate(response.data[0].SIMULATION_START_TIME)
-    endDate.value = formatDate(response.data[0].SIMULATION_END_TIME)
+    endDate.value = addDays(formatDate(response.data[0].SIMULATION_END_TIME), -1)
   } catch (err) {
     console.error('Error fetching schedule version:', err)
   }
@@ -561,62 +509,22 @@ const loadEqpSchedule = async (version?: string): Promise<void> => {
     error.value = '데이터를 불러오는 중 오류가 발생했습니다.'
   }
 }
+
+// 간트 차트 선택 시 테이블 연동
+watch(selectedTask, (newTask) => {
+  if (newTask) {
+    selectedTableRows.value = [newTask]
+  }
+})
+
+// 데이터 변경 시 스크롤 동기화 재설정
+watch([days, columnWidth], () => {
+  ensureHorizontalScroll()
+  setupScrollSynchronization()
+})
 </script>
 
 <style scoped>
-.control-container {
-  font-family: 'Noto Sans KR', sans-serif;
-  margin-bottom: 16px;
-}
-
-.control-wrapper {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-
-.control-menu-name {
-  font-size: 20px;
-  font-weight: bold;
-  padding: 12px 16px;
-  color: #2c3e50;
-}
-
-.header-container {
-  background: #f5f7fa;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-}
-
-.filter-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-
-.filter-item {
-  flex: 1;
-  min-width: 180px;
-}
-
-.filter-input {
-  width: 100%;
-}
-
-.search-button-container {
-  display: flex;
-  justify-content: flex-end;
-  min-width: 100px;
-}
-
-.search-button {
-  height: 40px;
-  font-weight: 500;
-}
-
 .gantt-wrapper {
   height: 500px;
   margin-bottom: 20px;
