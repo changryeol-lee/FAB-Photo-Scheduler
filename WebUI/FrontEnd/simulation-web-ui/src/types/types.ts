@@ -42,3 +42,11 @@ export interface EqpArrange {
   TACT_TIME: number
 }
 
+export interface EngineExecuteLog {
+  SIMULATION_VERSION: string
+  DISPATCH_TYPE: string
+  SIMULATION_START_TIME: string
+  SIMULATION_END_TIME: string
+  RUN_USER: string
+  SIMULATION_EXECUTE_TIME: string
+}

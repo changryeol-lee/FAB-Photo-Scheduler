@@ -7,6 +7,7 @@ import DispatchLog from 'src/pages/DispatchLog.vue'
 import BomData from 'src/pages/Master/BomData.vue'
 import EquipmentData from 'src/pages/Master/EquipmentData.vue'
 import MasterDataLayout from 'src/layouts/MasterDataLayout.vue'
+import EngineExecute from 'pages/Planning/EngineExecute.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -19,6 +20,15 @@ const routes: RouteRecordRaw[] = [
         children: [
           { path: 'bom', component: BomData },
           { path: 'equipment', component: EquipmentData },
+          // { path: 'lot', component: LotData },
+          // { path: 'etc', component: EtcData },
+        ],
+      },
+      {
+        path: 'planning',
+        children: [
+          { path: 'engine-execute', component: EngineExecute },
+
           // { path: 'lot', component: LotData },
           // { path: 'etc', component: EtcData },
         ],

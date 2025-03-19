@@ -59,18 +59,18 @@
           @hide="onHide('productionPlan')"
           :header-style="parentMenuBackgroundColor.get('productionPlan')"
         >
+          <q-item clickable v-ripple to="/planning/engine-execute" class="q-pl-lg">
+            <q-item-section avatar>
+              <q-icon name="play_arrow" />
+            </q-item-section>
+            <q-item-section>생산 계획 엔진 실행</q-item-section>
+          </q-item>
           <q-item clickable v-ripple to="/schedule/eqp" class="q-pl-lg">
             <q-item-section avatar>
+              <!-- timeline memory -->
               <q-icon name="build" />
             </q-item-section>
             <q-item-section>설비별 생산 계획</q-item-section>
-          </q-item>
-
-          <q-item clickable v-ripple to="/schedule/product" class="q-pl-lg">
-            <q-item-section avatar>
-              <q-icon name="shopping_cart" />
-            </q-item-section>
-            <q-item-section>완제품 생산 계획</q-item-section>
           </q-item>
         </q-expansion-item>
 
