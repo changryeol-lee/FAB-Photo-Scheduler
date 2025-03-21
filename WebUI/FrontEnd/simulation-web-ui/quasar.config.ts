@@ -93,7 +93,7 @@ export default defineConfig((/* ctx */) => {
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#framework
     framework: {
-      plugins: ['Loading'],
+      plugins: ['Loading', 'Notify', 'Dialog'],
       config: {},
     },
 
