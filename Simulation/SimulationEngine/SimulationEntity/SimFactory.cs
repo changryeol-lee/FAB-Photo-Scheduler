@@ -52,6 +52,11 @@ namespace SimulationEngine.SimulationEntity
         }
         private SimFactory() { }
 
+        public static void ResetInstance()
+        {
+            _instance = null;
+        }
+
         public static void InitializeInstance(IModelGroup modelGroup, SimulationOption option)
         {
             if (_instance == null)

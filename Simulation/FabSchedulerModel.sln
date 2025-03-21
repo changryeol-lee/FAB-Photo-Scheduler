@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMart", "DataMart\DataMa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FabSchedulerModel", "FabScheduler\FabSchedulerModel.csproj", "{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineTrigger", "EngineTrigger\EngineTrigger.csproj", "{C7463978-2BE0-404C-BBA7-264FDAA9B959}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DD4BF56-97E9-49D7-A07E-8EB9F77C86FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7463978-2BE0-404C-BBA7-264FDAA9B959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7463978-2BE0-404C-BBA7-264FDAA9B959}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7463978-2BE0-404C-BBA7-264FDAA9B959}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7463978-2BE0-404C-BBA7-264FDAA9B959}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

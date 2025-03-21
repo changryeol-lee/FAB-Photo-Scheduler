@@ -10,37 +10,49 @@ namespace DataMart.SqlMapper
     public class InputMart
     {
         private static readonly object lockObject = new object();
-        private static volatile InputMart instance;
         private Dictionary<InputTable, object> dataLists;
         private readonly TableDataAccess dataAccess;
         private Dictionary<InputTable, object> tableQueries;
-        public string SimulationVersion { get; private set; } 
+        private readonly string _connectionString;
+        private static volatile InputMart instance;
 
+        public string SimulationVersion { get; private set; }
+
+        public static InputMart Initialize(string connectionString)
+        {
+            if (instance == null)
+            {
+                lock (lockObject)
+                {
+                    if (instance == null)
+                    {
+                        instance = new InputMart(connectionString);
+                    }
+                }
+            }
+
+            return instance;
+        }
         public static InputMart Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    lock (lockObject)
-                    {
-                        if (instance == null)
-                        {
-                            instance = new InputMart();
-                        }
-                    }
+                    throw new InvalidOperationException("InputMart is not initialized. Call Initialize() first.");
                 }
                 return instance;
             }
         }
-
-        private InputMart()
+        private InputMart(string connectionString)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            dataAccess = new TableDataAccess(connectionString);
+            _connectionString = connectionString;
+            dataAccess = new TableDataAccess(_connectionString);
             dataLists = new Dictionary<InputTable, object>();
             InitializeTableQueries();
         }
+
+
 
         private void InitializeTableQueries()
         {
@@ -99,8 +111,7 @@ namespace DataMart.SqlMapper
         }
         public void SetVersion(string prefix)
         {
-            if(SimulationVersion == null) 
-                SimulationVersion =  $"{prefix}_{DateTime.Now:yyyyMMdd_HHmmss}"; // 예: VER_20250228_164837
+            SimulationVersion =  $"{prefix}_{DateTime.Now:yyyyMMdd_HHmmss}"; // 예: VER_20250228_164837
         }
     }
 }

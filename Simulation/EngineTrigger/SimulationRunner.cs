@@ -12,27 +12,35 @@ namespace EngineTrigger
     {
         public void RunSimulation(PhotoSimulationOption option)
         {
-            InputMart.Instance.LoadFromDatabase();
-            InputMart.Instance.SetVersion(option.DispatchType.ToString());
+            try {
+                InputMart.Instance.LoadFromDatabase();
+                InputMart.Instance.SetVersion(option.DispatchType.ToString());
+                option.SimulationEndTime = option.SimulationStartTime.AddDays(option.SimulationPeriod);
 
-            PhotoSimulationModel simulationModel = new PhotoSimulationModel();
-            PhotoEquipmentModel equipmentModel = new PhotoEquipmentModel();
-            PhotoLotModel lotModel = new PhotoLotModel();
-            PhotoRouteModel routeModel = new PhotoRouteModel();
-            PhotoDispatchModel dispatchModel = new PhotoDispatchModel();
-            PhotoProcessModel processModel = new PhotoProcessModel();
-            PhotoOffTimeModel offTimeModel = new PhotoOffTimeModel();
+                PhotoSimulationModel simulationModel = new PhotoSimulationModel();
+                PhotoEquipmentModel equipmentModel = new PhotoEquipmentModel();
+                PhotoLotModel lotModel = new PhotoLotModel();
+                PhotoRouteModel routeModel = new PhotoRouteModel();
+                PhotoDispatchModel dispatchModel = new PhotoDispatchModel();
+                PhotoProcessModel processModel = new PhotoProcessModel();
+                PhotoOffTimeModel offTimeModel = new PhotoOffTimeModel();
 
-            IModelGroup modelGroup = new PhotoModelGroup(
-                simulationModel, equipmentModel, lotModel,
-                routeModel, dispatchModel, processModel, offTimeModel);
+                IModelGroup modelGroup = new PhotoModelGroup(
+                    simulationModel, equipmentModel, lotModel,
+                    routeModel, dispatchModel, processModel, offTimeModel);
 
-            OutputHelper.WriteEngineExecuteLog(option);
+                OutputHelper.WriteEngineExecuteLog(option);
 
-            SimFactory.InitializeInstance(modelGroup, option);
-            SimFactory factory = SimFactory.Instance;
-            factory.Initialize(modelGroup);
-            factory.StartSimulation();
+                SimFactory.InitializeInstance(modelGroup, option);
+                SimFactory factory = SimFactory.Instance;
+                factory.Initialize(modelGroup);
+                factory.StartSimulation();
+            }
+            finally
+            {
+                SimFactory.ResetInstance();
+                OutputMart.Instance.ClearData(); 
+            }
         }
     }
 }

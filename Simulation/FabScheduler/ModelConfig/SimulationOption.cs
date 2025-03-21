@@ -12,5 +12,6 @@ namespace FabSchedulerModel.ModelConfig
     {
         public DispatchType DispatchType { get; set; }
         public string RunUser { get; set; }
+        public int SimulationPeriod { get; set; }
     }
 }

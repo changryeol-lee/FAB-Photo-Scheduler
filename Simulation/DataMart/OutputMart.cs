@@ -1,6 +1,7 @@
 ﻿using DataMart.Input;
 using DataMart.Input.Query;
 using DataMart.Output;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 
@@ -10,32 +11,42 @@ namespace DataMart.SqlMapper
     public class OutputMart
     {
         private static readonly object lockObject = new object();
-        private static volatile OutputMart instance;
         private Dictionary<OutputTable, object> dataLists;
         private readonly TableDataAccess dataAccess;
         private Dictionary<OutputTable, object> tableQueries;
+        private readonly string _connectionString;
+        private static volatile OutputMart instance;
 
+
+        public static OutputMart Initialize(string connectionString)
+        {
+            if (instance == null)
+            {
+                lock (lockObject)
+                {
+                    if (instance == null)
+                    {
+                        instance = new OutputMart(connectionString);
+                    }
+                }
+            }
+
+            return instance;
+        }
         public static OutputMart Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    lock (lockObject)
-                    {
-                        if (instance == null)
-                        {
-                            instance = new OutputMart();
-                        }
-                    }
+                    throw new InvalidOperationException("OutputMart is not initialized. Call Initialize() first.");
                 }
                 return instance;
             }
         }
-
-        private OutputMart()
+        private OutputMart(string connectionString)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            _connectionString = connectionString;
             dataAccess = new TableDataAccess(connectionString);
             dataLists = new Dictionary<OutputTable, object>();
         }
@@ -127,6 +138,11 @@ namespace DataMart.SqlMapper
 
                 }
             }
+        }
+
+        public void ClearData()
+        {
+            dataLists.Clear();
         }
     }
 }
