@@ -238,6 +238,20 @@ const runEngine = async () => {
 }
 </script>
 <style scoped>
+/* 테이블 헤더 고정 CSS */
+:deep(.q-table) thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+:deep(.q-table) thead tr th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f5f5f5;
+}
+
 /* 테이블 헤더 스타일 */
 :deep(.q-table thead tr) {
   background-color: #f5f5f5;
