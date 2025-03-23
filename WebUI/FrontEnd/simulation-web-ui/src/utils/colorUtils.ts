@@ -1,4 +1,4 @@
-import type { TaskItem } from '../types/types'
+import type { EqpSchedule as TaskItem } from '../types/types'
 
 const lotColorMap = new Map<string, string>()
 const pastelColors = [

@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import MasterData from 'pages/MasterData.vue'
 import GanttChart from 'pages/GanttChart.vue'
 import GanttChart2 from 'pages/GanttChart2.vue'
-import EqpSchedule from 'src/pages/EqpSchedule.vue'
+import EqpSchedule from 'src/pages/Planning/EqpSchedule.vue'
 import DispatchLog from 'src/pages/DispatchLog.vue'
 import BomData from 'src/pages/Master/BomData.vue'
 import EquipmentData from 'src/pages/Master/EquipmentData.vue'
@@ -28,6 +28,7 @@ const routes: RouteRecordRaw[] = [
         path: 'planning',
         children: [
           { path: 'engine-execute', component: EngineExecute },
+          { path: 'eqp-schedule', component: EqpSchedule },
 
           // { path: 'lot', component: LotData },
           // { path: 'etc', component: EtcData },
@@ -38,7 +39,6 @@ const routes: RouteRecordRaw[] = [
         children: [
           { path: 'gantt', component: GanttChart },
           { path: 'gantt2', component: GanttChart2 },
-          { path: 'eqp-schedule', component: EqpSchedule },
           { path: 'dispatch-log', component: DispatchLog },
         ],
       },

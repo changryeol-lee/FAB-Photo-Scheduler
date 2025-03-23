@@ -1,4 +1,4 @@
-export interface TaskItem {
+export interface EqpSchedule {
   SIMULATION_VERSION: string
   SCHEDULE_ID: string
   EQP_ID: string
@@ -40,6 +40,24 @@ export interface EqpArrange {
   STEP_ID: string
   EQP_ID: string
   TACT_TIME: number
+}
+
+export interface OffTime {
+  RULE_TYPE: string
+  // [Daily / Weekly] 시: 해당 시간을 TimeSpan으로 정의
+  START_TIME: string
+  END_TIME: string
+  // Weekly일 경우, 적용할 요일들
+  DAYS_OF_WEEK: string[]
+  // Once일 경우, 구체적인 DateTime 범위
+  START_DATE_TIME: Date
+  END_DATE_TIME: Date
+}
+
+export interface SetupInfo {
+  EQP_ID: string
+  SETUP_CONDITION: string
+  SETUP_TIME: number
 }
 
 export interface EngineExecuteLog {
