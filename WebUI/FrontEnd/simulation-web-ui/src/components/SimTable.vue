@@ -1,7 +1,7 @@
 <template>
-  <div class="simple-table-container q-mt-md q-px-md">
+  <div class="sim-table-container q-mt-md q-px-md">
     <q-table
-      class="simple-table"
+      class="sim-table"
       :rows="data"
       :columns="columns"
       :loading="loading"
@@ -17,6 +17,7 @@
       :virtual-scroll-slice-size="visibleRows"
       :pagination="pagination"
       :style="tableStyle"
+      :table-row-class-fn="tableRowClassFn"
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
@@ -35,6 +36,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import type { QTableColumn } from 'quasar'
+import type { PropType } from 'vue'
 
 // Props 정의
 const props = defineProps({
@@ -73,6 +75,10 @@ const props = defineProps({
   rowKey: {
     type: String,
   },
+  tableRowClassFn: {
+    type: Function as PropType<(row: any) => string>,
+    default: null,
+  },
 })
 
 // 이벤트 정의
@@ -110,11 +116,11 @@ onMounted(() => {})
 </script>
 
 <style scoped>
-.simple-table-container {
+.sim-table-container {
   width: 100%;
 }
 
-.simple-table {
+.sim-table {
   overflow-y: auto;
 }
 
