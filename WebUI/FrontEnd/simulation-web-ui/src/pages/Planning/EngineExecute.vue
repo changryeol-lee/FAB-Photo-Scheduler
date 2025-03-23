@@ -100,23 +100,12 @@
         </div>
       </div>
     </div>
-
-    <div class="q-mt-md q-px-md">
-      <q-table
-        class="double-search-table"
-        :rows="engineExecuteLog"
-        :columns="columns"
-        selection="single"
-        bordered
-        flat
-        dense
-        sticky-header
-        virtual-scroll
-        :virtual-scroll-slice-size="6"
-        :pagination="pagination"
-      >
-      </q-table>
-    </div>
+    <SimTable
+      :data="engineExecuteLog"
+      :columns="columns"
+      :offsetHeight="240"
+      rowKey="SIMULATION_VERSION"
+    />
   </div>
 </template>
 <script setup lang="ts">
@@ -125,6 +114,8 @@ import { onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import type { EngineExecuteLog } from 'src/types/types'
 import { addDays, formatDate, formatDateTime, removeZAndParse } from 'src/utils/dateUtils'
+import SimTable from 'src/components/SimTable.vue'
+
 const $q = useQuasar()
 const endDate = ref(formatDate(new Date()))
 const startDate = ref(addDays(endDate.value, -7))
@@ -238,62 +229,6 @@ const runEngine = async () => {
 }
 </script>
 <style scoped>
-/* 테이블 헤더 고정 CSS */
-:deep(.q-table) thead {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
-:deep(.q-table) thead tr th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: #f5f5f5;
-}
-
-/* 테이블 헤더 스타일 */
-:deep(.q-table thead tr) {
-  background-color: #f5f5f5;
-}
-
-/* 고정 헤더에 그림자 효과 추가 */
-:deep(.q-table--sticky-header thead tr:last-child th) {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-/* 선택된 행 스타일 */
-:deep(.q-table tbody tr.selected) {
-  background-color: rgba(25, 118, 210, 0.12);
-}
-
-/* 체크박스 열 너비를 0으로 설정하여 완전히 숨기기 */
-/* .q-table--col-auto-width {
-  padding: 0px;
-} */
-:deep(.q-table--col-auto-width) {
-  display: none;
-}
-:deep(.q-checkbox) {
-  display: none;
-}
-
-/* 열 사이에 경계선 추가 */
-:deep(.q-table th),
-:deep(.q-table td) {
-  border-right: 1px solid #e0e0e0;
-}
-
-/* 마지막 열의 오른쪽 경계선은 제거 (선택 사항) */
-:deep(.q-table th:last-child),
-:deep(.q-table td:last-child) {
-  border-right: none;
-}
-
-/* 테두리 스타일을 일관되게 유지 */
-:deep(.q-table) {
-  border-collapse: collapse;
-}
-
 .filter-container {
   position: relative;
   gap: 32px;
@@ -353,10 +288,5 @@ const runEngine = async () => {
   .filter-item {
     flex: 0 0 100%;
   }
-}
-.double-search-table {
-  height: calc(100vh - 240px); /* 화면 전체 높이에서 상단/하단 요소 크기 빼기 */
-  max-height: calc(100vh - 240px);
-  overflow-y: auto; /* 필요할 경우 내부 스크롤 허용 */
 }
 </style>
