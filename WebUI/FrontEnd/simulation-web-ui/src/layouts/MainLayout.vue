@@ -65,9 +65,8 @@
             </q-item-section>
             <q-item-section>생산 계획 엔진 실행</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/schedule/eqp" class="q-pl-lg">
+          <q-item clickable v-ripple to="/planning/eqp-schedule" class="q-pl-lg">
             <q-item-section avatar>
-              <!-- timeline memory -->
               <q-icon name="build" />
             </q-item-section>
             <q-item-section>설비별 생산 계획</q-item-section>
