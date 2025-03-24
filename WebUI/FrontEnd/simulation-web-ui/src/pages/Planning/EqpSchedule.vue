@@ -88,7 +88,11 @@ const loadEngineExecuteLog = async () => {
 const loadEquipment = async () => {
   try {
     const response = await api.get('/get-equipment')
-    eqps.value = response.data.map((eqp: Equipment) => ({ label: eqp.EQP_ID, value: eqp.EQP_ID }))
+
+    eqps.value = [
+      { label: '전체', value: null },
+      ...response.data.map((eqp: Equipment) => ({ label: eqp.EQP_ID, value: eqp.EQP_ID })),
+    ]
   } catch (err) {
     console.error('Error fetching schedule version:', err)
   }
