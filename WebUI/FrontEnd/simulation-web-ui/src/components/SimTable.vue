@@ -10,14 +10,16 @@
       bordered
       flat
       dense
-      v-model:selected="selectedTableRows"
-      @row-click="onTableRowClick"
+      v-model:selected="modelSelected"
+      @update:selected="onSelectedUpdate"
+      @row-click="handleRowClick"
       sticky-header
       virtual-scroll
       :virtual-scroll-slice-size="visibleRows"
       :pagination="pagination"
       :style="tableStyle"
       :table-row-class-fn="tableRowClassFn"
+      ref="qTableRef"
     >
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
@@ -33,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import type { QTableColumn } from 'quasar'
 import type { PropType } from 'vue'
 
@@ -74,14 +76,51 @@ const props = defineProps({
   rowKey: {
     type: String,
   },
+  selectedRow: {
+    type: Array,
+    default: () => [],
+  },
   tableRowClassFn: {
     type: Function as PropType<(row: any) => string>,
     default: () => '',
   },
+  onRowClick: {
+    type: Function as PropType<(evt: Event, row: any, index: number) => void>,
+    default: () => '',
+  },
 })
+const emit = defineEmits(['update:selected', 'row-click'])
 
-// 이벤트 정의
-defineEmits(['update:selected', 'row-click'])
+const qTableRef = ref(null)
+
+const handleRowClick = (evt: Event, row: any, index: number) => {
+  modelSelected.value = [row]
+  emit('update:selected', modelSelected.value)
+  // 부모로부터 받은 onRowClick 함수가 있으면 호출
+  if (props.onRowClick) {
+    props.onRowClick(evt, row, index)
+  } else {
+    modelSelected.value = [row]
+  }
+}
+// 내부적으로 선택된 행 관리 (부모의 selected와 동기화)
+const modelSelected = ref(props.selectedRow || [])
+
+// 선택 상태가 내부적으로 변경되면 부모에게 알림
+const onSelectedUpdate = (newSelected: any[]) => {
+  modelSelected.value = newSelected
+  emit('update:selected', newSelected)
+}
+
+watch(
+  () => props.selectedRow,
+  (newValue) => {
+    if (newValue !== modelSelected.value) {
+      modelSelected.value = newValue || []
+    }
+  },
+  { deep: true },
+)
 
 // 페이지네이션 설정
 const pagination = ref({
@@ -89,8 +128,6 @@ const pagination = ref({
   sortBy: '',
   descending: false,
 })
-
-const selectedTableRows = ref([])
 
 const tableStyle = computed(() => {
   if (props.useFixedHeight) {
@@ -107,11 +144,19 @@ const tableStyle = computed(() => {
   }
 })
 
-const onTableRowClick = (evt, row) => {
-  selectedTableRows.value = [row]
+const scrollToRow = (rowId) => {
+  if (!qTableRef.value || !props.data) return
+  const index = props.data.findIndex((row) => row[props.rowKey] === rowId)
+  if (index >= 0) {
+    qTableRef.value.scrollTo(index, 'center')
+  }
 }
 
 onMounted(() => {})
+defineExpose({
+  // 다른 노출 메서드/속성...
+  scrollToRow,
+})
 </script>
 
 <style scoped>
@@ -124,11 +169,11 @@ onMounted(() => {})
 }
 
 /* 테이블 헤더 고정 CSS */
-:deep(.q-table) thead {
+/* :deep(.q-table) thead {
   position: sticky;
   top: 0;
   z-index: 1;
-}
+} */
 
 :deep(.q-table) thead tr th {
   position: sticky;

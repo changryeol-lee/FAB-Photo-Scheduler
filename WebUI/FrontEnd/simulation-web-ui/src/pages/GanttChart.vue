@@ -146,7 +146,7 @@
                   class="task-item"
                   :class="getTaskClass(task)"
                   :style="getTaskStyle(task)"
-                  @click="selectedTask = task"
+                  @click="onClickTask(task)"
                 >
                   <span v-if="task.WORK_TYPE === 'SETUP'">SETUP</span>
                   <span v-else-if="task.WORK_TYPE === 'OFF'">OFF</span>
@@ -159,8 +159,18 @@
         </div>
       </div>
     </div>
-    <div class="task-table-container q-mt-md q-px-md" v-if="eqpSchedule.length > 0">
-      <q-table
+    <SimTable
+      ref="tableRef"
+      :data="filteredTasks"
+      :columns="columns"
+      :offsetHeight="720"
+      rowKey="SCHEDULE_ID"
+      :tableRowClassFn="getRowClass"
+      :on-row-click="onTableRowClick"
+      :selectedRow="selectedTableRows"
+    />
+    <!-- <div class="task-table-container q-mt-md q-px-md" v-if="eqpSchedule.length > 0"> -->
+    <!-- <q-table
         class="task-detail-table"
         :rows="filteredTasks"
         :columns="columns"
@@ -176,8 +186,8 @@
         :virtual-scroll-slice-size="6"
         :pagination="pagination"
       >
-      </q-table>
-    </div>
+      </q-table> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -189,6 +199,7 @@ import api from '../api/axiosInstance'
 import type { EqpSchedule as TaskItem, SelectOption, Equipment } from '../types/types'
 import { getLotColor } from 'src/utils/colorUtils'
 import SearchPanel from 'components/SearchPanel.vue'
+import SimTable from 'src/components/SimTable.vue'
 import type { QTableColumn } from 'quasar'
 
 const $q = useQuasar()
@@ -202,6 +213,7 @@ const timeGrid = ref(null)
 
 const eqpSchedule = ref<TaskItem[]>([])
 const resourceListRef = ref(null)
+const tableRef = ref(null)
 const error = ref<string | null>(null)
 
 // UI 상태 관리
@@ -358,6 +370,11 @@ const getTaskClass = (task: TaskItem) => {
 
   return classes.join(' ')
 }
+const onClickTask = async (task: TaskItem) => {
+  selectedTask.value = task
+  await nextTick()
+  tableRef.value.scrollToRow(task.SCHEDULE_ID)
+}
 
 const ensureHorizontalScroll = () => {
   void nextTick(() => {
@@ -455,7 +472,7 @@ const columns = ref<QTableColumn[]>([
 ])
 
 // 테이블 행 클릭 이벤트
-const onTableRowClick = (evt, row) => {
+const onTableRowClick = (evt: Event, row: any) => {
   selectedTask.value = row
   selectedTableRows.value = [row]
 }
@@ -516,6 +533,22 @@ const loadEqpSchedule = async (version?: string): Promise<void> => {
     $q.loading.hide()
   }
 }
+
+const getRowClass = (row) => {
+  // 예: 특정 상태를 가진 행에 클래스 적용
+  if (row.WORK_TYPE === 'SETUP') {
+    return 'setup-row'
+  }
+  if (row.WORK_TYPE === 'OFF') {
+    return 'off-row'
+  }
+  if (row.WORK_TYPE === 'REWORK') {
+    return 'rework-row'
+  }
+
+  return ''
+}
+
 // 간트 차트 선택 시 테이블 연동
 watch(selectedTask, (newTask) => {
   if (newTask) {
