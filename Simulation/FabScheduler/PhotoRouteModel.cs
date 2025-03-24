@@ -19,9 +19,9 @@ namespace FabSchedulerModel
             //한개 lot은 rework 한번만 발생. 
             if (lot.StepId == "INSPECTION" && pl.IsRework == false)
             {
-                if(Utils.IsTrueWithPercent(15)) //rework 확률 = 15% 
+                double reworkProbability = 15; //rework 확률 = 15% 
+                if (Utils.IsTrueWithPercent(reworkProbability)) 
                 {
-                    pl.IsRework = true; 
                     return pl.Process.GetFirstStep(); //rework시 첫 step부터 다시 
                 };
             }
@@ -31,6 +31,13 @@ namespace FabSchedulerModel
         public void OnStepDone(SimLot lot, EqpSchedule plan)
         {
             OutputHelper.WriteEqpSchedule(plan, lot);
+
+            //step done인데 INSPECTION 공정이라는 뜻 = 다음 공정부터는 rework이다 
+            if (lot.StepId == "INSPECTION")
+            {
+                PhotoLot pl = (lot.GetLot()) as PhotoLot;
+                pl.IsRework = true; 
+            }
         }
 
         public void OnLotDone(SimLot lot, EqpSchedule plan)

@@ -49,7 +49,7 @@ namespace FabSchedulerModel.Helper
             string workType;
             if ((lot.GetLot() as PhotoLot).IsRework && plan.WorkType == WorkType.PLAN)
             {
-                workType = WorkType.REWORK.ToString();
+                workType = "REWORK";
             }
             else
             {

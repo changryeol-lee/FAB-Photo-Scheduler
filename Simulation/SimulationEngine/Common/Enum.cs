@@ -22,7 +22,6 @@ namespace SimulationEngine.Common
     public enum WorkType
     {
         PLAN,
-        REWORK,
         SETUP,
         OFF
     }
