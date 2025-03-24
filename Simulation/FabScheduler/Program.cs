@@ -19,7 +19,9 @@ internal class Program
 {
         static void Main(string[] args)
         {
-      
+            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            InputMart.Initialize(connectionString);
+            OutputMart.Initialize(connectionString);
             InputMart.Instance.LoadFromDatabase();
             //var products = InputMart.Instance.GetList<PRODUCT>(InputTable.PRODUCT);
 
