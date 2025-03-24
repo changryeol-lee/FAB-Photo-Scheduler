@@ -20,40 +20,22 @@ internal class Program
         static void Main(string[] args)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-            InputMart.Initialize(connectionString);
-            OutputMart.Initialize(connectionString);
-            InputMart.Instance.LoadFromDatabase();
+            SimHelper.InitializeMart(connectionString);
+
+            //이 시점부터 input 데이터 접근 가능 
             //var products = InputMart.Instance.GetList<PRODUCT>(InputTable.PRODUCT);
 
-
-            PhotoSimulationModel simulationModel = new PhotoSimulationModel();
-            PhotoEquipmentModel equipmentModel = new PhotoEquipmentModel();
-            PhotoLotModel lotModel = new PhotoLotModel();
-            PhotoRouteModel routeModel = new PhotoRouteModel();
-            PhotoDispatchModel dispatchModel = new PhotoDispatchModel(); 
-            PhotoProcessModel processModel = new PhotoProcessModel();
-            PhotoOffTimeModel offTimeModel = new PhotoOffTimeModel();
-
-            IModelGroup modelGroup = new PhotoModelGroup(simulationModel, equipmentModel, lotModel, routeModel, dispatchModel, processModel, offTimeModel);
-
-            //엔진 실행자로부터 입력받아야할 값을 담은 객체 
-            PhotoSimulationOption simulationOption = new PhotoSimulationOption();
-            simulationOption.SimulationStartTime = DateTime.Today; 
-            simulationOption.SimulationEndTime = DateTime.Today.AddDays(7);
-            simulationOption.DispatchType = DispatchType.MIN_SETUP;
-            simulationOption.RunUser = "Engine";
+            IModelGroup modelGroup = SimHelper.CreateModelGroup();
+            //옵션 파라미터 설정
+            PhotoSimulationOption simulationOption = SimHelper.CreateSimulationOption();
             InputMart.Instance.SetVersion(simulationOption.DispatchType.ToString());
+            OutputHelper.WriteEngineExecuteLog(simulationOption);
 
-            OutputHelper.WriteEngineExecuteLog(simulationOption); 
-
-            SimFactory.InitializeInstance(modelGroup, simulationOption);
-            SimFactory factory = SimFactory.Instance;
-            factory.Initialize(modelGroup);
-            factory.StartSimulation();
+            //시뮬레이션 실행 
+            SimHelper.RunSimulation(modelGroup, simulationOption);
 
             Console.WriteLine("\nPress Enter to exit...");
             Console.ReadLine();
-
         }
     }
 }
