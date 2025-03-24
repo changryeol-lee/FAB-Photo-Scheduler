@@ -17,11 +17,11 @@ namespace FabSchedulerModel
         {
             PhotoLot pl = (lot.GetLot()) as PhotoLot; 
             //한개 lot은 rework 한번만 발생. 
-            if (lot.StepId == "INSPECTION" && pl.isRework == false)
+            if (lot.StepId == "INSPECTION" && pl.IsRework == false)
             {
                 if(Utils.IsTrueWithPercent(15)) //rework 확률 = 15% 
                 {
-                    pl.isRework = true; 
+                    pl.IsRework = true; 
                     return pl.Process.GetFirstStep(); //rework시 첫 step부터 다시 
                 };
             }
@@ -70,6 +70,11 @@ namespace FabSchedulerModel
         public void OnSetupOut(SimEquipment equipment, SimLot lot, EqpSchedule plan)
         {
             OutputHelper.WriteEqpSchedule(plan, lot);
+        }
+
+        public double GetTransferTime(SimLot lot, Step step, Step nextStep)
+        {
+            return 3600; //1시간 
         }
     }
 }

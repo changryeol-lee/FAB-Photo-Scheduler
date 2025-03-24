@@ -144,23 +144,30 @@ namespace SimulationEngine.Manager
             if (nextStep == null)
             {
                 lot.IsDone = true; 
-                _model.OnLotDone(lot, plan);
+                _model.OnLotDone(lot, plan); 
             }
             else
             {
                 _model.OnStepDone(lot, plan);
-                lot.GetLot().Step = nextStep;
-
-                // 일단 임시로 1시간 후에 Release
-                DateTime nextStepTime = finishTime.AddHours(1);
-                AddPendingRelease(nextStepTime, lot);
+                Transfer(lot, nextStep, finishTime); 
             }
 
-            //이 시점에 장비가 wait되서, dispatch하는 것도 고려. 
+            //이 시점에 장비가 wait되서, dispatch
             if (!_scheduleManager.HasEvent(_currentTime.AddMilliseconds(30), DispatchIn))
             {
                 _scheduleManager.AddEvent(_currentTime.AddMilliseconds(30), DispatchIn);
             }
+        }
+
+        public void Transfer(SimLot lot, Step nextStep, DateTime finishTime)
+        {
+            //단위 초(second)  
+            double transferTime = _model.GetTransferTime(lot, lot.GetLot().Step, nextStep);
+            lot.GetLot().Step = nextStep;
+            DateTime nextStepTime = finishTime.AddSeconds(transferTime);
+
+            //lot의 release 시점 
+            AddPendingRelease(nextStepTime, lot);
         }
 
         //public bool OnStepDone(SimLot lot)

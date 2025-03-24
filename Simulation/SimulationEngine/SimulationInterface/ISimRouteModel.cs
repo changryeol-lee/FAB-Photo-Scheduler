@@ -20,5 +20,6 @@ namespace SimulationEngine.SimulationInterface
         Step GetNextStep(SimLot lot);
         void OnLotDone(SimLot lot, EqpSchedule plan);
         void OnSetupOut(SimEquipment equipment, SimLot lot, EqpSchedule plan);
+        double GetTransferTime(SimLot lot, Step step, Step nextStep);
     }
 }

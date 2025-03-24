@@ -47,7 +47,7 @@ namespace FabSchedulerModel.Helper
             es.WAIT_DURATION = plan.WaitDuration;
 
             string workType;
-            if ((lot.GetLot() as PhotoLot).isRework && plan.WorkType == WorkType.PLAN)
+            if ((lot.GetLot() as PhotoLot).IsRework && plan.WorkType == WorkType.PLAN)
             {
                 workType = WorkType.REWORK.ToString();
             }
