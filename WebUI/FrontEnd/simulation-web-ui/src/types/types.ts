@@ -6,6 +6,8 @@ export interface EqpSchedule {
   LOT_ID: string
   LOT_QTY: number
   STEP_ID: string
+  STEP_NAME: string
+  STEP_SEQ: number
   START_TIME: string
   END_TIME: string
   PROCESS_DURATION: number

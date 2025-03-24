@@ -39,8 +39,8 @@
         <q-select
           outlined
           dense
-          v-model="selectedResource"
-          :options="resources"
+          v-model="selectedEqp"
+          :options="eqps"
           label="설비 ID"
           class="filter-input"
         />
@@ -75,7 +75,7 @@
         <!-- Left Sidebar (Fixed) -->
         <div class="gantt-sidebar">
           <div class="resource-header">설비 ID</div>
-          <div class="resource-list" ref="resourceList">
+          <div class="resource-list" ref="resourceListRef">
             <div v-for="resource in groupedResources" :key="resource.id" class="resource-row">
               {{ resource.id }}
             </div>
@@ -166,8 +166,8 @@
         :columns="columns"
         row-key="SCHEDULE_ID"
         v-model:selected="selectedTableRows"
-        selection="single"
         @row-click="onTableRowClick"
+        selection="single"
         bordered
         flat
         dense
@@ -186,9 +186,11 @@ import { date, useQuasar } from 'quasar'
 import { removeZAndParse, formatDateTime, formatDate, addDays } from 'src/utils/dateUtils'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import api from '../api/axiosInstance'
-import type { TaskItem } from '../types/types'
+import type { EqpSchedule as TaskItem, SelectOption, Equipment } from '../types/types'
 import { getLotColor } from 'src/utils/colorUtils'
 import SearchPanel from 'components/SearchPanel.vue'
+import type { QTableColumn } from 'quasar'
+
 const $q = useQuasar()
 
 // 컴포넌트 최상단에 refs 정의
@@ -196,17 +198,18 @@ const ganttHeader = ref(null)
 const ganttHeaderContent = ref(null)
 const ganttBody = ref(null)
 const ganttContent = ref(null)
-const resourceList = ref(null)
 const timeGrid = ref(null)
 
 const eqpSchedule = ref<TaskItem[]>([])
+const resourceListRef = ref(null)
 const error = ref<string | null>(null)
 
 // UI 상태 관리
 const startDate = ref('') // 2040-03-01
 const endDate = ref('') // 2040-03-08
 const selectedScheduleVersion = ref(null)
-const selectedResource = ref(null)
+const selectedEqp = ref(null)
+const eqps = ref<SelectOption[]>()
 const columnWidth = ref(300)
 const selectedTask = ref<TaskItem | null>(null)
 
@@ -217,15 +220,10 @@ const scheduleVersions = ref<any>()
 onMounted(async () => {
   // await loadEqpSchedule()
   await loadEngineExecuteLog()
+  await loadEquipment()
   await loadEqpSchedule(selectedScheduleVersion.value)
   ensureHorizontalScroll()
   setupScrollSynchronization()
-})
-
-// 리소스 목록
-const resources = computed(() => {
-  const resourceList = [...new Set(eqpSchedule.value.map((item) => item.EQP_ID))]
-  return resourceList.map((resource) => ({ label: resource, value: resource }))
 })
 
 // 시간 간격 (시간)
@@ -403,19 +401,19 @@ const setupScrollSynchronization = () => {
   }
 
   // 설비 목록과 본문의 세로 스크롤 동기화
-  if (ganttBody.value && resourceList.value) {
+  if (ganttBody.value && resourceListRef.value) {
     ganttBody.value.addEventListener('scroll', () => {
       requestAnimationFrame(() => {
-        if (resourceList.value) {
-          resourceList.value.scrollTop = ganttBody.value.scrollTop
+        if (resourceListRef.value) {
+          resourceListRef.value.scrollTop = ganttBody.value.scrollTop
         }
       })
     })
 
-    resourceList.value.addEventListener('scroll', () => {
+    resourceListRef.value.addEventListener('scroll', () => {
       requestAnimationFrame(() => {
         if (ganttBody.value) {
-          ganttBody.value.scrollTop = resourceList.value.scrollTop
+          ganttBody.value.scrollTop = resourceListRef.value.scrollTop
         }
       })
     })
@@ -438,28 +436,22 @@ const filteredTasks = computed(() => {
   })
 })
 
-const columns = ref([
+const columns = ref<QTableColumn[]>([
   { name: 'WORK_TYPE', required: true, label: '작업 유형', field: 'WORK_TYPE' },
   { name: 'EQP_ID', required: true, label: '설비 ID', field: 'EQP_ID' },
   { name: 'PRODUCT_ID', required: true, label: '제품 ID', field: 'PRODUCT_ID' },
   { name: 'LOT_ID', required: true, label: 'LOT ID', field: 'LOT_ID' },
   { name: 'LOT_QTY', required: true, label: 'LOT 수량', field: 'LOT_QTY' },
   { name: 'STEP_ID', required: true, label: '공정 ID', field: 'STEP_ID' },
-  { name: 'START_TIME', required: true, label: '작업 시작 시간', field: 'START_TIME' },
+  { name: 'STEP_NAME', required: true, label: '공정명', field: 'STEP_NAME' },
+  { name: 'STEP_SEQ', required: true, label: '공정 순서', field: 'STEP_SEQ' },
+  {
+    name: 'START_TIME',
+    required: true,
+    label: '작업 시작 시간',
+    field: 'START_TIME',
+  },
   { name: 'END_TIME', required: true, label: '작업 종료 시간', field: 'END_TIME' },
-  {
-    name: 'TOTAL_PROCESS_DURATION',
-    required: true,
-    label: '총 작업 시간(분)',
-    field: 'TOTAL_PROCESS_DURATION',
-  },
-  {
-    name: 'PROCESS_DURATION',
-    required: true,
-    label: '순 작업 시간(분)',
-    field: 'PROCESS_DURATION',
-  },
-  { name: 'WAIT_DURATION', required: true, label: '대기 시간(분)', field: 'WAIT_DURATION' },
 ])
 
 // 테이블 행 클릭 이벤트
@@ -480,14 +472,24 @@ const loadEngineExecuteLog = async () => {
   }
 }
 
+const loadEquipment = async () => {
+  try {
+    const response = await api.get('/get-equipment')
+    eqps.value = response.data.map((eqp: Equipment) => ({ label: eqp.EQP_ID, value: eqp.EQP_ID }))
+  } catch (err) {
+    console.error('Error fetching schedule version:', err)
+  }
+}
+
 // 데이터 로드 함수
 const loadEqpSchedule = async (version?: string): Promise<void> => {
-  error.value = null
   $q.loading.show()
+  const eqpId: string = selectedEqp.value?.value
   try {
     const response = await api.get('/get-eqp-schedule', {
       params: {
         version: version,
+        eqpId: eqpId,
       },
     })
     if (!version) {
@@ -496,7 +498,6 @@ const loadEqpSchedule = async (version?: string): Promise<void> => {
         '',
       )
     }
-
     // API 응답의 날짜 문자열을 Date 객체로 변환
     eqpSchedule.value = response.data
       .filter((item) => item.SIMULATION_VERSION === version)
@@ -505,15 +506,12 @@ const loadEqpSchedule = async (version?: string): Promise<void> => {
         START_TIME: formatDateTime(removeZAndParse(item.START_TIME)),
         END_TIME: formatDateTime(removeZAndParse(item.END_TIME)),
       }))
-    selectedTask.value = null
   } catch (err) {
     console.error('Error fetching schedule data:', err)
-    error.value = '데이터를 불러오는 중 오류가 발생했습니다.'
   } finally {
     $q.loading.hide()
   }
 }
-
 // 간트 차트 선택 시 테이블 연동
 watch(selectedTask, (newTask) => {
   if (newTask) {
