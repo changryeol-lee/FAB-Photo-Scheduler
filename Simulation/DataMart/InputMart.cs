@@ -111,7 +111,7 @@ namespace DataMart.SqlMapper
         }
         public void SetVersion(string prefix)
         {
-            SimulationVersion =  $"{prefix}_{DateTime.Now:yyyyMMdd_HHmmss}"; // 예: VER_20250228_164837
+            SimulationVersion =  $"{prefix}_{DateTime.Now:MMdd_HHmmss}"; // 예: VER_20250228_164837
         }
     }
 }
