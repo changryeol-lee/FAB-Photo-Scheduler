@@ -12,6 +12,7 @@ namespace DataMart.Output
         public string SCHEDULE_ID { get; set; }
         public string EQP_ID { get; set; }
         public string PRODUCT_ID { get; set; }
+        public string PROCESS_ID { get; set; }
         public string LOT_ID { get; set; }
         public int LOT_QTY { get; set; }
         public string STEP_ID { get; set; }

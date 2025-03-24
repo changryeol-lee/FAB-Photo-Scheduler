@@ -36,6 +36,7 @@ namespace FabSchedulerModel.Helper
             es.SCHEDULE_ID = plan.ScheduleId;
             es.EQP_ID = plan.EqpId;
             es.PRODUCT_ID = plan.ProductId;
+            es.PROCESS_ID =  plan.ProcessId;
             es.LOT_ID = plan.LotId;
             es.LOT_QTY = plan.LotQty;
             es.STEP_ID = plan.StepId;

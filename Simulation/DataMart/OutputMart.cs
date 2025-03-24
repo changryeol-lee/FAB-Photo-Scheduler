@@ -95,9 +95,9 @@ namespace DataMart.SqlMapper
                     case OutputTable.EQP_SCHEDULE:
                         var scheduleList = listObj as List<EQP_SCHEDULE>;
                         string insertEqpScheduleSql =
-                            "INSERT INTO TB_EQP_SCHEDULE (SIMULATION_VERSION, SCHEDULE_ID, EQP_ID, PRODUCT_ID, LOT_ID, LOT_QTY, STEP_ID, START_TIME, END_TIME, " +
+                            "INSERT INTO TB_EQP_SCHEDULE (SIMULATION_VERSION, SCHEDULE_ID, EQP_ID, PRODUCT_ID, PROCESS_ID, LOT_ID, LOT_QTY, STEP_ID, START_TIME, END_TIME, " +
                             "TOTAL_PROCESS_DURATION, PROCESS_DURATION, WAIT_DURATION, WORK_TYPE) " +
-                            "VALUES (@SimulationVersion, @ScheduleId, @EqpId, @ProductId, @LotId, @LotQty, @StepId, @StartTime, @EndTime, " +
+                            "VALUES (@SimulationVersion, @ScheduleId, @EqpId, @ProductId, @ProcessId, @LotId, @LotQty, @StepId, @StartTime, @EndTime, " +
                             "@TotalProcessDuration, @ProcessDuration, @WaitDuration, @WorkType)";
 
                         int eqpRows = dataAccess.InsertRows(insertEqpScheduleSql, scheduleList, (cmd, item) =>
@@ -106,6 +106,7 @@ namespace DataMart.SqlMapper
                             cmd.Parameters.AddWithValue("@ScheduleId", item.SCHEDULE_ID);
                             cmd.Parameters.AddWithValue("@EqpId", item.EQP_ID);
                             cmd.Parameters.AddWithValue("@ProductId", item.PRODUCT_ID);
+                            cmd.Parameters.AddWithValue("@ProcessId", item.PROCESS_ID);
                             cmd.Parameters.AddWithValue("@LotId", item.LOT_ID);
                             cmd.Parameters.AddWithValue("@LotQty", item.LOT_QTY);
                             cmd.Parameters.AddWithValue("@StepId", item.STEP_ID);

@@ -12,6 +12,7 @@ namespace SimulationEngine.BaseEntity
         public string ScheduleId { get; set; }
         public string EqpId { get; set; }
         public string ProductId { get; set; }
+        public string ProcessId { get; set; }
         public string LotId { get; set; }
         public int LotQty { get; set; }
         public string StepId { get; set; }
