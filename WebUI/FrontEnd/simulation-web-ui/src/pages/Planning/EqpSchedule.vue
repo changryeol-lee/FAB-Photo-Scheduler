@@ -17,8 +17,8 @@
         <q-select
           outlined
           dense
-          v-model="selectedResource"
-          :options="resources"
+          v-model="selectedEqp"
+          :options="eqps"
           label="설비 ID"
           class="filter-input"
         />
@@ -50,15 +50,15 @@ import SimTable from 'src/components/SimTable.vue'
 
 const $q = useQuasar()
 const selectedScheduleVersion = ref(null)
-const selectedResource = ref(null)
+const selectedEqp = ref(null)
 const scheduleVersions = ref<string[]>()
 
 const eqpSchedule = ref<EqpSchedule[]>([])
 const error = ref<string | null>(null)
 
-const resources = computed(() => {
-  const resourceList = [...new Set(eqpSchedule.value.map((item) => item.EQP_ID))]
-  return resourceList.map((resource) => ({ label: resource, value: resource }))
+const eqps = computed(() => {
+  const eqpList = [...new Set(eqpSchedule.value.map((item) => item.EQP_ID))]
+  return eqpList.map((eqp) => ({ label: eqp, value: eqp }))
 })
 
 const columns = ref([
@@ -68,6 +68,7 @@ const columns = ref([
   { name: 'LOT_ID', required: true, label: 'LOT ID', field: 'LOT_ID' },
   { name: 'LOT_QTY', required: true, label: 'LOT 수량', field: 'LOT_QTY' },
   { name: 'STEP_ID', required: true, label: '공정 ID', field: 'STEP_ID' },
+  { name: 'STEP_NAME', required: true, label: '공정명', field: 'STEP_NAME' },
   { name: 'START_TIME', required: true, label: '작업 시작 시간', field: 'START_TIME' },
   { name: 'END_TIME', required: true, label: '작업 종료 시간', field: 'END_TIME' },
 ])
@@ -86,10 +87,12 @@ const loadEngineExecuteLog = async () => {
 const loadEqpSchedule = async (version?: string): Promise<void> => {
   error.value = null
   $q.loading.show()
+  const eqpId: string = selectedEqp.value?.value
   try {
     const response = await api.get('/get-eqp-schedule', {
       params: {
         version: version,
+        eqpId: eqpId,
       },
     })
     if (!version) {
