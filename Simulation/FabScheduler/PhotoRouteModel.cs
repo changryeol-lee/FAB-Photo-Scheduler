@@ -28,14 +28,14 @@ namespace FabSchedulerModel
             return pl.Process.GetNextStep(lot.StepId); 
         }
 
-        public void OnStepDone(SimLot lot)
+        public void OnStepDone(SimLot lot, EqpSchedule plan)
         {
-            //throw new NotImplementedException();
+            OutputHelper.WriteEqpSchedule(plan, lot);
         }
 
-        public void OnLotDone(SimLot lot)
+        public void OnLotDone(SimLot lot, EqpSchedule plan)
         {
-            //throw new NotImplementedException();
+            OutputHelper.WriteEqpSchedule(plan, lot);
         }
 
         public void OnProcessed(SimLot lot, SimEquipment equipment)

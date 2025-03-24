@@ -16,6 +16,7 @@ namespace SimulationEngine.SimulationEntity
         public SimLot(Lot lot)
         {
             _lot = lot;
+            IsDone = false; 
         }
 
         public Lot GetLot() => _lot;
@@ -25,5 +26,7 @@ namespace SimulationEngine.SimulationEntity
             // 작업물의 factor 값 계산 로직
             return 0.0;
         }
+
+        public bool IsDone { get; set; }    
     }
 }

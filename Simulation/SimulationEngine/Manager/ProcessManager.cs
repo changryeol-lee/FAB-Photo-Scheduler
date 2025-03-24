@@ -108,12 +108,11 @@ namespace SimulationEngine.Manager
                 finishTime = adjustedFinishTime;
             }
 
-
             _scheduleManager.AddEvent(finishTime, () =>
             {
-                TrackOut(equipment, lot, finishTime, processDuration);
+                TrackOut(equipment, lot, finishTime);
                 
-                SimFactory.Instance._routeManager.Processed(lot, equipment, finishTime);
+                SimFactory.Instance._routeManager.Processed(lot, equipment, finishTime, processDuration);
             });
         }
 
@@ -147,16 +146,12 @@ namespace SimulationEngine.Manager
             return _model.GetProcessTime(equipment, lot);
         }
 
-        internal void TrackOut(SimEquipment equipment, SimLot lot, DateTime finishTime, double processDuration)
+        internal void TrackOut(SimEquipment equipment, SimLot lot, DateTime finishTime)
         {
             equipment.GetEquipment().State = EqpState.IDLE;
             lot.GetLot().State = LotState.WAIT;
-            EqpSchedule plan =  equipment.GetCurrentPlan();
-            plan.EndTime = finishTime;
-            plan.ProcessDuration = processDuration;
-            equipment.SetPreviousPlan(plan);
-            equipment.SetCurrentPlan(null);
-            _model.OnTrackOut(equipment, lot, plan);
+
+            _model.OnTrackOut(equipment, lot);
         }
 
 

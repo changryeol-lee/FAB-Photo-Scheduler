@@ -25,5 +25,6 @@ namespace DataMart.Output
         // Lot이 실제로 공정 대기를 얼마나 했는지
         public double? WAIT_DURATION { get; set; }
         public string WORK_TYPE { get; set; }
+        public string IS_DONE { get; set; }
     }
 }

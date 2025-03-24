@@ -129,19 +129,26 @@ namespace SimulationEngine.Manager
             //_processManager.Process(equipment, lot, currentTime);
         }
 
-        public void Processed(SimLot lot, SimEquipment equipment, DateTime finishTime)
+        public void Processed(SimLot lot, SimEquipment equipment, DateTime finishTime, double processDuration)
         {
+            EqpSchedule plan = equipment.GetCurrentPlan();
+            plan.EndTime = finishTime;
+            plan.ProcessDuration = processDuration;
+            equipment.SetPreviousPlan(plan);
+            equipment.SetCurrentPlan(null);
             _model.OnProcessed(lot, equipment);
 
             // 다음 공정 이동 여부 판단
-            Step nextStep = _model.GetNextStep(lot);
+            Step nextStep = GetNextStep(lot);
+
             if (nextStep == null)
             {
-                _model.OnLotDone(lot);
+                lot.IsDone = true; 
+                _model.OnLotDone(lot, plan);
             }
             else
             {
-                _model.OnStepDone(lot);
+                _model.OnStepDone(lot, plan);
                 lot.GetLot().Step = nextStep;
 
                 // 일단 임시로 1시간 후에 Release

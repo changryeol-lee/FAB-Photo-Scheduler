@@ -57,6 +57,7 @@ namespace FabSchedulerModel.Helper
             }
 
             es.WORK_TYPE = workType;
+            es.IS_DONE = lot.IsDone ? "Y" : "N"; 
             OutputMart.Instance.AddData(OutputTable.EQP_SCHEDULE, es);
         }
         public static string GenerateRandom8Digits()

@@ -15,10 +15,10 @@ namespace SimulationEngine.SimulationInterface
 
         void OnProcessed(SimLot lot, SimEquipment equipment);
 
-        void OnStepDone(SimLot lot);
+        void OnStepDone(SimLot lot, EqpSchedule plan);
 
         Step GetNextStep(SimLot lot);
-        void OnLotDone(SimLot lot);
+        void OnLotDone(SimLot lot, EqpSchedule plan);
         void OnSetupOut(SimEquipment equipment, SimLot lot, EqpSchedule plan);
     }
 }
