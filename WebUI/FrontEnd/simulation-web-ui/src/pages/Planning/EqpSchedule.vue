@@ -44,7 +44,7 @@ import { useQuasar } from 'quasar'
 import { ref, computed, onMounted } from 'vue'
 import api from '../../api/axiosInstance'
 import SearchPanel from 'components/SearchPanel.vue'
-import type { EqpSchedule } from 'src/types/types'
+import type { EqpSchedule, Equipment, SelectOption } from 'src/types/types'
 import { removeZAndParse, formatDateTime, formatDate, addDays } from 'src/utils/dateUtils'
 import SimTable from 'src/components/SimTable.vue'
 
@@ -55,11 +55,7 @@ const scheduleVersions = ref<string[]>()
 
 const eqpSchedule = ref<EqpSchedule[]>([])
 const error = ref<string | null>(null)
-
-const eqps = computed(() => {
-  const eqpList = [...new Set(eqpSchedule.value.map((item) => item.EQP_ID))]
-  return eqpList.map((eqp) => ({ label: eqp, value: eqp }))
-})
+const eqps = ref<SelectOption[]>()
 
 const columns = ref([
   { name: 'WORK_TYPE', required: true, label: '작업 유형', field: 'WORK_TYPE' },
@@ -78,6 +74,14 @@ const loadEngineExecuteLog = async () => {
     const response = await api.get('/get-engine-execute-log')
     scheduleVersions.value = response.data.map((x) => x.SIMULATION_VERSION)
     selectedScheduleVersion.value = scheduleVersions.value[0]
+  } catch (err) {
+    console.error('Error fetching schedule version:', err)
+  }
+}
+const loadEquipment = async () => {
+  try {
+    const response = await api.get('/get-equipment')
+    eqps.value = response.data.map((eqp: Equipment) => ({ label: eqp.EQP_ID, value: eqp.EQP_ID }))
   } catch (err) {
     console.error('Error fetching schedule version:', err)
   }
@@ -134,6 +138,7 @@ const getRowClass = (row) => {
 
 onMounted(async () => {
   await loadEngineExecuteLog()
+  await loadEquipment()
   await loadEqpSchedule(selectedScheduleVersion.value)
 })
 </script>

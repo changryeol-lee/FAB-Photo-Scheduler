@@ -68,3 +68,8 @@ export interface EngineExecuteLog {
   RUN_USER: string
   SIMULATION_EXECUTE_TIME: string
 }
+
+export interface SelectOption {
+  label: string
+  value: string
+}

@@ -22,7 +22,6 @@
       <template v-slot:loading>
         <q-inner-loading showing color="primary" />
       </template>
-
       <template v-slot:no-data>
         <div class="full-width row flex-center q-pa-md text-grey-8">데이터가 없습니다</div>
       </template>
@@ -172,6 +171,9 @@ onMounted(() => {})
 :deep(.q-table th:last-child),
 :deep(.q-table td:last-child) {
   border-right: none;
+}
+:deep(.q-table tr:last-child td) {
+  border-bottom-width: 1px;
 }
 
 /* 테두리 스타일을 일관되게 유지 */
