@@ -104,7 +104,7 @@ const displayRows = computed(() => {
 
 /* 테이블 헤더 스타일 */
 :deep(.q-table thead tr) {
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
 }
 
 /* 테이블 헤더 고정 CSS */
@@ -118,7 +118,7 @@ const displayRows = computed(() => {
   position: sticky;
   top: 0;
   z-index: 1;
-  background-color: #f5f5f5;
+  background-color: #f0f0f0;
 }
 
 /* 고정 헤더에 그림자 효과 추가 */
