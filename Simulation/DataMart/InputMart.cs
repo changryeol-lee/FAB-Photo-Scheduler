@@ -111,7 +111,9 @@ namespace DataMart.SqlMapper
         }
         public void SetVersion(string prefix)
         {
-            SimulationVersion =  $"{prefix}_{DateTime.Now:MMdd_HHmmss}"; // 예: VER_20250228_164837
+            TimeZoneInfo koreaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
+            DateTime nowDt = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, koreaTimeZone);
+            SimulationVersion =  $"{prefix}_{nowDt:MMdd_HHmmss}"; // 예: VER_20250228_164837
         }
     }
 }
