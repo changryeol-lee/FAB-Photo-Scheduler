@@ -54,6 +54,7 @@ export interface OffTime {
   // Once일 경우, 구체적인 DateTime 범위
   START_DATE_TIME: Date
   END_DATE_TIME: Date
+  OFF_DESC: string
 }
 
 export interface SetupInfo {
