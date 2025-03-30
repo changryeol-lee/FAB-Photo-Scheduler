@@ -25,7 +25,7 @@ namespace FabSchedulerModel.Helper
             el.SIMULATION_START_TIME = option.SimulationStartTime;
             el.SIMULATION_END_TIME = option.SimulationEndTime;
             el.RUN_USER = option.RunUser;
-            el.SIMULATION_EXECUTE_TIME = DateTime.Now;
+            el.SIMULATION_EXECUTE_TIME = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, Utils.koreaTimeZone);
             OutputMart.Instance.AddData(OutputTable.ENGINE_EXECUTE_LOG, el);
         }
 

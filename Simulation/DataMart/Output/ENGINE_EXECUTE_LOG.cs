@@ -10,8 +10,8 @@ namespace DataMart.Output
     {
         public string SIMULATION_VERSION { get; set; }
         public string DISPATCH_TYPE { get; set; }
-        public DateTime SIMULATION_START_TIME { get; set; }
-        public DateTime SIMULATION_END_TIME { get; set; }
+        public DateTimeOffset SIMULATION_START_TIME { get; set; }
+        public DateTimeOffset SIMULATION_END_TIME { get; set; }
         public string RUN_USER { get; set; }
         public DateTime SIMULATION_EXECUTE_TIME { get; set; }
         

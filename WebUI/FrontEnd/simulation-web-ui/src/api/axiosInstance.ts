@@ -5,7 +5,7 @@ const apiUrl = process.env.API_GATEWAY_URL
 const apiKey = process.env.API_KEY
 const defaultDbName = 'FACTORY_FAB'
 
-const engineApiUrl = 'http://localhost:7042'
+const engineApiUrl = 'http://localhost:7043'
 
 const api = axios.create({
   baseURL: apiUrl, // API Gateway 기본 URL 설정
@@ -38,7 +38,7 @@ api.interceptors.request.use((config) => {
 
 // 엔진 서버용 Axios 인스턴스
 const engineApi = axios.create({
-  baseURL: engineApiUrl, // 엔진 API URL 설정
+  baseURL: 'http://52.79.235.205:7043', // 엔진 API URL 설정
   headers: {
     'Content-Type': 'application/json',
   },

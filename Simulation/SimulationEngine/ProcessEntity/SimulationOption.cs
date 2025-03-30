@@ -8,7 +8,7 @@ namespace SimulationEngine.ProcessEntity
 {
     public class SimulationOption
     {
-        public DateTime SimulationStartTime { get; set; }
-        public DateTime SimulationEndTime { get; set; }
+        public DateTimeOffset SimulationStartTime { get; set; }
+        public DateTimeOffset SimulationEndTime { get; set; }
     }
 }

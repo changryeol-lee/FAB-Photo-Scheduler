@@ -12,7 +12,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowVueApp",
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:9000")
+                          policy.WithOrigins(
+                                     "http://localhost:9000",
+                                     "http://localhost:9001",
+                                     "http://localhost:9002",
+                                     "http://52.79.235.205:88"   // EC2 ÆÛºí¸¯ IP 
+                                 )
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                       });
@@ -58,4 +63,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run("http://localhost:7042");
+app.Run();

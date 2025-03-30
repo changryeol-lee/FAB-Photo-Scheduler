@@ -21,5 +21,8 @@ namespace FabSchedulerModel.Helper
 
             return _random.Value.Next(100) < n;
         }
+
+        public static TimeZoneInfo koreaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Korea Standard Time");
+
     }
 }

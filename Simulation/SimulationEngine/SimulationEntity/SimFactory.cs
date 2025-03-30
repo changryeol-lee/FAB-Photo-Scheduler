@@ -27,8 +27,8 @@ namespace SimulationEngine.SimulationEntity
         private ISimulationModel _model;
 
         public SimulationOption option; 
-        public DateTime _simulationStartTime => option.SimulationStartTime;
-        public DateTime _simulationEndTime => option.SimulationEndTime;
+        public DateTime _simulationStartTime => option.SimulationStartTime.LocalDateTime;
+        public DateTime _simulationEndTime => option.SimulationEndTime.LocalDateTime;
         public DateTime currentTime; 
         private static SimFactory _instance;
 
@@ -47,7 +47,7 @@ namespace SimulationEngine.SimulationEntity
         private SimFactory(IModelGroup model, SimulationOption simOption)
         {
             option = simOption;
-            currentTime = simOption.SimulationStartTime;
+            currentTime = simOption.SimulationStartTime.LocalDateTime;
             _model = model.SimulationModel;
         }
         private SimFactory() { }
