@@ -1,6 +1,8 @@
 <template>
+  <div class="control-wrapper q-px-md">
+    <div class="control-menu-name">기준정보 / BOM 데이터</div>
+  </div>
   <div class="reference-data-page q-pa-md">
-    <div class="text-h5 q-mb-lg">BOM 데이터</div>
     <div class="row q-col-gutter-md">
       <!-- 첫 번째 행 -->
       <div class="col-md-6 col-xs-12">
@@ -57,30 +59,30 @@ import type { QTableColumn } from 'quasar'
 const productData = ref<Product[]>([])
 const loadingProduct = ref(false)
 const productColumns = ref<QTableColumn[]>([
-  { name: 'PRODUCT_ID', align: 'left', label: '제품 ID', field: 'PRODUCT_ID', sortable: true },
-  { name: 'PROCESS_ID', align: 'left', label: '프로세스 ID', field: 'PROCESS_ID', sortable: true },
-  { name: 'LOT_SIZE', align: 'left', label: 'Lot Size', field: 'LOT_SIZE', sortable: true },
+  { name: 'PRODUCT_ID', label: '제품 ID', field: 'PRODUCT_ID', sortable: true },
+  { name: 'PROCESS_ID', label: '프로세스 ID', field: 'PROCESS_ID', sortable: true },
+  { name: 'LOT_SIZE', label: 'Lot Size', field: 'LOT_SIZE', sortable: true },
 ])
 
 const processData = ref<Process[]>([])
 const loadingProcess = ref(false)
 const processColumns = ref<QTableColumn[]>([
-  { name: 'PROCESS_ID', align: 'left', label: '프로세스 ID', field: 'PROCESS_ID', sortable: true },
+  { name: 'PROCESS_ID', label: '프로세스 ID', field: 'PROCESS_ID', sortable: true },
 ])
 
 const stepData = ref<Step[]>([])
 const loadingStep = ref(false)
 const stepColumns = ref<QTableColumn[]>([
-  { name: 'STEP_ID', align: 'left', label: '공정 ID', field: 'STEP_ID', sortable: true },
-  { name: 'STEP_NAME', align: 'left', label: '공정 이름', field: 'STEP_NAME', sortable: true },
+  { name: 'STEP_ID', label: '공정 ID', field: 'STEP_ID', sortable: true },
+  { name: 'STEP_NAME', label: '공정 이름', field: 'STEP_NAME', sortable: true },
 ])
 
 const stepRouteData = ref<StepRoute[]>([])
 const loadingStepRoute = ref(false)
 const stepRouteColumns = ref<QTableColumn[]>([
-  { name: 'PROCESS_ID', align: 'left', label: '프로세스 ID', field: 'PROCESS_ID', sortable: true },
-  { name: 'STEP_ID', align: 'left', label: '공정 ID', field: 'STEP_ID', sortable: true },
-  { name: 'STEP_SEQ', align: 'left', label: '공정 순서', field: 'STEP_SEQ', sortable: true },
+  { name: 'PROCESS_ID', label: '프로세스 ID', field: 'PROCESS_ID', sortable: true },
+  { name: 'STEP_ID', label: '공정 ID', field: 'STEP_ID', sortable: true },
+  { name: 'STEP_SEQ', label: '공정 순서', field: 'STEP_SEQ', sortable: true },
 ])
 
 const fetchProduct = async () => {

@@ -130,7 +130,7 @@ const eqp_arrange_columns = ref([
   { name: 'PROCESS_ID', required: true, label: 'PROC ID', field: 'PROCESS_ID' },
   { name: 'STEP_ID', required: true, label: '공정 ID', field: 'STEP_ID' },
   { name: 'EQP_ID', required: true, label: '설비 ID', field: 'EQP_ID' },
-  { name: 'TACT_TIME', required: true, label: '공정 시간(초)', field: 'TACT_TIME' },
+  { name: 'TACT_TIME', required: true, label: '공정 시간 (초)', field: 'TACT_TIME' },
 ])
 
 const loadProducts = async (): Promise<any> => {
