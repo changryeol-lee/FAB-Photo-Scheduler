@@ -1,13 +1,13 @@
 <template>
   <q-layout view="hHh LpR fFf">
-    <q-header elevated class="sk-header">
+    <q-header elevated class="main-header">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
         <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg" />
+          <q-avatar color="white" text-color="primary">
+            <q-icon name="factory" />
           </q-avatar>
-          FAB PHOTO Schduler
+          FAB Photo APS
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
@@ -37,7 +37,7 @@
             <q-item-section>설비 정보</q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple to="/master/lot" class="q-pl-lg">
+          <!-- <q-item clickable v-ripple to="/master/lot" class="q-pl-lg">
             <q-item-section avatar>
               <q-icon name="widgets" />
             </q-item-section>
@@ -49,7 +49,7 @@
               <q-icon name="info" />
             </q-item-section>
             <q-item-section>기타 정보</q-item-section>
-          </q-item>
+          </q-item> -->
         </q-expansion-item>
         <q-expansion-item
           expand-separator
@@ -88,30 +88,18 @@
             </q-item-section>
             <q-item-section>간트차트</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/analysis/gantt2" class="q-pl-lg">
-            <q-item-section avatar>
-              <q-icon name="timeline" />
-            </q-item-section>
-            <q-item-section>간트차트2</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/analysis/eqp-schedule" class="q-pl-lg">
+          <!-- <q-item clickable v-ripple to="/analysis/eqp-schedule" class="q-pl-lg">
             <q-item-section avatar>
               <q-icon name="compare" />
             </q-item-section>
             <q-item-section>계획 결과 비교</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/analysis/dispatch-log" class="q-pl-lg">
+          </q-item> -->
+          <!-- <q-item clickable v-ripple to="/analysis/dispatch-log" class="q-pl-lg">
             <q-item-section avatar>
               <q-icon name="list" />
             </q-item-section>
             <q-item-section>Dispatch Log</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/analysis/other-logs" class="q-pl-lg">
-            <q-item-section avatar>
-              <q-icon name="description" />
-            </q-item-section>
-            <q-item-section>기타 Log</q-item-section>
-          </q-item>
+          </q-item> -->
         </q-expansion-item>
       </q-list>
     </q-drawer>
@@ -138,8 +126,8 @@ const onHide = (menu: string) => {
 }
 </script>
 <style scoped>
-.sk-header {
-  background: linear-gradient(90deg, #ea002c 0%, #ff6a00 100%); /* SK하이닉스 로고 그라디언트 */
+.main-header {
+  background: #749bf7;
   color: white;
 }
 </style>
