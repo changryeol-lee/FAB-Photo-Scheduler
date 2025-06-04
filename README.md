@@ -11,13 +11,15 @@ WEB UI : [http://52.79.235.205:88/](https://52.79.235.205:88/)
 
 # APS 프로젝트 구성 및 Work Flow
 
-![](images/work_flow.png)
+![](images/work_flow.jpg)
 
 # 1. 시뮬레이션
 
 # **1.1 Data Mart**
 
 C#, .Net Framework 4.7, Library
+
+: 데이터 ETL을 위한 모듈입니다.  
 
 ## Input Mart
 
@@ -27,7 +29,7 @@ C#, .Net Framework 4.7, Library
 
 : 시뮬레이션을 진행하면서 각종 통계 정보를 Output Mart에 수집합니다. 수집한 Output Mart는 엔진 종료시 DB에 INSERT 합니다.
 
-## **1.2 Simulation Engine**
+# **1.2 Simulation Engine**
 
 C#, .Net Framework 4.7, Library
 
@@ -68,7 +70,7 @@ C#, .Net Framework 4.7, Library
   - Manager들이 Model 인터페이스를 생성자를 통해 주입받음
   - 의존성이 외부에서 제공됨
 
-## 1.3 Photo Aps Model
+# 1.3 Photo Aps Model
 
 C#, .Net Framework 4.7, 콘솔 앱
 
@@ -86,7 +88,10 @@ C#, .Net Framework 4.7, 콘솔 앱
 - 노광(EXPOSURE) 공정의 SETUP
 - 일요일 마다 OFF 발생
 
-## 1.4 Engine Trigger
+
+![](images/lot_cycle.jpg)
+
+# 1.4 Engine Trigger
 
 C#, .ASP .NET CORE
 
