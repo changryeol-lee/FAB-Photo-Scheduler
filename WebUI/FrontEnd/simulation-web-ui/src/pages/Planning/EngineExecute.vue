@@ -119,7 +119,6 @@ import SimTable from 'src/components/SimTable.vue'
 const $q = useQuasar()
 const endDate = ref(formatDate(new Date()))
 const startDate = ref(addDays(endDate.value, -7))
-const pagination = ref({ rowsPerPage: 0 })
 
 const simulationStartDate = ref(formatDate(new Date()))
 const simulationPeriod = ref(7)
@@ -168,7 +167,13 @@ const onSearch = async () => {
 const loadEngineExecuteLog = async () => {
   try {
     $q.loading.show()
-    const response = await api.get('/get-engine-execute-log')
+    const response = await api.get('/get-engine-execute-log', {
+      params: {
+        startDate: startDate.value,
+        endDate: endDate.value,
+      },
+    })
+
     engineExecuteLog.value = response.data.map((item: any) => ({
       ...item,
       SIMULATION_START_TIME: formatDateTime(removeZAndParse(item.SIMULATION_START_TIME)),
