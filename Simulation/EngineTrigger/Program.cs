@@ -15,7 +15,8 @@ builder.Services.AddCors(options =>
                           policy.WithOrigins(
                                      "http://localhost:9000",
                                      "http://localhost:9001",
-                                     "http://localhost:9002",
+                                     "http://localhost:9002", 
+                                     "http://localhost:88",
                                      "http://52.79.235.205:88"   // EC2 ÆÛºí¸¯ IP 
                                  )
                                 .AllowAnyHeader()
