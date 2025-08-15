@@ -1,6 +1,6 @@
 # READ ME
 
-본 프로젝트는 이산사건 시뮬레이션기반 APS(Advanced Planning & Scheduling) 시스템의 토이프로젝트입니다. 가상의 반도체 PHOTO 공정을 생산 계획을 세우는 걸 목표로 합니다.
+본 프로젝트는 이산사건 시뮬레이션기반 APS(Advanced Planning & Scheduling) 시스템의 토이프로젝트입니다. 가상의 반도체 PHOTO 공정의 생산 계획을 세우는 걸 목표로 합니다.
 사용자가 조작하는 UI와 실제 계획을 세우는 응용프로그램으로 나누어져 있습니다.
 
 프로젝트 소개 PDF : [https://drive.google.com/file/d/1dcblyFfFAxLis_7fcvOaT5kK6Gou6-Cp/view?usp=sharing](https://drive.google.com/file/d/1dcblyFfFAxLis_7fcvOaT5kK6Gou6-Cp/view?usp=sharing) 
@@ -52,7 +52,7 @@ C#, .Net Framework 4.7, Library
   - Lot Manager: 작업물의 상태 관리
   - Process Manager: 공정 및 SETUP 작업의 시작/종료 처리
   - Offtime Manager: 유휴시간 관리
-  - Dispatching Agent: 설비-작업물 매칭 관리
+  - Dispatching Manager: 설비-작업물 매칭 관리
 - **Simulation Interface:** 업종, 공장에 따라 모델에서 구현해야 하는 로직에 대한 인터페이스 제공
 
 ## 핵심 기능
